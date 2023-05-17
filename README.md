@@ -1,25 +1,18 @@
-<p align="center">
-  <img src="solhint.png">
-</p>
-<p align="center">
-  By <a href="https://protofire.io/">Protofire</a>
-</p>
+A community-maintained solhint fork
 
-[![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue)](https://etherscan.io/address/0xA81705c8C247C413a19A244938ae7f4A0393944e)
-[![NPM version](https://badge.fury.io/js/solhint.svg)](https://npmjs.org/package/solhint)
-[![Coverage Status](https://coveralls.io/repos/github/protofire/solhint/badge.svg?branch=master)](
-https://coveralls.io/github/protofire/solhint?branch=master)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/protofire/solhint/master/LICENSE)
+[![NPM
+version](https://badge.fury.io/js/solhint-community.svg)](https://npmjs.org/package/solhint-community)
+![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)
 
 This is an open source project for linting [Solidity](http://solidity.readthedocs.io/en/develop/) code. This project
 provides both **Security** and **Style Guide** validations.
 
 ## Installation
 
-You can install Solhint using **npm**:
+You can install solhint-community using **npm**:
 
 ```sh
-npm install -g solhint
+npm install -g solhint-community
 
 # verify that it was installed correctly
 solhint --version
