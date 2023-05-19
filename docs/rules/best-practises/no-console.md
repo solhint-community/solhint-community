@@ -51,9 +51,9 @@ import "forge-std/consoleN.sol"
 ```
 
 ## Version
-This rule was introduced in [Solhint 3.4.0](https://github.com/protofire/solhint/tree/v3.4.0)
+This rule was introduced in [Solhint 3.4.0](https://github.com/solhint-community/solhint-community/tree/v3.4.0)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/best-practises/no-console.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/best-practises/no-console.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/best-practises/no-console.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/best-practises/no-console.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/best-practises/no-console.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/best-practises/no-console.js)

@@ -65,9 +65,9 @@ This rule accepts an array of options:
 ```
 
 ## Version
-This rule was introduced in [Solhint 1.4.0](https://github.com/protofire/solhint/tree/v1.4.0)
+This rule was introduced in [Solhint 1.4.0](https://github.com/solhint-community/solhint-community/tree/v1.4.0)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/miscellaneous/quotes.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/miscellaneous/quotes.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/miscellaneous/quotes.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/miscellaneous/quotes.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/miscellaneous/quotes.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/miscellaneous/quotes.js)

@@ -84,9 +84,9 @@ mapping(address => mapping(address token => uint256 balance)) public tokenBalanc
 ```
 
 ## Version
-This rule was introduced in [Solhint 3.4.0](https://github.com/protofire/solhint/tree/v3.4.0)
+This rule was introduced in [Solhint 3.4.0](https://github.com/solhint-community/solhint-community/tree/v3.4.0)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/naming/named-parameters-mapping.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/naming/named-parameters-mapping.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/naming/named-parameters-mapping.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/naming/named-parameters-mapping.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/naming/named-parameters-mapping.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/naming/named-parameters-mapping.js)

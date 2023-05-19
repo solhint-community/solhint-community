@@ -340,9 +340,9 @@ contract MyContract {
 ```
 
 ## Version
-This rule was introduced in [Solhint 3.2.0](https://github.com/protofire/solhint/tree/v3.2.0)
+This rule was introduced in [Solhint 3.2.0](https://github.com/solhint-community/solhint-community/tree/v3.2.0)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/order/ordering.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/order/ordering.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/order/ordering.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/order/ordering.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/order/ordering.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/order/ordering.js)

@@ -55,9 +55,9 @@ function b() { }
 ```
 
 ## Version
-This rule was introduced in [Solhint 2.0.0-alpha.0](https://github.com/protofire/solhint/tree/v2.0.0-alpha.0)
+This rule was introduced in [Solhint 2.0.0-alpha.0](https://github.com/solhint-community/solhint-community/tree/v2.0.0-alpha.0)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/security/func-visibility.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/security/func-visibility.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/security/func-visibility.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/security/func-visibility.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/security/func-visibility.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/security/func-visibility.js)
