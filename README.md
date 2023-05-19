@@ -172,7 +172,7 @@ Or disable all validations for a group of lines:
 
 ## Documentation
 
-Related documentation you may find [here](https://solhint-commiunity.github.io/solhint-commiunity/).
+Related documentation you may find [here](https://solhint-community.github.io/solhint-community/).
 
 ## IDE Integrations
 

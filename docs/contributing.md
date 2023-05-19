@@ -10,7 +10,7 @@ Issues and feature requests
 ---------------------------
 
 If you have any issues to report or features to request, please use the
-[issue tracker](https://github.com/protofire/solhint/issues).
+[issue tracker](https://github.com/solhint-community/solhint-community/issues).
 
 Development
 -----------
@@ -26,7 +26,7 @@ In order to develop Solhint, you'll need:
 
 Clone this repository and install npm dependencies:
 
-    $ git clone git@github.com:protofire/solhint.git
+    $ git clone git@github.com:solhint-community/solhint-community.git
     $ cd solhint
     $ npm install
 

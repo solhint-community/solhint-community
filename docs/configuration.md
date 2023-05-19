@@ -34,7 +34,7 @@ format:
     }
   }
 ```
-A full list of all supported rules can be found [here](https://github.com/protofire/solhint/blob/master/docs/rules.md). 
+A full list of all supported rules can be found [here](https://github.com/solhint-community/solhint-community/blob/master/docs/rules.md). 
 
 To ignore files / folders that do not require validation you may use `.solhintignore` file. It supports rules in
 `.gitignore` format.
