@@ -172,7 +172,7 @@ Or disable all validations for a group of lines:
 
 ## Documentation
 
-Related documentation you may find [here](https://protofire.github.io/solhint/).
+Related documentation you may find [here](https://solhint-commiunity.github.io/solhint-commiunity/).
 
 ## IDE Integrations
 
@@ -221,12 +221,3 @@ The Solidity parser used is [`@solidity-parser/parser`](https://github.com/solid
 ## Licence
 
 MIT
-
-## Back us
-Solhint is free to use and open-sourced. If you value our effort and feel like helping us to keep pushing this tool forward, you can send us a small donation. We'll highly appreciate it :)
-
-[![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue)](https://etherscan.io/address/0xA81705c8C247C413a19A244938ae7f4A0393944e)
-
-## Related projects
-
-- [eth-cli](https://github.com/protofire/eth-cli): CLI swiss army knife for Ethereum developers.
