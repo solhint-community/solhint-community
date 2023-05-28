@@ -150,6 +150,23 @@ describe('Linter - no-unused-import', () => {
       description: 'imported type is used in a function parameter declaration',
       code: `import {A} from './A.sol'; contract B { function (A.thing statevar) public {} }`,
     },
+    {
+      description: 'imported function is attached to a type',
+      code: `import {add} from './A.sol'; type Int is int; using {add} for Int global;`,
+    },
+    {
+      description: 'imported function is used as a user-defined operator',
+      code: `import {add} from './A.sol'; type Int is int; using {add as +} for Int global;`,
+    },
+    {
+      description: 'field of imported name is attached to a type',
+      code: `
+          import {Int, Math} from "./A.sol"; using {Math.add} for Int;
+          contract C {
+              Int public foo;
+          }
+      `,
+    },
   ].forEach(({ description, code }) => {
     it(`should not raise when ${description}`, () => {
       const report = linter.processStr(code, {
