@@ -67,9 +67,9 @@ while (d > e) { }
 ```
 
 ## Version
-This rule was introduced in [Solhint 1.1.5](https://github.com/protofire/solhint/tree/v1.1.5)
+This rule was introduced in [Solhint 1.1.5](https://github.com/solhint-community/solhint-community/tree/v1.1.5)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/best-practises/code-complexity.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/best-practises/code-complexity.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/best-practises/code-complexity.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/best-practises/code-complexity.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/best-practises/code-complexity.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/best-practises/code-complexity.js)

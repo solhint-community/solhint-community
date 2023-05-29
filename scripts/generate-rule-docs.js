@@ -158,7 +158,7 @@ function loadExampleConfig(rule) {
 
 function linkToVersion(version) {
     if (version) {
-        return `This rule was introduced in [Solhint ${version}](https://github.com/protofire/solhint/tree/v${version})`;
+        return `This rule was introduced in [Solhint ${version}](https://github.com/solhint-community/solhint-community/tree/v${version})`;
     } else {
         return `This rule is introduced in the latest version.`;
     }
@@ -166,17 +166,17 @@ function linkToVersion(version) {
 
 function linkToSource(rule) {
     const link = rule.file.replace(path.resolve(path.join(__dirname, '..')), '');
-    return `https://github.com/protofire/solhint/tree/master${link}`;
+    return `https://github.com/solhint-community/solhint-community/tree/master${link}`;
 }
 
 function linkToDocumentSource(rule) {
     const link = rule.file.replace(path.resolve(path.join(__dirname, '..')), '').replace("lib/rules", "docs/rules").replace(/\.js$/, ".md");
-    return `https://github.com/protofire/solhint/tree/master${link}`;
+    return `https://github.com/solhint-community/solhint-community/tree/master${link}`;
 }
 
 function linkToTestCase(rule) {
     const link = rule.file.replace(path.resolve(path.join(__dirname, '..', 'lib', 'rules')), '');
-    return `https://github.com/protofire/solhint/tree/master/test/rules${link}`;
+    return `https://github.com/solhint-community/solhint-community/tree/master/test/rules${link}`;
 }
 
 function loadExamples(rule) {

@@ -99,9 +99,9 @@ This rule accepts an array of options:
 ```
 
 ## Version
-This rule was introduced in [Solhint 1.1.5](https://github.com/protofire/solhint/tree/v1.1.5)
+This rule was introduced in [Solhint 1.1.5](https://github.com/solhint-community/solhint-community/tree/v1.1.5)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/best-practises/max-states-count.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/best-practises/max-states-count.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/best-practises/max-states-count.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/best-practises/max-states-count.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/best-practises/max-states-count.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/best-practises/max-states-count.js)

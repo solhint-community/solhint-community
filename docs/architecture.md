@@ -43,7 +43,7 @@ Developers of new rules need to have a basic understanding about the concepts an
 
 You can write your own plugins to add new rules to Solhint. A plugin is just an npm packages that exports an array of new rules. The name of the package has to follow the naming convention of `solhint-plugin-<plugin-name>`.
 
-Read [this document](https://github.com/protofire/solhint/blob/master/docs/writing-plugins.md) to learn more about writing plugins.
+Read [this document](https://github.com/solhint-community/solhint-community/blob/master/docs/writing-plugins.md) to learn more about writing plugins.
 
 
 ### How to Add Shared Configuration
@@ -52,12 +52,12 @@ Shareable configs are configurations that you can use and extend from. They can 
 
 You can either use a shared configuration from `solhint` or from a npm package with the naming convention `solhint-config-<config-name>`.
 
-Read [this document](https://github.com/protofire/solhint/blob/master/docs/shareable-configs.md) to learn more about shared configurations.
+Read [this document](https://github.com/solhint-community/solhint-community/blob/master/docs/shareable-configs.md) to learn more about shared configurations.
 
 
 ## How to Contribute
 
-Solhint is an open source project, and you can follow the [instructions here](https://github.com/protofire/solhint/blob/master/docs/contributing.md) to contribute.
+Solhint is an open source project, and you can follow the [instructions here](https://github.com/solhint-community/solhint-community/blob/master/docs/contributing.md) to contribute.
 
 Thanks for your contribution to Solhint.
 

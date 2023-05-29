@@ -34,9 +34,9 @@ This rule accepts an array of options:
 This rule does not have examples.
 
 ## Version
-This rule was introduced in [Solhint 3.0.0-rc.3](https://github.com/protofire/solhint/tree/v3.0.0-rc.3)
+This rule was introduced in [Solhint 3.0.0-rc.3](https://github.com/solhint-community/solhint-community/tree/v3.0.0-rc.3)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/naming/private-vars-leading-underscore.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/naming/private-vars-leading-underscore.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/naming/private-vars-leading-underscore.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/naming/private-vars-leading-underscore.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/naming/private-vars-leading-underscore.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/naming/private-vars-leading-underscore.js)

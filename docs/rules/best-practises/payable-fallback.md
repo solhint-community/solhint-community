@@ -59,9 +59,9 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 ```
 
 ## Version
-This rule was introduced in [Solhint 2.0.0-alpha.0](https://github.com/protofire/solhint/tree/v2.0.0-alpha.0)
+This rule was introduced in [Solhint 2.0.0-alpha.0](https://github.com/solhint-community/solhint-community/tree/v2.0.0-alpha.0)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/best-practises/payable-fallback.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/best-practises/payable-fallback.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/best-practises/payable-fallback.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/best-practises/payable-fallback.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/best-practises/payable-fallback.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/best-practises/payable-fallback.js)

@@ -52,9 +52,9 @@ contract Foo {
 ```
 
 ## Version
-This rule was introduced in [Solhint 3.3.0](https://github.com/protofire/solhint/tree/v3.3.0)
+This rule was introduced in [Solhint 3.3.0](https://github.com/solhint-community/solhint-community/tree/v3.3.0)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/miscellaneous/comprehensive-interface.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/miscellaneous/comprehensive-interface.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/miscellaneous/comprehensive-interface.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/miscellaneous/comprehensive-interface.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/miscellaneous/comprehensive-interface.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/miscellaneous/comprehensive-interface.js)

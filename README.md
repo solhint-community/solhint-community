@@ -1,25 +1,18 @@
-<p align="center">
-  <img src="solhint.png">
-</p>
-<p align="center">
-  By <a href="https://protofire.io/">Protofire</a>
-</p>
+A community-maintained solhint fork
 
-[![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue)](https://etherscan.io/address/0xA81705c8C247C413a19A244938ae7f4A0393944e)
-[![NPM version](https://badge.fury.io/js/solhint.svg)](https://npmjs.org/package/solhint)
-[![Coverage Status](https://coveralls.io/repos/github/protofire/solhint/badge.svg?branch=master)](
-https://coveralls.io/github/protofire/solhint?branch=master)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/protofire/solhint/master/LICENSE)
+[![NPM
+version](https://badge.fury.io/js/solhint-community.svg)](https://npmjs.org/package/solhint-community)
+![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)
 
 This is an open source project for linting [Solidity](http://solidity.readthedocs.io/en/develop/) code. This project
 provides both **Security** and **Style Guide** validations.
 
 ## Installation
 
-You can install Solhint using **npm**:
+You can install solhint-community using **npm**:
 
 ```sh
-npm install -g solhint
+npm install -g solhint-community
 
 # verify that it was installed correctly
 solhint --version
@@ -179,7 +172,7 @@ Or disable all validations for a group of lines:
 
 ## Documentation
 
-Related documentation you may find [here](https://protofire.github.io/solhint/).
+Related documentation you may find [here](https://solhint-community.github.io/solhint-community/).
 
 ## IDE Integrations
 
@@ -228,12 +221,3 @@ The Solidity parser used is [`@solidity-parser/parser`](https://github.com/solid
 ## Licence
 
 MIT
-
-## Back us
-Solhint is free to use and open-sourced. If you value our effort and feel like helping us to keep pushing this tool forward, you can send us a small donation. We'll highly appreciate it :)
-
-[![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue)](https://etherscan.io/address/0xA81705c8C247C413a19A244938ae7f4A0393944e)
-
-## Related projects
-
-- [eth-cli](https://github.com/protofire/eth-cli): CLI swiss army knife for Ethereum developers.

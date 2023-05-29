@@ -1,5 +1,5 @@
 {
-  "name": "solhint",
+  "name": "solhint-community",
   "version": "3.4.1",
   "description": "Solidity Code Linter",
   "main": "lib/index.js",
@@ -13,8 +13,8 @@
     "code-quality",
     "smart-contracts"
   ],
-  "homepage": "https://protofire.github.io/solhint/",
-  "repository": "https://github.com/protofire/solhint",
+  "homepage": "https://solhint-community.github.io/solhint-community",
+  "repository": "https://github.com/solhint-community/solhint-community",
   "scripts": {
     "exec-tests": "nyc mocha --recursive && nyc report --reporter=text-lcov | coveralls",
     "test:coverage": "npm run exec-tests",

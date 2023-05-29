@@ -28,9 +28,9 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 This rule does not have examples.
 
 ## Version
-This rule was introduced in [Solhint 1.2.0](https://github.com/protofire/solhint/tree/v1.2.0)
+This rule was introduced in [Solhint 1.2.0](https://github.com/solhint-community/solhint-community/tree/v1.2.0)
 
 ## Resources
-- [Rule source](https://github.com/protofire/solhint/tree/master/lib/rules/deprecations/constructor-syntax.js)
-- [Document source](https://github.com/protofire/solhint/tree/master/docs/rules/deprecations/constructor-syntax.md)
-- [Test cases](https://github.com/protofire/solhint/tree/master/test/rules/deprecations/constructor-syntax.js)
+- [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/deprecations/constructor-syntax.js)
+- [Document source](https://github.com/solhint-community/solhint-community/tree/master/docs/rules/deprecations/constructor-syntax.md)
+- [Test cases](https://github.com/solhint-community/solhint-community/tree/master/test/rules/deprecations/constructor-syntax.js)
