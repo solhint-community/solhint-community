@@ -1,3 +1,17 @@
+## [3.5.0] - 2023-05-30
+
+### Updated
+- Renamed stuff for this fork: https://github.com/solhint-community/solhint-community/pull/1
+
+### Added
+- no-unused-imports rule: https://github.com/solhint-community/solhint-community/pull/3 
+
+### Fixed
+- Ignore empty blocks in constructors with non-empty initialization lists https://github.com/solhint-community/solhint-community/pull/8 
+
+
+<br><br>
+
 ## [3.4.1] - 2023-03-06
 ### Updated
 - Updated solidity parser to 0.16.0 [#420](https://github.com/protofire/solhint/pull/420)
