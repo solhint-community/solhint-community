@@ -38,7 +38,7 @@ jobs:
         run: npm i -g solhint-community*tgz
       
       - name: run-e2e-tests
-        run: cd e2e && npm ci && npm test
+        run: npm run e2e
 
   e2e_windows:
     runs-on: windows-latest
@@ -63,7 +63,7 @@ jobs:
         run: npm run lint
 
       - name: Run e2e Tests
-        run: cd e2e && npm install && npm test
+        run: npm run e2e
 
   e2e_macos:
     runs-on: macos-latest
@@ -88,4 +88,4 @@ jobs:
       run: npm run lint
 
     - name: Run Tests
-      run: cd e2e && npm install && npm test
+      run: npm run e2e
