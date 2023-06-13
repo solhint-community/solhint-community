@@ -11,7 +11,7 @@ const path = require('path')
 const shell = require('shelljs')
 
 function useFixture(dir) {
-  beforeEach(`switch to ${dir}`, function() {
+  beforeEach(`switch to ${dir}`, function () {
     const fixturePath = path.join(__dirname, dir)
 
     const tmpDirContainer = os.tmpdir()
@@ -26,17 +26,17 @@ function useFixture(dir) {
   })
 }
 
-describe('e2e', function() {
-  describe('no config', function() {
+describe('e2e', function () {
+  describe('no config', function () {
     useFixture('01-no-config')
 
-    it('should fail', function() {
+    it('should fail', function () {
       const { code } = shell.exec('solhint Foo.sol')
 
       expect(code).to.equal(1)
     })
 
-    it('should create an initial config with --init', function() {
+    it('should create an initial config with --init', function () {
       const { code } = shell.exec('solhint --init')
 
       expect(code).to.equal(0)
@@ -46,7 +46,7 @@ describe('e2e', function() {
       expect(fs.existsSync(solhintConfigPath)).to.be.true
     })
 
-    it('should print usage if called without arguments', function() {
+    it('should print usage if called without arguments', function () {
       const { code, stdout } = shell.exec('solhint')
 
       expect(code).to.equal(0)
@@ -57,10 +57,10 @@ describe('e2e', function() {
     })
   })
 
-  describe('empty-config', function() {
+  describe('empty-config', function () {
     useFixture('02-empty-solhint-json')
 
-    it('should print nothing', function() {
+    it('should print nothing', function () {
       const { code, stdout } = shell.exec('solhint Foo.sol')
 
       expect(code).to.equal(0)
@@ -68,7 +68,7 @@ describe('e2e', function() {
       expect(stdout.trim()).to.equal('')
     })
 
-    it('should show warning when using --init', function() {
+    it('should show warning when using --init', function () {
       const { code, stdout } = shell.exec('solhint --init')
 
       expect(code).to.equal(0)
@@ -77,10 +77,10 @@ describe('e2e', function() {
     })
   })
 
-  describe('no-empty-blocks', function() {
+  describe('no-empty-blocks', function () {
     useFixture('03-no-empty-blocks')
 
-    it('should exit with 1', function() {
+    it('should exit with 1', function () {
       const { code, stdout } = shell.exec('solhint Foo.sol')
 
       expect(code).to.equal(1)
@@ -88,13 +88,13 @@ describe('e2e', function() {
       expect(stdout.trim()).to.contain('Code contains empty blocks')
     })
 
-    it('should work with stdin', async function() {
+    it('should work with stdin', async function () {
       const child = cp.exec('solhint stdin')
 
       const stdoutPromise = getStream(child.stdout)
 
-      const codePromise = new Promise(resolve => {
-        child.on('close', code => {
+      const codePromise = new Promise((resolve) => {
+        child.on('close', (code) => {
           resolve(code)
         })
       })
@@ -112,15 +112,14 @@ describe('e2e', function() {
     })
 
     describe('formatters', function () {
-
-      it("unix", async  function() {
+      it('unix', async function () {
         const { stdout } = shell.exec('solhint Foo.sol --formatter unix')
         const lines = stdout.split('\n')
         expect(lines[0]).to.eq('Foo.sol:3:1: Code contains empty blocks [Error/no-empty-blocks]')
         expect(lines[2]).to.eq('1 problem')
       })
 
-      it("tap", async  function() {
+      it('tap', async function () {
         const { stdout } = shell.exec('solhint Foo.sol --formatter tap')
         const lines = stdout.split('\n')
 
@@ -136,7 +135,7 @@ describe('e2e', function() {
         expect(lines[9]).to.eq('    ruleId: no-empty-blocks')
       })
 
-      it("stylish", async  function() {
+      it('stylish', async function () {
         const { stdout } = shell.exec('solhint Foo.sol --formatter stylish')
         const lines = stdout.split('\n')
 
@@ -145,34 +144,52 @@ describe('e2e', function() {
         expect(lines[4]).to.eq('✖ 1 problem (1 error, 0 warnings)')
       })
 
-      it("compact", async  function() {
+      it('compact', async function () {
         const { stdout } = shell.exec('solhint Foo.sol --formatter compact')
         const lines = stdout.split('\n')
-        expect(lines[0]).to.eq('Foo.sol: line 3, col 1, Error - Code contains empty blocks (no-empty-blocks)')
+        expect(lines[0]).to.eq(
+          'Foo.sol: line 3, col 1, Error - Code contains empty blocks (no-empty-blocks)'
+        )
         expect(lines[2]).to.eq('1 problem')
       })
 
-      it("table", async  function() {
+      it('table', async function () {
         const { stdout } = shell.exec('solhint Foo.sol --formatter table')
         const lines = stdout.split('\n')
 
         expect(lines[1]).to.eq('Foo.sol')
-        expect(lines[3]).to.eq( '║ Line     │ Column   │ Type     │ Message                                                │ Rule ID              ║')
-        expect(lines[4]).to.eq( '╟──────────┼──────────┼──────────┼────────────────────────────────────────────────────────┼──────────────────────╢')
-        expect(lines[5]).to.eq( '║ 3        │ 1        │ error    │ Code contains empty blocks                             │ no-empty-blocks      ║')
-        expect(lines[7]).to.eq( '╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗')
-        expect(lines[8]).to.eq( '║ 1 Error                                                                                                        ║')
-        expect(lines[9]).to.eq( '╟────────────────────────────────────────────────────────────────────────────────────────────────────────────────╢')
-        expect(lines[10]).to.eq('║ 0 Warnings                                                                                                     ║')
-        expect(lines[11]).to.eq('╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝')
+        expect(lines[3]).to.eq(
+          '║ Line     │ Column   │ Type     │ Message                                                │ Rule ID              ║'
+        )
+        expect(lines[4]).to.eq(
+          '╟──────────┼──────────┼──────────┼────────────────────────────────────────────────────────┼──────────────────────╢'
+        )
+        expect(lines[5]).to.eq(
+          '║ 3        │ 1        │ error    │ Code contains empty blocks                             │ no-empty-blocks      ║'
+        )
+        expect(lines[7]).to.eq(
+          '╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗'
+        )
+        expect(lines[8]).to.eq(
+          '║ 1 Error                                                                                                        ║'
+        )
+        expect(lines[9]).to.eq(
+          '╟────────────────────────────────────────────────────────────────────────────────────────────────────────────────╢'
+        )
+        expect(lines[10]).to.eq(
+          '║ 0 Warnings                                                                                                     ║'
+        )
+        expect(lines[11]).to.eq(
+          '╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝'
+        )
       })
     })
   })
 
-  describe('.sol on path', function() {
+  describe('.sol on path', function () {
     useFixture('04-dotSol-on-path')
 
-    it('should handle directory names that end with .sol', function() {
+    it('should handle directory names that end with .sol', function () {
       const { code } = shell.exec('solhint contracts/**/*.sol')
 
       expect(code).to.equal(0)
