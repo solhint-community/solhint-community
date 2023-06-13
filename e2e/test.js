@@ -145,6 +145,13 @@ describe('e2e', function() {
         expect(lines[4]).to.eq('✖ 1 problem (1 error, 0 warnings)')
       })
 
+      it("compact", async  function() {
+        const { stdout } = shell.exec('solhint Foo.sol --formatter compact')
+        const lines = stdout.split('\n')
+        expect(lines[0]).to.eq('Foo.sol: line 3, col 1, Error - Code contains empty blocks (no-empty-blocks)')
+        expect(lines[2]).to.eq('1 problem')
+      })
+
       it("table", async  function() {
         const { stdout } = shell.exec('solhint Foo.sol --formatter table')
         const lines = stdout.split('\n')
