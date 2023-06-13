@@ -6,6 +6,8 @@ _Thanks for considering contributing to Solhint!_
 The following is a set of guidelines for contributions. Feel free to suggest
 improvements to this document in a pull request.
 
+If you want to chat with fellow solhint devs, feel free to drop by the [telegram group](https://t.me/+9TPjopBMry02MmQx)
+
 Issues and feature requests
 ---------------------------
 

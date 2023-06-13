@@ -4,6 +4,8 @@ A community-maintained solhint fork
 version](https://badge.fury.io/js/solhint-community.svg)](https://npmjs.org/package/solhint-community)
 ![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)
 
+[![Telegram group badge](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/+9TPjopBMry02MmQx)
+
 This is an open source project for linting [Solidity](http://solidity.readthedocs.io/en/develop/) code. This project
 provides both **Security** and **Style Guide** validations.
 
