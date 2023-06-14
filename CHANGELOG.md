@@ -1,6 +1,15 @@
 ## [3.5.0] - 2023-05-30
 
 ### Updated
+- Linked telegram group in readme & docs https://github.com/solhint-community/solhint-community/pull/11
+
+### Fixed
+- Restore compact formatter and test existing formatters so we don't remove them again:
+https://github.com/solhint-community/solhint-community/pull/14
+
+## [3.5.0] - 2023-05-30
+
+### Updated
 - Renamed stuff for this fork: https://github.com/solhint-community/solhint-community/pull/1
 
 ### Added
