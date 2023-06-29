@@ -6,20 +6,21 @@ title:       "Rule Index of Solhint"
 
 ## Best Practise Rules
 
-| Rule Id                                                            | Error                                                                                                                 | Recommended |
-| ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ----------- |
-| [code-complexity](./rules/best-practises/code-complexity.md)       | Function has cyclomatic complexity "current" but allowed no more than maxcompl.                                       |             |
-| [function-max-lines](./rules/best-practises/function-max-lines.md) | Function body contains "count" lines but allowed no more than maxlines.                                               |             |
-| [max-line-length](./rules/best-practises/max-line-length.md)       | Line length must be no more than maxlen.                                                                              |             |
-| [max-states-count](./rules/best-practises/max-states-count.md)     | Contract has "some count" states declarations but allowed no more than maxstates.                                     | ✔️          |
-| [no-console](./rules/best-practises/no-console.md)                 | No console.log/logInt/logBytesX/logString/etc & No hardhat and forge-std console.sol import statements                | ✔️          |
-| [no-empty-blocks](./rules/best-practises/no-empty-blocks.md)       | Code block has zero statements inside. Some common exceptions apply.                                                  | ✔️          |
-| [no-global-import](./rules/best-practises/no-global-import.md)     | Import statement includes an entire file instead of selected symbols                                                  | ✔️          |
-| [no-unused-import](./rules/best-practises/no-unused-import.md)     | Reports a warning when an imported name is not used                                                                   | ✔️          |
-| [no-unused-vars](./rules/best-practises/no-unused-vars.md)         | Variable "name" is unused.                                                                                            | ✔️          |
-| [payable-fallback](./rules/best-practises/payable-fallback.md)     | When fallback is not payable you will not be able to receive ethers.                                                  | ✔️          |
-| [reason-string](./rules/best-practises/reason-string.md)           | Require or revert statement must have a reason string and check that each reason string is at most N characters long. | ✔️          |
-| [constructor-syntax](./rules/best-practises/constructor-syntax.md) | Constructors should use the new constructor keyword.                                                                  |             |
+| Rule Id                                                                  | Error                                                                                                                 | Recommended |
+| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ----------- |
+| [code-complexity](./rules/best-practises/code-complexity.md)             | Function has cyclomatic complexity "current" but allowed no more than maxcompl.                                       |             |
+| [function-max-lines](./rules/best-practises/function-max-lines.md)       | Function body contains "count" lines but allowed no more than maxlines.                                               |             |
+| [max-line-length](./rules/best-practises/max-line-length.md)             | Line length must be no more than maxlen.                                                                              |             |
+| [max-states-count](./rules/best-practises/max-states-count.md)           | Contract has "some count" states declarations but allowed no more than maxstates.                                     | ✔️          |
+| [no-console](./rules/best-practises/no-console.md)                       | No console.log/logInt/logBytesX/logString/etc & No hardhat and forge-std console.sol import statements                | ✔️          |
+| [no-empty-blocks](./rules/best-practises/no-empty-blocks.md)             | Code block has zero statements inside. Some common exceptions apply.                                                  | ✔️          |
+| [no-global-import](./rules/best-practises/no-global-import.md)           | Import statement includes an entire file instead of selected symbols                                                  | ✔️          |
+| [no-unused-import](./rules/best-practises/no-unused-import.md)           | Reports a warning when an imported name is not used                                                                   | ✔️          |
+| [no-unused-vars](./rules/best-practises/no-unused-vars.md)               | Variable "name" is unused.                                                                                            | ✔️          |
+| [payable-fallback](./rules/best-practises/payable-fallback.md)           | When fallback is not payable you will not be able to receive ethers.                                                  | ✔️          |
+| [reason-string](./rules/best-practises/reason-string.md)                 | Require or revert statement must have a reason string and check that each reason string is at most N characters long. | ✔️          |
+| [constructor-syntax](./rules/best-practises/constructor-syntax.md)       | Constructors should use the new constructor keyword.                                                                  |             |
+| [named-parameters-function](./rules/naming/named-parameters-function.md) | Enforce using named parameters when invoking a function with more than N arguments                                    |             |
         
 
 ## Miscellaneous
