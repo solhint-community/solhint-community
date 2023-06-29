@@ -167,6 +167,22 @@ describe('Linter - no-unused-import', () => {
           }
       `,
     },
+    {
+      description: 'Name is used in an override',
+      code: `
+        pragma solidity >=0.8.19;
+
+        import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+        import { IERC721Metadata } from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
+
+        contract MyContract {
+            /// @inheritdoc ERC721
+            function tokenURI(uint256 streamId) public view override(IERC721Metadata, ERC721) returns (string memory uri) {
+                uri = "example.com";
+            }
+        }
+      `,
+    },
   ].forEach(({ description, code }) => {
     it(`should not raise when ${description}`, () => {
       const report = linter.processStr(code, {
