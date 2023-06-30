@@ -183,6 +183,18 @@ describe('Linter - no-unused-import', () => {
         }
       `,
     },
+    {
+      description: 'Type is used in a constructor initializator',
+      code: `
+        pragma solidity >=0.8.19;
+
+        import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
+        contract MyContract {
+            constructor() ERC721("Sablier V2 Lockup Dynamic NFT", "SAB-V2-LOCKUP-DYN") { }
+        }
+      `,
+    },
   ].forEach(({ description, code }) => {
     it(`should not raise when ${description}`, () => {
       const report = linter.processStr(code, {
