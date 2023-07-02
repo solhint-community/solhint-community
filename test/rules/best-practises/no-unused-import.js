@@ -195,6 +195,47 @@ describe('Linter - no-unused-import', () => {
         }
       `,
     },
+    {
+      description: 'Import is used as value in a function parameter',
+      code: `
+        pragma solidity >=0.8.19 <0.9.0;
+
+        import { UD60x18, ZERO } from "@prb/math/UD60x18.sol";
+
+        contract SetProtocolFee_Integration_Fuzz_Test {
+            function testFuzz_SetProtocolFee(UD60x18 newProtocolFee) external {
+                newProtocolFee = _bound(newProtocolFee, 1, MAX_FEE);
+                vm.expectEmit({ emitter: address(comptroller) });
+                emit SetProtocolFee({ admin: users.admin, asset: dai, oldProtocolFee: ZERO, newProtocolFee: newProtocolFee });
+            }
+        }
+      `,
+    },
+    {
+      description: 'Import is used as value in a binary expression',
+      code: `
+        import { ZERO } from "@prb/math/UD60x18.sol";
+
+        contract Foo {
+            function returnFifteen() public returns (uint){
+              return ZERO + 15;
+            }
+        }
+      `,
+    },
+    {
+      description: 'Import is used as value in an assignment',
+      code: `
+        import { ZERO } from "@prb/math/UD60x18.sol";
+
+        contract Foo {
+            uint256 public howMuch;
+            constructor () {
+              howMuch = ZERO;
+            }
+        }
+      `,
+    },
   ].forEach(({ description, code }) => {
     it(`should not raise when ${description}`, () => {
       const report = linter.processStr(code, {
