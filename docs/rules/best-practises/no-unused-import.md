@@ -12,7 +12,7 @@ title:       "no-unused-import | Solhint"
 
 
 ## Description
-Imported name is not used
+Reports a warning when an imported name is not used
 
 ## Options
 This rule accepts a string option of rule severity. Must be one of "error", "warn", "off". Default to warn.
@@ -28,10 +28,30 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 
 
 ## Examples
-This rule does not have examples.
+### 👍 Examples of **correct** code for this rule
+
+#### Imported name is used
+
+```solidity
+
+            import {A} from './A.sol';
+            contract B is A {}
+          
+```
+
+### 👎 Examples of **incorrect** code for this rule
+
+#### Imported name is not used
+
+```solidity
+
+            import {A} from './A.sol';
+            contract B {}
+          
+```
 
 ## Version
-This rule is introduced in the latest version.
+This rule was introduced in [Solhint 3.5.1](https://github.com/solhint-community/solhint-community/tree/v3.5.1)
 
 ## Resources
 - [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/best-practises/no-unused-import.js)
