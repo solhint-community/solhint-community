@@ -78,6 +78,41 @@ describe('Linter - no-unused-import', () => {
     assertErrorMessage(report, 'imported name B is not used')
   })
 
+  it('should raise when an imported name is not used but shadowed in a variable declaration', () => {
+    const code = `
+      import {A} from './A.sol';
+
+      contract C {
+        function foo () public {
+          uint A = 40;
+        }
+      }`
+
+    const report = linter.processStr(code, {
+      rules: { 'no-unused-import': 'error' },
+    })
+    assertErrorCount(report, 1)
+    assertErrorMessage(report, 'imported name A is not used')
+  })
+
+  it('should raise when an imported name is shadowed and then used', () => {
+    const code = `
+      import {A} from './A.sol';
+
+      contract C {
+        function foo () public returns (uint256){
+          uint A = 40;
+          return A;
+        }
+      }`
+
+    const report = linter.processStr(code, {
+      rules: { 'no-unused-import': 'error' },
+    })
+    assertErrorCount(report, 1)
+    assertErrorMessage(report, 'imported name A is not used')
+  })
+
   it('should not raise when contract name is used as a type for a memory variable', () => {
     const code = `
     import {ERC20} from './ERC20.sol';
