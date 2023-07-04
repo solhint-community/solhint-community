@@ -1,4 +1,9 @@
-## [3.5.0] - 2023-05-30
+## [3.5.2] - 2023-07-4
+
+### Fixed
+- Fix false positives in no-unused-imports https://github.com/solhint-community/solhint-community/pull/21
+
+## [3.5.1] - 2023-06-14
 
 ### Updated
 - Linked telegram group in readme & docs https://github.com/solhint-community/solhint-community/pull/11
