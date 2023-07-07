@@ -26,6 +26,24 @@ describe('Linter - code-complexity', () => {
     assertNoErrors(report)
   })
 
+  it('GIVEN a config with max complexity of 0, it should use the default value', () => {
+    const goodReport = linter.processStr(
+      funcWith(require('../../fixtures/best-practises/code-complexity-low')),
+      {
+        rules: { 'code-complexity': ['error', 0] },
+      }
+    )
+    assertNoErrors(goodReport)
+
+    const reportWithError = linter.processStr(
+      funcWith(require('../../fixtures/best-practises/code-complexity-high')),
+      {
+        rules: { 'code-complexity': ['error', 0] },
+      }
+    )
+    assertErrorCount(reportWithError, 1)
+  })
+
   it('should raise error when cyclomatic complexity of a modifier is too high', () => {
     const report = linter.processStr(
       modifierWith(require('../../fixtures/best-practises/code-complexity-high')),
