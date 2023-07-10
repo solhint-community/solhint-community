@@ -248,6 +248,18 @@ describe('Linter - no-unused-import', () => {
         }
       `,
     },
+    {
+      description: 'Import is used as the type value of a mapping',
+      code: `
+        pragma solidity >=0.8.19;
+
+        import {UD60x18} from "@prb/math/UD60x18.sol";
+
+        contract SolhintTest {
+            mapping(address user => UD60x18 amount) internal balance;
+        }
+      `,
+    },
   ].forEach(({ description, code }) => {
     it(`should not raise when ${description}`, () => {
       const report = linter.processStr(code, {
