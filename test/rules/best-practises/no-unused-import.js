@@ -236,6 +236,18 @@ describe('Linter - no-unused-import', () => {
         }
       `,
     },
+    {
+      description: 'Import is used in the left side of a using for statement',
+      code: `
+        pragma solidity >=0.8.19;
+
+        import {EnumerableSetUD60x18, EnumerableSet} from "./libraries/EnumerableSetUD60x18.sol";
+
+        contract SolhintTest {
+            using EnumerableSetUD60x18 for EnumerableSet.Bytes32Set;
+        }
+      `,
+    },
   ].forEach(({ description, code }) => {
     it(`should not raise when ${description}`, () => {
       const report = linter.processStr(code, {
