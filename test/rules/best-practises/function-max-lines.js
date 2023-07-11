@@ -35,6 +35,18 @@ describe('Linter - function-max-lines', () => {
     assertNoErrors(report)
   })
 
+  it('should use default value of 50 when 0 is specified in the config', () => {
+    const cleanReport = linter.processStr(funcWith(emptyLines(49)), {
+      rules: { 'function-max-lines': ['error', 0] },
+    })
+    assertNoErrors(cleanReport)
+
+    const reportWithError = linter.processStr(funcWith(emptyLines(51)), {
+      rules: { 'function-max-lines': ['error', 0] },
+    })
+    assertErrorCount(reportWithError, 1)
+  })
+
   function repeatLines(line, count) {
     return _.times(count)
       .map(() => line)

@@ -46,6 +46,18 @@ describe('Linter - max-states-count', () => {
     assertNoErrors(report)
   })
 
+  it('should use default value when 0 is passed as an option', () => {
+    const cleanReport = linter.processStr(contractWith(stateDef(10)), {
+      rules: { 'max-states-count': ['error', 0] },
+    })
+    assertNoErrors(cleanReport)
+
+    const reportWithErrors = linter.processStr(contractWith(stateDef(16)), {
+      rules: { 'max-states-count': ['error', 0] },
+    })
+    assertErrorCount(reportWithErrors, 1)
+  })
+
   it('should not count immutable variables', () => {
     const code = contractWith(`
       uint public immutable a;
