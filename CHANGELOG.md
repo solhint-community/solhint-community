@@ -1,3 +1,18 @@
+## [3.6.0] - 2023-07-13
+
+### Updated
+- lint missing files and remove nested npm project:
+https://github.com/solhint-community/solhint-community/pull/15
+
+### Fixed
+- false positives in no-unused-imports:
+https://github.com/solhint-community/solhint-community/pull/33
+https://github.com/solhint-community/solhint-community/pull/32
+
+### Added
+- named-parameters-function rule
+https://github.com/solhint-community/solhint-community/pull/25
+
 ## [3.5.2] - 2023-07-4
 
 ### Fixed
