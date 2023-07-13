@@ -27,6 +27,26 @@ describe('Linter - no-unused-import', () => {
     assertErrorMessage(report, 'imported name A is not used')
   })
 
+  it('should not crash on, but also not recognize, malformed inheritdoc statements', () => {
+    const code = `
+    import {A} from './A.sol';
+    // inheritdoc A
+    // @inheritdoc A
+    /// inheritdoc A
+    /// @ inherit A
+    /// @ inheritdoc A
+    /// @inheritdoc somethingelse
+    /// @inheritdoc
+    /// @inheritdoc 
+    `
+
+    const report = linter.processStr(code, {
+      rules: { 'no-unused-import': 'error' },
+    })
+    assertErrorCount(report, 1)
+    assertErrorMessage(report, 'imported name A is not used')
+  })
+
   it('should raise error when using solhint:recommended', () => {
     const code = `pragma solidity ^0.5.8; import {A} from "./A.sol";`
 
@@ -257,6 +277,34 @@ describe('Linter - no-unused-import', () => {
 
         contract SolhintTest {
             mapping(address user => UD60x18 amount) internal balance;
+        }
+      `,
+    },
+    {
+      description: 'Import is used in /// @inheritdoc',
+      code: `
+        import { IPRBProxyPlugin } from "@prb/proxy/interfaces/IPRBProxyPlugin.sol";
+
+        contract SablierV2ProxyPlugin {
+          /// @inheritdoc IPRBProxyPlugin
+          function getMethods() external pure returns (bytes4[] memory methods) {
+              methods = new bytes4[](1);
+              methods[0] = this.onStreamCanceled.selector;
+          }
+        }
+      `,
+    },
+    {
+      description: 'Import is used in /** @inheritdoc',
+      code: `
+        import { IPRBProxyPlugin } from "@prb/proxy/interfaces/IPRBProxyPlugin.sol";
+
+        contract SablierV2ProxyPlugin {
+          /** @inheritdoc IPRBProxyPlugin */
+          function getMethods() external pure returns (bytes4[] memory methods) {
+              methods = new bytes4[](1);
+              methods[0] = this.onStreamCanceled.selector;
+          }
         }
       `,
     },
