@@ -1,3 +1,6 @@
+## [3.7.0-rc00] - 2023-07-23
+Current release candidate
+
 ## [3.6.0] - 2023-07-13
 
 ### Updated
