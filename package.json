@@ -1,6 +1,6 @@
 {
   "name": "solhint-community",
-  "version": "3.6.1",
+  "version": "3.7.0-rc00",
   "description": "Solidity Code Linter",
   "main": "lib/index.js",
   "keywords": [
