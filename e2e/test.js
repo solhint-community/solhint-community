@@ -29,6 +29,17 @@ function useFixture(dir) {
 describe('e2e', function () {
   describe('no config', function () {
     useFixture('01-no-config')
+    describe('GIVEN a config file created with solhint --init', function () {
+      beforeEach(function () {
+        shell.exec('solhint --init')
+      })
+
+      it('WHEN linting a file, THEN the config is used ', function () {
+        const { code, stdout } = shell.exec('solhint Foo.sol')
+        expect(code).to.equal(1)
+        expect(stdout.trim()).to.contain('Code contains empty blocks')
+      })
+    })
 
     it('should fail', function () {
       const { code } = shell.exec('solhint Foo.sol')
