@@ -126,7 +126,7 @@ function processStdin(options) {
 function writeSampleConfigFile() {
   const configPath = '.solhint.json'
   const sampleConfig = `{
-  "extends": "solhint:default"
+  "extends": "solhint:recommended"
 }
 `
 
