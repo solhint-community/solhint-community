@@ -196,7 +196,6 @@ describe('Linter - no-unused-import', () => {
         import { IERC721Metadata } from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 
         contract MyContract {
-            /// @inheritdoc ERC721
             function tokenURI(uint256 streamId) public view override(IERC721Metadata, ERC721) returns (string memory uri) {
                 uri = "example.com";
             }
