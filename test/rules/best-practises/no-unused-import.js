@@ -280,6 +280,17 @@ describe('Linter - no-unused-import', () => {
       `,
     },
     {
+      description: 'Import is used as the type value of a nested mapping',
+      code: `
+        pragma solidity >=0.8.19;
+        import {SD59x18} from "@prb/math/SD59x18.sol";
+
+        contract SolhintTest {
+            mapping(address user => mapping(address relayer => SD59x18 amount)) internal balance;
+        }
+      `,
+    },
+    {
       description: 'Import is used in /// @inheritdoc',
       code: `
         import { IPRBProxyPlugin } from "@prb/proxy/interfaces/IPRBProxyPlugin.sol";
