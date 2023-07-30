@@ -21,6 +21,7 @@
     "test": "mocha --recursive",
     "e2e": "mocha e2e/test.js",
     "lint": "eslint .",
+    "generate-rulesets": "node scripts/generate-rulesets.js && prettier --write conf/rulesets",
     "docs": "node scripts/generate-rule-docs.js"
   },
   "bin": {
