@@ -84,7 +84,7 @@ ${[
   categoryBadge(rule.meta.docs.category),
   defaultSeverityBadge(defaultSeverity),
   isDefault
-    ? '> The {"extends": "solhint:default"} property in a configuration file enables this rule.\n'
+    ? '> The {"extends": "solhint:default"} property in a configuration file enables this rule. This is currently deprecated and will be removed in version 4.0.0\n'
     : '',
   isRecommended
     ? '> The {"extends": "solhint:recommended"} property in a configuration file enables this rule.\n'
