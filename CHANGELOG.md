@@ -1,3 +1,9 @@
+## [3.6.1] - 2023-07-31
+
+### Fixed
+false positives in no-unused-imports with nested mappings: 
+https://github.com/solhint-community/solhint-community/pull/37
+
 ## [3.6.0] - 2023-07-13
 
 ### Updated
