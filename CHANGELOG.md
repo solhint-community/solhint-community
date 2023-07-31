@@ -1,5 +1,9 @@
-## [3.7.0-rc00] - 2023-07-23
+## [3.7.0-rc01] - 2023-07-23
 Current release candidate
+
+### Updated
+- depreacted solhit:default ruleset:
+https://github.com/solhint-community/solhint-community/pull/36
 
 ## [3.6.1] - 2023-07-31
 
