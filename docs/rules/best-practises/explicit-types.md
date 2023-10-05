@@ -5,14 +5,11 @@ title:       "explicit-types | Solhint"
 ---
 
 # explicit-types
-![Recommended Badge](https://img.shields.io/badge/-Recommended-brightgreen)
 ![Category Badge](https://img.shields.io/badge/-Best%20Practise%20Rules-informational)
 ![Default Severity Badge warn](https://img.shields.io/badge/Default%20Severity-warn-yellow)
-> The {"extends": "solhint:recommended"} property in a configuration file enables this rule.
-
 
 ## Description
-Forbid or enforce explicit types (like uint256) that have an alias (like uint).
+Enforce explicit types (like uint256) over implicit ones(like uint).
 
 ## Options
 This rule accepts an array of options:
@@ -20,14 +17,13 @@ This rule accepts an array of options:
 | Index | Description                                           | Default Value |
 | ----- | ----------------------------------------------------- | ------------- |
 | 0     | Rule severity. Must be one of "error", "warn", "off". | warn          |
-| 1     | Options need to be one of "explicit", "implicit"      | explicit      |
 
 
 ### Example Config
 ```json
 {
   "rules": {
-    "explicit-types": ["warn","explicit"]
+    "explicit-types": ["warn"]
   }
 }
 ```
@@ -36,19 +32,19 @@ This rule accepts an array of options:
 ## Examples
 ### 👍 Examples of **correct** code for this rule
 
-#### If explicit is selected
+#### using a type that explicitly states the variable size
 
 ```solidity
 uint256 public variableName
 ```
 
-#### If implicit is selected
+#### using a type that explicitly states the variable size
 
 ```solidity
-uint public variableName
+fixed128x18 public foo
 ```
 
-#### If explicit is selected
+#### using a type that explicitly states the variable size
 
 ```solidity
 uint256 public variableName = uint256(5)
@@ -56,22 +52,22 @@ uint256 public variableName = uint256(5)
 
 ### 👎 Examples of **incorrect** code for this rule
 
-#### If explicit is selected
+#### using the shorter alias for a type, which is implicit about its size
 
 ```solidity
 uint public variableName
 ```
 
-#### If implicit is selected
+#### using the shorter alias for a type, which is implicit about its size
 
 ```solidity
-uint256 public variableName
+fixed public foo
 ```
 
-#### At any setting
+#### using the shorter alias for a type, which is implicit about its size
 
 ```solidity
-uint public variableName = uint256(5)
+uint public variableName = uint(5)
 ```
 
 ## Version
