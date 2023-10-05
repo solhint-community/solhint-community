@@ -18,6 +18,23 @@ describe('Linter - explicit-types rule', () => {
     assertErrorCount(report, 2)
   })
 
+  it('should report correct line for initializer of a variable declaration', function () {
+    const code = `                            // 1
+      contract Foo {                          // 2
+          function foo() {                    // 3
+              uint256 complexThing = uint256( // 4
+                  uint(420)                   // 5
+              );                              // 6
+          }
+      }
+    `
+    const report = linter.processStr(code, {
+      rules: { 'explicit-types': 'error' },
+    })
+    assertErrorCount(report, 1)
+    assertLineNumber(report.reports[0], 5)
+  })
+
   for (const key in FIXTURE) {
     it(`should raise error for ${key} when using an implicit type`, () => {
       const { implicit } = FIXTURE[key]
