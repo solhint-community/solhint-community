@@ -1,88 +1,39 @@
 const linter = require('../../../lib/index')
 const contractWith = require('../../common/contract-builder').contractWith
-const { assertErrorCount, assertNoErrors, assertErrorMessage } = require('../../common/asserts')
-const VAR_DECLARATIONS = require('../../fixtures/best-practises/explicit-types')
-
-const getZeroErrosObject = () => {
-  const zeroErrorsExplicit = {}
-  const zeroErrorsImplicit = {}
-  for (const key in VAR_DECLARATIONS) {
-    const obj = VAR_DECLARATIONS[key]
-    if (obj.errorsImplicit === 0) {
-      zeroErrorsImplicit[key] = obj
-    }
-    if (obj.errorsExplicit === 0) {
-      zeroErrorsExplicit[key] = obj
-    }
-  }
-
-  return { zeroErrorsImplicit, zeroErrorsExplicit }
-}
+const {
+  assertErrorCount,
+  assertNoErrors,
+  assertErrorMessage,
+  assertLineNumber,
+} = require('../../common/asserts')
+const FIXTURE = require('../../fixtures/best-practises/explicit-types')
 
 describe('Linter - explicit-types rule', () => {
-  it('should throw an error with a wrong configuration rule', () => {
-    const code = contractWith('uint256 public constant SNAKE_CASE = 1;')
+  it('should ignore configuration', () => {
+    const code = contractWith('uint public constant SNAKE_CASE = 1; uint public foo; ')
 
     const report = linter.processStr(code, {
-      rules: { 'explicit-types': ['error', 'implicito'] },
+      rules: { 'explicit-types': ['error', 'IMPLICIT'] },
     })
-
-    assertErrorCount(report, 1)
-    assertErrorMessage(report, `Error: Config error on [explicit-types]. See explicit-types.md.`)
+    assertErrorCount(report, 2)
   })
 
-  it('should NOT throw error without the config array and default should take place', () => {
-    const code = contractWith('uint256 public constant SNAKE_CASE = 1;')
-    const report = linter.processStr(code, {
-      rules: { 'explicit-types': 'error' },
-    })
-
-    assertNoErrors(report)
-  })
-
-  for (const key in VAR_DECLARATIONS) {
-    it(`should raise error for ${key} on 'implicit' mode`, () => {
-      const { code, errorsImplicit } = VAR_DECLARATIONS[key]
-      const report = linter.processStr(contractWith(code), {
-        rules: { 'explicit-types': ['error', 'implicit'] },
+  for (const key in FIXTURE) {
+    it(`should raise error for ${key} when using an implicit type`, () => {
+      const { implicit } = FIXTURE[key]
+      const report = linter.processStr(contractWith(implicit), {
+        rules: { 'explicit-types': 'error' },
       })
-      assertErrorCount(report, errorsImplicit)
-      if (errorsImplicit > 0) assertErrorMessage(report, `Rule is set with implicit type [var/s:`)
+      assertErrorCount(report, 1)
+      assertErrorMessage(report, 'prefer use of explicit type')
+    })
+
+    it(`should NOT raise error for ${key} when using an explicit type`, () => {
+      const { explicit } = FIXTURE[key]
+      const report = linter.processStr(contractWith(explicit), {
+        rules: { 'explicit-types': 'error' },
+      })
+      assertNoErrors(report)
     })
   }
-
-  for (const key in VAR_DECLARATIONS) {
-    it(`should raise error for ${key} on 'explicit' mode`, () => {
-      const { code, errorsExplicit } = VAR_DECLARATIONS[key]
-      const report = linter.processStr(contractWith(code), {
-        rules: { 'explicit-types': ['error', 'explicit'] },
-      })
-      assertErrorCount(report, errorsExplicit)
-      if (errorsExplicit > 0) assertErrorMessage(report, `Rule is set with explicit type [var/s:`)
-    })
-  }
-
-  describe('Rule [explicit-types] - should not raise any error', () => {
-    const { zeroErrorsImplicit, zeroErrorsExplicit } = getZeroErrosObject()
-
-    for (const key in zeroErrorsExplicit) {
-      it(`should NOT raise error for ${key} on 'implicit' mode`, () => {
-        const { code } = zeroErrorsExplicit[key]
-        const report = linter.processStr(contractWith(code), {
-          rules: { 'explicit-types': ['error', 'explicit'] },
-        })
-        assertNoErrors(report)
-      })
-    }
-
-    for (const key in zeroErrorsImplicit) {
-      it(`should NOT raise error for ${key} on 'implicit' mode`, () => {
-        const { code } = zeroErrorsImplicit[key]
-        const report = linter.processStr(contractWith(code), {
-          rules: { 'explicit-types': ['error', 'implicit'] },
-        })
-        assertNoErrors(report)
-      })
-    }
-  })
 })

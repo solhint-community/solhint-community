@@ -1,176 +1,79 @@
 const VAR_DECLARATIONS = {
+  // these cases try to make sure I catch every *type* that can be made explicit
+  // or implicit
   uint256: {
-    code: 'uint256 public varUint256;',
-    errorsImplicit: 1,
-    errorsExplicit: 0,
+    explicit: 'uint256 public varUint256;',
+    implicit: 'uint public varUint;',
   },
-
-  uint: {
-    code: 'uint public varUint;',
-    errorsImplicit: 0,
-    errorsExplicit: 1,
-  },
-
   int256: {
-    code: 'int256 public varInt256;',
-    errorsImplicit: 1,
-    errorsExplicit: 0,
+    explicit: 'int256 public varInt256;',
+    implicit: 'int public varInt;',
   },
-
-  int: {
-    code: 'int public varInt;',
-    errorsImplicit: 0,
-    errorsExplicit: 1,
-  },
-
   ufixed128x18: {
-    code: 'ufixed128x18 public varUfixed128x18;',
-    errorsImplicit: 1,
-    errorsExplicit: 0,
+    explicit: 'ufixed128x18 public varUfixed128x18;',
+    implicit: 'ufixed public varUfixed;',
   },
-
-  ufixed: {
-    code: 'ufixed public varUfixed;',
-    errorsImplicit: 0,
-    errorsExplicit: 1,
-  },
-
   fixed128x18: {
-    code: 'fixed128x18 public varFixed128x18;',
-    errorsImplicit: 1,
-    errorsExplicit: 0,
+    explicit: 'fixed128x18 public varFixed128x18;',
+    implicit: 'fixed public varFixed;',
   },
 
-  fixed: {
-    code: 'fixed public varFixed;',
-    errorsImplicit: 0,
-    errorsExplicit: 1,
+  // Here I try to be sure I don't miss places where a type can be used
+  functionParameterUint256: {
+    explicit: 'function withUint256(uint256 varUint256) public {}',
+    implicit: 'function withUint256(uint varUint256) public {}',
   },
-
-  functionParameterAndReturns1: {
-    code: 'function withUint256(uint256 varUint256, uint varUint) public returns(int256 returnInt256) {}',
-    errorsImplicit: 2,
-    errorsExplicit: 1,
+  functionReturn: {
+    explicit: 'function foo() public returns(int256 returnInt) {}',
+    implicit: 'function foo() public returns(int returnInt) {}',
   },
-
-  functionParameterAndReturns2: {
-    code: 'function withUint256(uint varUint, uint varUint) public returns(int returnInt) {}',
-    errorsImplicit: 0,
-    errorsExplicit: 3,
-  },
-
   eventParameter: {
-    code: 'event EventWithInt256(int256 varWithInt256, address addressVar, bool boolVat, int varWithInt);',
-    errorsImplicit: 1,
-    errorsExplicit: 1,
+    implicit: 'event EventWithInt256(int varWithInt256);',
+    explicit: 'event EventWithInt256(int256 varWithInt256);',
   },
-
-  regularMap1: {
-    code: 'mapping(uint256 => fixed128x18) public mapWithFixed128x18;',
-    errorsImplicit: 2,
-    errorsExplicit: 0,
+  mappingKey: {
+    implicit: 'mapping(uint => fixed128x18) public map;',
+    explicit: 'mapping(uint256 => fixed128x18) public map;',
   },
-
-  regularMap2: {
-    code: 'mapping(uint => fixed128x18) public mapWithFixed128x18;',
-    errorsImplicit: 1,
-    errorsExplicit: 1,
+  mappingValue: {
+    implicit: 'mapping(uint256 => fixed) public map;',
+    explicit: 'mapping(uint256 => fixed128x18) public map;',
   },
-
-  mapOfMapping: {
-    code: 'mapping(uint => mapping(fixed128x18 => int256)) mapOfMap;',
-    errorsImplicit: 2,
-    errorsExplicit: 1,
+  nestedMappingKey: {
+    implicit: 'mapping(uint256 => mapping(fixed => int256)) mapOfMap;',
+    explicit: 'mapping(uint256 => mapping(fixed128x18 => int256)) mapOfMap;',
   },
-
-  struct: {
-    code: 'struct Estructura { ufixed128x18 varWithUfixed128x18; uint varUint; }',
-    errorsImplicit: 1,
-    errorsExplicit: 1,
+  nestedMappingValue: {
+    implicit: 'mapping(uint256 => mapping(fixed128x18 => int)) mapOfMap;',
+    explicit: 'mapping(uint256 => mapping(fixed128x18 => int256)) mapOfMap;',
   },
-
-  mapOfStruct: {
-    code: 'struct Estructura { ufixed128x18 varWithUfixed128x18; uint varUint; mapping(uint256 => Estructura) mapOfStruct; }',
-    errorsImplicit: 2,
-    errorsExplicit: 1,
+  structMember: {
+    implicit: 'struct Estructura { uint varUint; }',
+    explicit: 'struct Estructura { uint256 varUint; }',
   },
-
-  structWithMap: {
-    code: 'struct Estructura { ufixed varWithUfixed; uint varUint; mapping(address => uint256) structWithMap; } ',
-    errorsImplicit: 1,
-    errorsExplicit: 2,
+  structWithMappingMember: {
+    implicit: 'struct Estructura { mapping(address => uint) structWithMap; } ',
+    explicit: 'struct Estructura { mapping(address => uint256) structWithMap; } ',
   },
-
-  mapOfArrayStructWithMap: {
-    code: 'struct Estructura { ufixed varWithUfixed; uint varUint; mapping(address => uint256) structWithMap; } mapping(uint256 => Estructura[]) mapOfArrayStructWithMap;',
-    errorsImplicit: 2,
-    errorsExplicit: 2,
+  array: {
+    implicit: 'uint[] public arr;',
+    explicit: 'uint256[] public arr;',
   },
-
-  regularArray: {
-    code: 'uint256[] public arr;',
-    errorsImplicit: 1,
-    errorsExplicit: 0,
+  castInArrayDeclaration: {
+    implicit: 'uint256[] public arr = [uint(1),2,3];',
+    explicit: 'uint256[] public arr = [uint256(1),2,3];',
   },
-
-  fixedArray: {
-    code: 'uint[] public arr = [1,2,3];',
-    errorsImplicit: 0,
-    errorsExplicit: 1,
-  },
-
-  fixedArrayCastInDeclaration: {
-    code: 'uint[] public arr = [uint(1),2,3];',
-    errorsImplicit: 0,
-    errorsExplicit: 2,
-  },
-
-  fixedArrayOfArrays: {
-    code: 'uint256[] public arr = [[1,2,3]];',
-    errorsImplicit: 1,
-    errorsExplicit: 0,
-  },
-
-  mapOfFixedArray: {
-    code: 'uint[] public arr = [1,2,3]; mapping(uint256 => arr) mapOfFixedArray;',
-    errorsImplicit: 1,
-    errorsExplicit: 1,
-  },
-
   castInStateVariableDeclaration: {
-    code: 'uint256 public varUint256 = uint256(1); uint public varUint = uint(1);',
-    errorsImplicit: 2,
-    errorsExplicit: 2,
+    implicit: 'uint256 public varUint256 = uint(1);',
+    explicit: 'uint256 public varUint = uint256(1);',
   },
-
   castInsideFunctionAtDeclarationUint256: {
-    code: 'function withUint256() external { uint256 varUint256 = uint256(1); }',
-    errorsImplicit: 2,
-    errorsExplicit: 0,
+    implicit: 'function withUint256() external { uint256 varUint256 = uint(1); }',
+    explicit: 'function withUint256() external { uint256 varUint256 = uint256(1); }',
   },
-
-  castInsideFunctionAtDeclarationUint: {
-    code: 'function withUint() external { uint varUint = uint(1); }',
-    errorsImplicit: 0,
-    errorsExplicit: 2,
-  },
-
-  castInsideFunctionUint: {
-    code: 'function withUint() external { uint varUint; varUint = uint(1);}',
-    errorsImplicit: 0,
-    errorsExplicit: 2,
-  },
-
-  castInsideFunctionUint256: {
-    code: 'function withUint256() external { uint256 varUint; varUint = uint256(1);}',
-    errorsImplicit: 2,
-    errorsExplicit: 0,
-  },
-
-  castInsideModifier: {
-    code: 'modifier withUint256() { _; uint256 varUint; varUint = uint256(1);}',
-    errorsImplicit: 2,
-    errorsExplicit: 0,
+  castInExpressionStatement: {
+    implicit: 'function withUint() external { uint256 varUint; varUint = uint(1);}',
+    explicit: 'function withUint() external { uint256 varUint; varUint = uint256(1);}',
   },
 }
 
