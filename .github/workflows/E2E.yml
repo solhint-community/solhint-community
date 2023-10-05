@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           node-version: ${{ matrix.node }}
-      - uses: actions/checkout@v3
+          fetch-depth: 0
       
       - name: install
         run: npm install --include=dev
@@ -29,7 +29,10 @@ jobs:
         run: npm run lint
       
       - name: generate-docs
-        run: npm run docs 
+        run: npm run docs
+
+      - name: ensure-docs-are-up-to-date
+        run: test "$(git diff |wc -l)" -eq 0
       
       - name: pack
         run: npm pack
