@@ -9,6 +9,7 @@ title:       "Rule Index of Solhint"
 | Rule Id                                                                  | Error                                                                                                                 | Recommended |
 | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ----------- |
 | [code-complexity](./rules/best-practises/code-complexity.md)             | Function has cyclomatic complexity "current" but allowed no more than maxcompl.                                       |             |
+| [custom-errors](./rules/best-practises/custom-errors.md)                 | Enforces the use of Custom Errors over Require and Revert statements                                                  |             |
 | [function-max-lines](./rules/best-practises/function-max-lines.md)       | Function body contains "count" lines but allowed no more than maxlines.                                               |             |
 | [max-line-length](./rules/best-practises/max-line-length.md)             | Line length must be no more than maxlen.                                                                              |             |
 | [max-states-count](./rules/best-practises/max-states-count.md)           | Contract has "some count" states declarations but allowed no more than maxstates.                                     | ✔️          |
