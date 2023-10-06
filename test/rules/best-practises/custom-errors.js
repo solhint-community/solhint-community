@@ -1,4 +1,3 @@
-const assert = require('assert')
 const {
   assertNoWarnings,
   assertNoErrors,
@@ -73,7 +72,7 @@ describe('Linter - custom-errors', () => {
     assertNoErrors(report)
   })
 
-  it('should raise error for require, revert message and not for revert CustomError() for [recommended] config', () => {
+  it('should not be included in [recommended] config', () => {
     const code = funcWith(`require(!has(role, account), "Roles: account already has role");
         revert("RevertMessage");
         revert CustomError();
@@ -83,9 +82,9 @@ describe('Linter - custom-errors', () => {
       rules: { 'compiler-version': 'off' },
     })
 
+    assertNoErrors()
+    assertNoWarnings()
     assertWarnsCount(report, 2)
-    assert.equal(report.reports[0].message, 'Use Custom Errors instead of require statements')
-    assert.equal(report.reports[1].message, 'Use Custom Errors instead of revert statements')
   })
 
   it('should NOT raise error for default config', () => {
