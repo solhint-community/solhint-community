@@ -28,12 +28,15 @@ jobs:
       - name: lint
         run: npm run lint
       
+      - name: generate-rulesets
+        run: npm run generate-rulesets
+
       - name: generate-docs
         run: npm run docs
 
-      - name: ensure-docs-are-up-to-date
+      - name: ensure-docs-and-rulesets-are-up-to-date
         run: test "$(git diff |wc -l)" -eq 0
-      
+
       - name: pack
         run: npm pack
       
