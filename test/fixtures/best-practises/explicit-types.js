@@ -4,18 +4,26 @@ const VAR_DECLARATIONS = {
   uint256: {
     explicit: 'uint256 public varUint256;',
     implicit: 'uint public varUint;',
+    implicitTypeName: 'uint',
+    explicitTypeName: 'uint256',
   },
   int256: {
     explicit: 'int256 public varInt256;',
     implicit: 'int public varInt;',
+    implicitTypeName: 'int',
+    explicitTypeName: 'int256',
   },
   ufixed128x18: {
     explicit: 'ufixed128x18 public varUfixed128x18;',
     implicit: 'ufixed public varUfixed;',
+    implicitTypeName: 'ufixed',
+    explicitTypeName: 'ufixed128x18',
   },
   fixed128x18: {
     explicit: 'fixed128x18 public varFixed128x18;',
     implicit: 'fixed public varFixed;',
+    implicitTypeName: 'fixed',
+    explicitTypeName: 'fixed128x18',
   },
 
   // Here I try to be sure I don't miss places where a type can be used

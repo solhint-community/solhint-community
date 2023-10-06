@@ -37,12 +37,19 @@ describe('Linter - explicit-types rule', () => {
 
   for (const key in FIXTURE) {
     it(`should raise error for ${key} when using an implicit type`, () => {
-      const { implicit } = FIXTURE[key]
+      const { implicit, implicitTypeName, explicitTypeName } = FIXTURE[key]
       const report = linter.processStr(contractWith(implicit), {
         rules: { 'explicit-types': 'error' },
       })
       assertErrorCount(report, 1)
-      assertErrorMessage(report, 'prefer use of explicit type')
+      if (explicitTypeName && implicitTypeName) {
+        assertErrorMessage(
+          report,
+          `prefer use of explicit type ${explicitTypeName} over ${implicitTypeName}`
+        )
+      } else {
+        assertErrorMessage(report, 'prefer use of explicit type')
+      }
     })
 
     it(`should NOT raise error for ${key} when using an explicit type`, () => {
