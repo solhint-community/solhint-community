@@ -6,6 +6,8 @@
 module.exports = Object.freeze({
   rules: {
     'code-complexity': ['warn', 7],
+    'custom-errors': 'warn',
+    'explicit-types': ['warn'],
     'function-max-lines': ['warn', 50],
     'max-line-length': ['error', 120],
     'max-states-count': ['warn', 15],
@@ -30,6 +32,7 @@ module.exports = Object.freeze({
     'func-name-mixedcase': 'warn',
     'func-param-name-mixedcase': 'warn',
     'modifier-name-mixedcase': 'warn',
+    'named-parameters-function': ['warn', 3],
     'named-parameters-mapping': 'off',
     'private-vars-leading-underscore': [
       'warn',
