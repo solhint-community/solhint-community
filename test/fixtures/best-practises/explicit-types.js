@@ -19,6 +19,10 @@ const VAR_DECLARATIONS = {
   },
 
   // Here I try to be sure I don't miss places where a type can be used
+  memoryArrayCreation: {
+    explicit: 'function foo() public {uint256[] memory arr = new uint256[](5);}',
+    implicit: 'function foo() public {uint256[] memory arr = new uint[](5);}',
+  },
   functionParameterUint256: {
     explicit: 'function withUint256(uint256 varUint256) public {}',
     implicit: 'function withUint256(uint varUint256) public {}',
