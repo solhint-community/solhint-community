@@ -82,9 +82,8 @@ describe('Linter - custom-errors', () => {
       rules: { 'compiler-version': 'off' },
     })
 
-    assertNoErrors()
-    assertNoWarnings()
-    assertWarnsCount(report, 2)
+    assertNoErrors(report)
+    assertNoWarnings(report)
   })
 
   it('should NOT raise error for default config', () => {
