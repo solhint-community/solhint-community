@@ -127,7 +127,7 @@ describe('e2e', function () {
         const { stdout } = shell.exec('solhint Foo.sol --formatter unix')
         const lines = stdout.split('\n')
         expect(lines[0]).to.eq('Foo.sol:3:1: Code contains empty blocks [Error/no-empty-blocks]')
-        expect(lines[2]).to.eq('1 problem')
+        expect(lines[2].trim()).to.eq('1 problem')
       })
 
       it('tap', async function () {
@@ -161,7 +161,7 @@ describe('e2e', function () {
         expect(lines[0]).to.eq(
           'Foo.sol: line 3, col 1, Error - Code contains empty blocks (no-empty-blocks)'
         )
-        expect(lines[2]).to.eq('1 problem')
+        expect(lines[2].trim()).to.eq('1 problem')
       })
 
       it('table', async function () {
@@ -204,6 +204,59 @@ describe('e2e', function () {
       const { code } = shell.exec('solhint contracts/**/*.sol')
 
       expect(code).to.equal(0)
+    })
+  })
+
+  describe('--max-warnings parameter tests', function () {
+    useFixture('05-max-warnings')
+    const warningExceededMsg = 'Solhint found more warnings than the maximum specified'
+    let code
+    let stdout
+
+    describe('GIVEN a contract with no errors and 6 warnings', function () {
+      describe('WHEN linting with --max-warnings 7 ', function () {
+        beforeEach(function () {
+          ;({ code, stdout } = shell.exec(
+            'solhint contracts/NoErrors6Warnings.sol --max-warnings 7'
+          ))
+        })
+        it('THEN it does NOT display warnings exceeded message', function () {
+          expect(stdout.trim()).to.not.contain(warningExceededMsg)
+        })
+        it('AND it exits without error', function () {
+          expect(code).to.equal(0)
+        })
+      })
+
+      describe('WHEN linting with --max-warnings 3 ', function () {
+        beforeEach(function () {
+          ;({ code, stdout } = shell.exec(
+            'solhint contracts/NoErrors6Warnings.sol --max-warnings 3'
+          ))
+        })
+        it('THEN displays warnings exceeded message', function () {
+          expect(stdout.trim()).to.contain(warningExceededMsg)
+        })
+        it('AND it exits with error 1', function () {
+          expect(code).to.equal(1)
+        })
+      })
+    })
+
+    describe('GIVEN a contract with one error and 14 warnings', function () {
+      describe('WHEN linting with --max-warnings 3 ', function () {
+        beforeEach(function () {
+          ;({ code, stdout } = shell.exec(
+            'solhint contracts/OneError14Warnings.sol --max-warnings 3'
+          ))
+        })
+        it('THEN it exits error code 1', function () {
+          expect(code).to.equal(1)
+        })
+        it('AND does not to print the "there are too many warnings" message', function () {
+          expect(stdout.trim()).to.not.contain(warningExceededMsg)
+        })
+      })
     })
   })
 

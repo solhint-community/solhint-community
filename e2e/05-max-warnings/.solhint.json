@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "state-visibility": "warn",
+    "no-empty-blocks": "error"
+  }
+}
