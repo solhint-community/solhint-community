@@ -63,9 +63,6 @@ function execMainAction() {
 
   const reportLists = program.args.filter(_.isString).map(processPath)
   const reports = _.flatten(reportLists)
-  const warningsCount = reports.reduce((acc, i) => acc + i.warningCount, 0)
-  const warningsNumberExceeded =
-    program.opts().maxWarnings >= 0 && warningsCount > program.opts().maxWarnings
 
   if (program.opts().fix) {
     for (const report of reports) {
@@ -91,24 +88,7 @@ function execMainAction() {
       reporter.reports = reporter.reports.filter((i) => i.severity === 2)
     })
   }
-
-  if (printReports(reports, formatterFn)) {
-    if (
-      program.maxWarnings &&
-      reports &&
-      reports.length > 0 &&
-      !reports[0].errorCount &&
-      warningsNumberExceeded
-    ) {
-      console.log(
-        'Solhint found more warnings than the maximum specified (maximum: %s)',
-        program.opts().maxWarnings
-      )
-      process.exit(1)
-    }
-  }
-
-  exitWithCode(reports)
+  process.exit(consumeReport(reports, formatterFn))
 }
 
 function processStdin(options) {
@@ -118,9 +98,8 @@ function processStdin(options) {
   const report = processStr(stdinBuffer.toString())
   report.file = options.filename || 'stdin'
   const formatterFn = getFormatter()
-  printReports([report], formatterFn)
 
-  exitWithCode([report])
+  process.exit(consumeReport([report], formatterFn))
 }
 
 function writeSampleConfigFile() {
@@ -188,11 +167,6 @@ function processPath(path) {
   return linter.processPath(path, readConfig())
 }
 
-function printReports(reports, formatter) {
-  console.log(formatter(reports))
-  return reports
-}
-
 function getFormatter(formatter) {
   const formatterName = formatter || 'stylish'
   try {
@@ -204,11 +178,25 @@ function getFormatter(formatter) {
     throw ex
   }
 }
-
-function exitWithCode(reports) {
+// @returns the program's exit value
+function consumeReport(reports, formatterFn) {
   const errorsCount = reports.reduce((acc, i) => acc + i.errorCount, 0)
+  const warningCount = reports.reduce((acc, i) => acc + i.warningCount, 0)
+  const tooManyWarnings =
+    program.opts().maxWarnings >= 0 && warningCount > program.opts().maxWarnings
+  console.log(formatterFn(reports))
+  if (tooManyWarnings && errorsCount === 0) {
+    console.log(
+      'Solhint found more warnings than the maximum specified (maximum: %s, found %s). This is an error.',
+      program.opts().maxWarnings,
+      warningCount
+    )
+  }
 
-  process.exit(errorsCount > 0 ? 1 : 0)
+  if (errorsCount > 0 || tooManyWarnings) {
+    return 1
+  }
+  return 0
 }
 
 init()
