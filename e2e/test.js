@@ -206,4 +206,20 @@ describe('e2e', function () {
       expect(code).to.equal(0)
     })
   })
+
+  describe('Linter - foundry-test-functions with shell', () => {
+    // Foo contract has 1 warning
+    // FooTest contract has 1 error
+    useFixture('07-foundry-test')
+
+    it(`should raise error for wrongFunctionDefinitionName() only`, () => {
+      const { code, stdout } = shell.exec('solhint -c test/.solhint.json test/FooTest.sol')
+
+      expect(code).to.equal(1)
+      expect(stdout.trim()).to.contain(
+        'Function wrongFunctionDefinitionName() must match Foundry test naming convention'
+      )
+      expect(stdout.trim()).to.contain('(1 error')
+    })
+  })
 })
