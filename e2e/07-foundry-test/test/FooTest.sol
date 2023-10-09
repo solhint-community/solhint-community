@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.0;
 
-import "./Test.sol";
 
-contract FooTest is Test {
+contract FooTest {
     uint256 testNumber;
 
     function setUp() public {
