@@ -191,21 +191,25 @@ function loadNotes(rule) {
 }
 
 function linkToSource(rule) {
-  const link = rule.file.replace(path.resolve(path.join(__dirname, '..')), '')
+  const link = localPathToUri(rule.file)
   return `https://github.com/solhint-community/solhint-community/tree/master${link}`
 }
 
 function linkToDocumentSource(rule) {
-  const link = rule.file
-    .replace(path.resolve(path.join(__dirname, '..')), '')
-    .replace('lib/rules', 'docs/rules')
-    .replace(/\.js$/, '.md')
+  const link = localPathToUri(rule.file).replace('lib/rules', 'docs/rules').replace(/\.js$/, '.md')
   return `https://github.com/solhint-community/solhint-community/tree/master${link}`
 }
 
 function linkToTestCase(rule) {
-  const link = rule.file.replace(path.resolve(path.join(__dirname, '..', 'lib', 'rules')), '')
+  const link = localPathToUri(rule.file).replace('lib/rules/', '')
   return `https://github.com/solhint-community/solhint-community/tree/master/test/rules${link}`
+}
+
+function localPathToUri(file) {
+  return file
+    .replace(path.resolve(path.join(__dirname, '..')), '')
+    .split(path.sep)
+    .join('/')
 }
 
 function loadExamples(rule) {
