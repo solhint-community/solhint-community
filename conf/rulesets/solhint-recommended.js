@@ -23,6 +23,12 @@ module.exports = Object.freeze({
     'contract-name-camelcase': 'warn',
     'event-name-camelcase': 'warn',
     'func-name-mixedcase': 'warn',
+    'immutable-vars-naming': [
+      'warn',
+      {
+        immutablesAsConstants: true,
+      },
+    ],
     'use-forbidden-name': 'warn',
     'var-name-mixedcase': 'warn',
     'imports-on-top': 'warn',
