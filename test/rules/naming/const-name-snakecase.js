@@ -65,8 +65,8 @@ describe('Linter - const-name-snakecase', () => {
     assert.equal(report.errorCount, 0)
   })
 
-  it('should not raise const name error for immutable variables in mixedCase', () => {
-    const code = contractWith('uint32 private immutable SNAKE_CASE;')
+  it('should not raise const name error for immutable variables in camelCase', () => {
+    const code = contractWith('uint32 private immutable camelCase;')
 
     const report = linter.processStr(code, {
       rules: { 'const-name-snakecase': 'error' },
