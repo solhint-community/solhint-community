@@ -37,6 +37,7 @@ module.exports = Object.freeze({
     'modifier-name-mixedcase': 'warn',
     'named-parameters-function': ['warn', 3],
     'named-parameters-mapping': 'off',
+    'named-return-values': 'warn',
     'private-vars-leading-underscore': [
       'warn',
       {

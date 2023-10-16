@@ -47,6 +47,7 @@ title:       "Rule Index of Solhint"
 | [immutable-name-snakecase](./rules/naming/immutable-name-snakecase.md)               | Check Immutable variables are SNAKE_CASE.                                              |             |            |
 | [modifier-name-mixedcase](./rules/naming/modifier-name-mixedcase.md)                 | Modifier name must be in mixedCase.                                                    |             |            |
 | [named-parameters-mapping](./rules/naming/named-parameters-mapping.md)               | Solidity v0.8.18 introduced named parameters on the mappings definition                |             |            |
+| [named-return-values](./rules/naming/named-return-values.md)                         | Ensure function return parameters are named                                            |             |            |
 | [private-vars-leading-underscore](./rules/naming/private-vars-leading-underscore.md) | Private and internal names must start with a single underscore.                        |             |            |
 | [use-forbidden-name](./rules/naming/use-forbidden-name.md)                           | Avoid to use letters 'I', 'l', 'O' as identifiers.                                     | ✔️          |            |
 | [var-name-mixedcase](./rules/naming/var-name-mixedcase.md)                           | Variable name must be in mixedCase.                                                    | ✔️          |            |
