@@ -9,7 +9,7 @@ title:       "named-return-values | Solhint"
 ![Default Severity Badge warn](https://img.shields.io/badge/Default%20Severity-warn-yellow)
 
 ## Description
-Enforce the return values of a function to be named
+Ensure function return parameters are named
 
 ## Options
 This rule accepts a string option of rule severity. Must be one of "error", "warn", "off". Default to warn.
@@ -35,7 +35,7 @@ function checkBalance(address wallet) external view returns(uint256 retBalance) 
 
 ### 👎 Examples of **incorrect** code for this rule
 
-#### Function definition with UNNAMED return values
+#### Function definition with unnamed return values
 
 ```solidity
 function checkBalance(address wallet) external view returns(uint256) {}

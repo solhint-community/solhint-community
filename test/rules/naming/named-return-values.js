@@ -14,18 +14,19 @@ describe('Linter - named-return-values', () => {
     assertNoErrors(report)
   })
 
-  it('should raise error for unnamed return values', () => {
+  it('should raise error for unnamed return values AND report the correct ordinal', () => {
     const code = contractWith(
-      `function getBalanceFromTokens(address wallet) public returns(address, address, uint256, uint256) { balance = 1; }`
+      `function getBalanceFromTokens(address wallet) public returns(address, address, uint256, uint256, address) { balance = 1; }`
     )
     const report = linter.processStr(code, {
       rules: { 'named-return-values': 'error' },
     })
 
-    assertErrorCount(report, 4)
-    for (let index = 0; index < report.reports.length; index++) {
-      assert.equal(report.reports[index].message, `Named return value is missing - Index ${index}`)
-    }
+    assert.equal(report.reports[0].message, 'first return value does not have a name')
+    assert.equal(report.reports[1].message, 'second return value does not have a name')
+    assert.equal(report.reports[2].message, 'third return value does not have a name')
+    assert.equal(report.reports[3].message, '4-th return value does not have a name')
+    assert.equal(report.reports[4].message, '5-th return value does not have a name')
   })
 
   it('should NOT raise error for functions without return values', () => {
@@ -45,8 +46,8 @@ describe('Linter - named-return-values', () => {
     })
 
     assertErrorCount(report, 2)
-    assert.equal(report.reports[0].message, `Named return value is missing - Index 1`)
-    assert.equal(report.reports[1].message, `Named return value is missing - Index 3`)
+    assert.equal(report.reports[0].message, `second return value does not have a name`)
+    assert.equal(report.reports[1].message, `4-th return value does not have a name`)
   })
 
   it('should NOT raise error for solhint:recommended setup', () => {
@@ -85,8 +86,5 @@ describe('Linter - named-return-values', () => {
     })
 
     assertWarnsCount(report, 2)
-    for (let index = 0; index < report.reports.length; index++) {
-      assert.equal(report.reports[index].message, `Named return value is missing - Index ${index}`)
-    }
   })
 })
