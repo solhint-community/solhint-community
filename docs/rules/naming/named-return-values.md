@@ -42,7 +42,7 @@ function checkBalance(address wallet) external view returns(uint256) {}
 ```
 
 ## Version
-This rule is introduced in the latest version.
+This rule was introduced in [Solhint 3.7.0-rc02](https://github.com/solhint-community/solhint-community/tree/v3.7.0-rc02)
 
 ## Resources
 - [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/naming/named-return-values.js)

@@ -68,7 +68,7 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 ```
 
 ## Version
-This rule is introduced in the latest version.
+This rule was introduced in [Solhint 3.7.0-rc02](https://github.com/solhint-community/solhint-community/tree/v3.7.0-rc02)
 
 ## Resources
 - [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/best-practises/one-contract-per-file.js)
