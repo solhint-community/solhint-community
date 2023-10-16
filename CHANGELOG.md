@@ -1,5 +1,38 @@
-## [3.7.0-rc01] - 2023-07-23
+## [3.7.0-rc01] - 2023-10-16
 Current release candidate
+
+### Added
+- backport named-return-variables with small improvements:
+https://github.com/solhint-community/solhint-community/pull/56
+- backport immutable-vars-naming (with a different name:
+immutable-name-snakecase)
+https://github.com/solhint-community/solhint-community/pull/54/
+- backport one-contract-per-file
+https://github.com/solhint-community/solhint-community/pull/52
+- backport custom-errors rule, with improvements
+https://github.com/solhint-community/solhint-community/pull/42
+https://github.com/solhint-community/solhint-community/pull/44
+- backport explicit-types rule, with improvements
+https://github.com/solhint-community/solhint-community/pull/41
+- backport foundry-test-names
+https://github.com/solhint-community/solhint-community/pull/47
+
+### Fixed
+- Improved doc generation
+https://github.com/solhint-community/solhint-community/pull/43
+https://github.com/solhint-community/solhint-community/pull/53
+- Improved CI
+https://github.com/solhint-community/solhint-community/pull/48
+- Updated compiler-version to current solc version (a backport, with some
+improvements): 
+https://github.com/solhint-community/solhint-community/pull/50
+- backport: remove runtime dependency on load-rules
+https://github.com/solhint-community/solhint-community/pull/46
+- backport: solcjs to handle --max-warnings in a manner more consistent with
+eslint: https://github.com/solhint-community/solhint-community/pull/51 (plus
+added tests)
+
+## [3.7.0-rc01] - 2023-07-23
 
 ### Updated
 - depreacted solhit:default ruleset:
