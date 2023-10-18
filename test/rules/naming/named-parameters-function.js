@@ -39,7 +39,7 @@ describe('Linter - named-parameters-function', () => {
     })
   })
 
-  describe('GIVEN a setting of zero', function () {
+  describe('GIVEN an invalid setting of zero', function () {
     const config = {
       rules: { 'named-parameters-function': ['warn', 0] },
     }
@@ -47,10 +47,36 @@ describe('Linter - named-parameters-function', () => {
       const code = contractWith(multiLine('function foo() {}', `function bar (){foo();}`))
       assertNoWarnings(linter.processStr(code, config))
     })
-    it('WHEN calling with one positional argument THEN it reports', () => {
+    it('WHEN calling with one positional argument THEN it does NOT report', () => {
       const code = contractWith(multiLine('function foo(uint a) {}', `function bar (){foo(3);}`))
-      assertWarnsCount(linter.processStr(code, config), 1)
+      assertNoWarnings(linter.processStr(code, config))
     })
+
+    it('WHEN doing a cast to a user defined type, THEN it should NOT report an error', function () {
+      const code = `
+          contract A {}
+          contract B {
+            address public a;
+            function setA(address addr) external {
+              a = A(addr);
+            }
+          }
+          `
+      assertNoWarnings(linter.processStr(code, config))
+    })
+    ;[
+      ['uint', 'uint256', 'int', 'int256', 'uint8', 'int128'],
+      ['ufixed', 'ufixed128x18', 'fixed', 'fixed128x18'],
+      ['bytes1', 'bytes32', 'bytes', 'bytes12'],
+      ['address', 'payable', 'address payable'],
+    ]
+      .flat()
+      .forEach((i) => {
+        it(`WHEN doing a cast to native type ${i} THEN it does NOT report an error`, function () {
+          const code = contractWith(`function bar (){${i}(3);}`)
+          assertNoWarnings(linter.processStr(code, config))
+        })
+      })
   })
 
   it('GIVEN a setting of 4, THEN it does NOT warn on calls with four positional arguments', () => {
