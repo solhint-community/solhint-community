@@ -30,6 +30,12 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 ## Examples
 ### 👍 Examples of **correct** code for this rule
 
+#### empty receive function
+
+```solidity
+receive () external {}
+```
+
 #### empty fallback function
 
 ```solidity
