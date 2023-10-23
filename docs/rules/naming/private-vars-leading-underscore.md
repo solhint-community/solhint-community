@@ -30,32 +30,36 @@ This rule accepts an array of options:
 ```
 
 ### Notes
-- This rule skips external and public functions
-- This rule skips external and public state variables
 - See [here](https://docs.soliditylang.org/en/latest/style-guide.html#underscore-prefix-for-non-external-functions-and-variables) for further information
 
 ## Examples
 ### 👍 Examples of **correct** code for this rule
 
-#### Internal function with correct naming
+#### Internal function starting with an underscore
 
 ```solidity
 function _thisIsInternal() internal {}
 ```
 
-#### Private function with correct naming
+#### Private function starting with an underscore
 
 ```solidity
 function _thisIsPrivate() private {}
 ```
 
-#### Internal state variable with correct naming
+#### Internal state variable starting with an underscore
 
 ```solidity
 uint256 internal _thisIsInternalVariable;
 ```
 
-#### Internal state variable with correct naming (no visibility is considered internal)
+#### with `{strict: false}`, memory variables starting with an underscore is not considered an error
+
+```solidity
+function foo(uint256 _bar) public {}
+```
+
+#### Internal state variable starting with an underscore (no visibility is considered internal)
 
 ```solidity
 uint256 _thisIsInternalVariable;
@@ -63,25 +67,37 @@ uint256 _thisIsInternalVariable;
 
 ### 👎 Examples of **incorrect** code for this rule
 
-#### Internal function with incorrect naming
+#### with `{strict: true}`, memory variables starting with an underscore are considered an error
+
+```solidity
+function foo(uint256 _bar) public {}
+```
+
+#### public/external function name starts with an underscore
+
+```solidity
+function _foo() public {}
+```
+
+#### Internal function does not start with an underscore
 
 ```solidity
 function thisIsInternal() internal {}
 ```
 
-#### Private function with incorrect naming
+#### Private function does not start with an underscore
 
 ```solidity
 function thisIsPrivate() private {}
 ```
 
-#### Internal state variable with incorrect naming
+#### Internal state variable does not start with an underscore
 
 ```solidity
 uint256 internal thisIsInternalVariable;
 ```
 
-#### Internal state variable with incorrect naming (no visibility is considered internal)
+#### Internal state variable does not start with an underscore(no visibility is considered internal)
 
 ```solidity
 uint256 thisIsInternalVariable;
