@@ -260,6 +260,72 @@ describe('e2e', function () {
     })
   })
 
+  describe.only('list-rules ', function () {
+    let code
+    let stdout
+    let stderr
+
+    describe('GIVEN a config file on the default path with 2 rules on and 1 off', function () {
+      useFixture('08-list-rules')
+      describe('WHEN executing with list-rules', function () {
+        beforeEach(function () {
+          ;({ code, stdout } = shell.exec('solhint list-rules'))
+        })
+        it('THEN it completes without error', function () {
+          expect(code).to.equal(0)
+        })
+        it('AND it lists enabled rules', function () {
+          expect(stdout).to.contain('compiler-version')
+          expect(stdout).to.contain('no-empty-blocks')
+        })
+        it('AND it does NOT list disabled rules', function () {
+          expect(stdout).to.not.contain('func-visibility')
+        })
+      })
+    })
+
+    describe('GIVEN a config file on a custom path with 2 rules on and 1 off', function () {
+      useFixture('08-list-rules')
+      describe('WHEN executing with list-rules -c config-file-with-weird-name.json', function () {
+        beforeEach(function () {
+          ;({ code, stdout } = shell.exec('solhint list-rules -c config-file-with-weird-name.json'))
+        })
+        it('THEN it completes without error', function () {
+          expect(code).to.equal(0)
+        })
+        it('AND it lists enabled rules', function () {
+          expect(stdout).to.contain('compiler-version')
+          expect(stdout).to.contain('no-empty-blocks')
+          expect(stdout).to.contain('func-visibility')
+          expect(stdout).to.contain('no-empty-blocks')
+        })
+        it('AND it does NOT list disabled rules', function () {
+          expect(stdout).to.not.contain('not-rely-on-time')
+        })
+      })
+    })
+
+    describe('GIVEN non-existing config file', function () {
+      useFixture('01-no-config')
+      describe('WHEN executing with list-rules', function () {
+        beforeEach(function () {
+          ;({ code, stdout, stderr } = shell.exec(
+            'solhint list-rules -c config-file-with-weird-name.json'
+          ))
+        })
+        it('THEN it returns error code 1', function () {
+          expect(code).to.equal(1)
+        })
+        it('AND it reports the problem to stderr', function () {
+          expect(stderr).to.contain('config file passed as a parameter does not exist')
+        })
+        it('AND it does NOT list disabled rules', function () {
+          expect(stdout).to.eq('')
+        })
+      })
+    })
+  })
+
   describe('Linter - foundry-test-functions with shell', () => {
     // Foo contract has 1 warning
     // FooTest contract has 1 error
