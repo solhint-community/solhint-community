@@ -40,6 +40,11 @@ function init() {
     .description('create configuration file for solhint')
     .action(writeSampleConfigFile)
 
+  program
+    .command('list-rules', null, { noHelp: false })
+    .description('display enabled rules of current config')
+    .action(listRules)
+
   if (process.argv.length <= 2) {
     program.help()
   }
@@ -146,7 +151,7 @@ const readConfig = _.memoize(() => {
   try {
     config = loadConfig(program.opts().config)
   } catch (e) {
-    console.log(e.message)
+    console.error(e.message)
     process.exit(1)
   }
 
@@ -197,6 +202,24 @@ function consumeReport(reports, formatterFn) {
     return 1
   }
   return 0
+}
+
+function listRules() {
+  const config = readConfig()
+  const rulesObject = config.rules
+
+  console.log('\nRules: \n')
+  const orderedRules = Object.keys(rulesObject)
+    .filter((key) => rulesObject[key] !== 'off' && rulesObject[key][0] !== 'off')
+    .sort()
+    .reduce((obj, key) => {
+      obj[key] = rulesObject[key]
+      return obj
+    }, {})
+
+  Object.keys(orderedRules).forEach(function (key) {
+    console.log('- ', key, ': ', orderedRules[key])
+  })
 }
 
 init()
