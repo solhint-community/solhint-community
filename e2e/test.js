@@ -260,7 +260,7 @@ describe('e2e', function () {
     })
   })
 
-  describe.only('list-rules ', function () {
+  describe('list-rules ', function () {
     let code
     let stdout
     let stderr
