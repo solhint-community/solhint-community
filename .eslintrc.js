@@ -9,8 +9,10 @@ module.exports = {
     es6: true,
     mocha: true,
   },
+  plugins: ['mocha'],
   extends: ['airbnb-base', 'plugin:prettier/recommended'],
   rules: {
+    'mocha/no-exclusive-tests': 'error',
     'consistent-return': 'off',
     'import/no-dynamic-require': 'off',
     'max-classes-per-file': 'off',
