@@ -11,6 +11,34 @@ describe('formatters', function () {
     expect(lines[2].trim()).to.eq('1 problem')
   })
 
+  describe('json', function () {
+    let stdout
+    beforeEach(function () {
+      ;({ stdout } = shell.exec('solhint Foo.sol --formatter json'))
+    })
+    it('is proper json and not a JS object', async function () {
+      expect(stdout).to.contain('"message"')
+      expect(stdout).to.contain('"severity"')
+    })
+    it('has a conclusion object as last element', function () {
+      const json = JSON.parse(stdout)
+      expect(json.length).to.eq(2)
+      expect(json[1]).to.deep.eq({ conclusion: '1 problem/s (1 error/s)' })
+    })
+    it('reports line, column, severity, ruleId and filepath', function () {
+      const json = JSON.parse(stdout)
+      expect(json[0]).to.deep.eq({
+        line: 3,
+        column: 1,
+        severity: 'Error',
+        message: 'Code contains empty blocks',
+        ruleId: 'no-empty-blocks',
+        fix: null,
+        filePath: 'Foo.sol',
+      })
+    })
+  })
+
   it('tap', async function () {
     const { stdout } = shell.exec('solhint Foo.sol --formatter tap')
     const lines = stdout.split('\n')
