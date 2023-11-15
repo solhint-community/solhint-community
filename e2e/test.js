@@ -1,32 +1,11 @@
-/* eslint-disable func-names */
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
-
 const { expect } = require('chai')
-const cp = require('child_process')
 const fs = require('fs-extra')
-const getStream = require('get-stream')
-const os = require('os')
 const path = require('path')
 const shell = require('shelljs')
+const { useFixture } = require('./utils')
 
-function useFixture(dir) {
-  beforeEach(`switch to ${dir}`, function () {
-    const fixturePath = path.join(__dirname, dir)
-
-    const tmpDirContainer = os.tmpdir()
-    this.testDirPath = path.join(tmpDirContainer, `solhint-tests-${dir}`)
-
-    fs.ensureDirSync(this.testDirPath)
-    fs.emptyDirSync(this.testDirPath)
-
-    fs.copySync(fixturePath, this.testDirPath)
-
-    shell.cd(this.testDirPath)
-  })
-}
-
-describe('e2e', function () {
+describe('main executable tests', function () {
   describe('no config', function () {
     useFixture('01-no-config')
     describe('GIVEN a config file created with solhint --init', function () {
@@ -85,115 +64,6 @@ describe('e2e', function () {
       expect(code).to.equal(0)
 
       expect(stdout.trim()).to.equal('Configuration file already exists')
-    })
-  })
-
-  describe('no-empty-blocks', function () {
-    useFixture('03-no-empty-blocks')
-
-    it('should exit with 1', function () {
-      const { code, stdout } = shell.exec('solhint Foo.sol')
-
-      expect(code).to.equal(1)
-
-      expect(stdout.trim()).to.contain('Code contains empty blocks')
-    })
-
-    it('should work with stdin', async function () {
-      const child = cp.exec('solhint stdin')
-
-      const stdoutPromise = getStream(child.stdout)
-
-      const codePromise = new Promise((resolve) => {
-        child.on('close', (code) => {
-          resolve(code)
-        })
-      })
-
-      child.stdin.write('contract Foo {}')
-      child.stdin.end()
-
-      const code = await codePromise
-
-      expect(code).to.equal(1)
-
-      const stdout = await stdoutPromise
-
-      expect(stdout.trim()).to.contain('Code contains empty blocks')
-    })
-
-    describe('formatters', function () {
-      it('unix', async function () {
-        const { stdout } = shell.exec('solhint Foo.sol --formatter unix')
-        const lines = stdout.split('\n')
-        expect(lines[0]).to.eq('Foo.sol:3:1: Code contains empty blocks [Error/no-empty-blocks]')
-        expect(lines[2].trim()).to.eq('1 problem')
-      })
-
-      it('tap', async function () {
-        const { stdout } = shell.exec('solhint Foo.sol --formatter tap')
-        const lines = stdout.split('\n')
-
-        expect(lines[0]).to.eq('TAP version 13')
-        expect(lines[1]).to.eq('1..1')
-        expect(lines[2]).to.eq('not ok 1 - Foo.sol')
-        expect(lines[3]).to.eq('  ---')
-        expect(lines[4]).to.eq('  message: Code contains empty blocks')
-        expect(lines[5]).to.eq('  severity: error')
-        expect(lines[6]).to.eq('  data:')
-        expect(lines[7]).to.eq('    line: 3')
-        expect(lines[8]).to.eq('    column: 1')
-        expect(lines[9]).to.eq('    ruleId: no-empty-blocks')
-      })
-
-      it('stylish', async function () {
-        const { stdout } = shell.exec('solhint Foo.sol --formatter stylish')
-        const lines = stdout.split('\n')
-
-        expect(lines[1]).to.eq('Foo.sol')
-        expect(lines[2]).to.eq('  3:1  error  Code contains empty blocks  no-empty-blocks')
-        expect(lines[4]).to.eq('✖ 1 problem (1 error, 0 warnings)')
-      })
-
-      it('compact', async function () {
-        const { stdout } = shell.exec('solhint Foo.sol --formatter compact')
-        const lines = stdout.split('\n')
-        expect(lines[0]).to.eq(
-          'Foo.sol: line 3, col 1, Error - Code contains empty blocks (no-empty-blocks)'
-        )
-        expect(lines[2].trim()).to.eq('1 problem')
-      })
-
-      it('table', async function () {
-        const { stdout } = shell.exec('solhint Foo.sol --formatter table')
-        const lines = stdout.split('\n')
-
-        expect(lines[1]).to.eq('Foo.sol')
-        expect(lines[3]).to.eq(
-          '║ Line     │ Column   │ Type     │ Message                                                │ Rule ID              ║'
-        )
-        expect(lines[4]).to.eq(
-          '╟──────────┼──────────┼──────────┼────────────────────────────────────────────────────────┼──────────────────────╢'
-        )
-        expect(lines[5]).to.eq(
-          '║ 3        │ 1        │ error    │ Code contains empty blocks                             │ no-empty-blocks      ║'
-        )
-        expect(lines[7]).to.eq(
-          '╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗'
-        )
-        expect(lines[8]).to.eq(
-          '║ 1 Error                                                                                                        ║'
-        )
-        expect(lines[9]).to.eq(
-          '╟────────────────────────────────────────────────────────────────────────────────────────────────────────────────╢'
-        )
-        expect(lines[10]).to.eq(
-          '║ 0 Warnings                                                                                                     ║'
-        )
-        expect(lines[11]).to.eq(
-          '╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝'
-        )
-      })
     })
   })
 
@@ -323,22 +193,6 @@ describe('e2e', function () {
           expect(stdout).to.eq('')
         })
       })
-    })
-  })
-
-  describe('Linter - foundry-test-functions with shell', () => {
-    // Foo contract has 1 warning
-    // FooTest contract has 1 error
-    useFixture('07-foundry-test')
-
-    it(`should raise error for wrongFunctionDefinitionName() only`, () => {
-      const { code, stdout } = shell.exec('solhint -c test/.solhint.json test/FooTest.sol')
-
-      expect(code).to.equal(1)
-      expect(stdout.trim()).to.contain(
-        'Function wrongFunctionDefinitionName() must match Foundry test naming convention'
-      )
-      expect(stdout.trim()).to.contain('(1 error')
     })
   })
 })
