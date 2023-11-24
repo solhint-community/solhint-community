@@ -9,7 +9,7 @@ describe('e2e tests fixers', function () {
     useFixture('09-fixers')
 
     it('GIVEN a file with a throw usage on disk WHEN fixing THEN it is replaced with revert', () => {
-      const { code } = shell.exec('solhint --fix throw-error.sol')
+      const { code } = shell.exec('solhint --fix throw-error.sol', { silent: true })
       expect(code).to.equal(0)
       expect(getFixtureFileContentSync('throw-error.sol')).to.eq(
         getFixtureFileContentSync('throw-fixed.sol')
@@ -21,7 +21,7 @@ describe('e2e tests fixers', function () {
     useFixture('09-fixers')
 
     it('GIVEN a file with a sha3 usage on disk WHEN fixing THEN it is replaced with keccak256', () => {
-      const { code } = shell.exec('solhint --fix sha3-error.sol')
+      const { code } = shell.exec('solhint --fix sha3-error.sol', { silent: true })
       expect(code).to.equal(0)
       expect(getFixtureFileContentSync('sha3-error.sol')).to.eq(
         getFixtureFileContentSync('sha3-fixed.sol')

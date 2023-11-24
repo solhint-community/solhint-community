@@ -5,7 +5,7 @@ const { useFixture } = require('./utils')
 describe('formatters', function () {
   useFixture('03-no-empty-blocks')
   it('unix', async function () {
-    const { stdout } = shell.exec('solhint Foo.sol --formatter unix')
+    const { stdout } = shell.exec('solhint Foo.sol --formatter unix', { silent: true })
     const lines = stdout.split('\n')
     expect(lines[0]).to.eq('Foo.sol:3:1: Code contains empty blocks [Error/no-empty-blocks]')
     expect(lines[2].trim()).to.eq('1 problem')
@@ -14,7 +14,7 @@ describe('formatters', function () {
   describe('json', function () {
     let stdout
     beforeEach(function () {
-      ;({ stdout } = shell.exec('solhint Foo.sol --formatter json'))
+      ;({ stdout } = shell.exec('solhint Foo.sol --formatter json', { silent: true }))
     })
     it('is proper json and not a JS object', async function () {
       expect(stdout).to.contain('"message"')
@@ -40,7 +40,7 @@ describe('formatters', function () {
   })
 
   it('tap', async function () {
-    const { stdout } = shell.exec('solhint Foo.sol --formatter tap')
+    const { stdout } = shell.exec('solhint Foo.sol --formatter tap', { silent: true })
     const lines = stdout.split('\n')
 
     expect(lines[0]).to.eq('TAP version 13')
@@ -56,7 +56,7 @@ describe('formatters', function () {
   })
 
   it('stylish', async function () {
-    const { stdout } = shell.exec('solhint Foo.sol --formatter stylish')
+    const { stdout } = shell.exec('solhint Foo.sol --formatter stylish', { silent: true })
     const lines = stdout.split('\n')
 
     expect(lines[1]).to.eq('Foo.sol')
@@ -65,7 +65,7 @@ describe('formatters', function () {
   })
 
   it('compact', async function () {
-    const { stdout } = shell.exec('solhint Foo.sol --formatter compact')
+    const { stdout } = shell.exec('solhint Foo.sol --formatter compact', { silent: true })
     const lines = stdout.split('\n')
     expect(lines[0]).to.eq(
       'Foo.sol: line 3, col 1, Error - Code contains empty blocks (no-empty-blocks)'
@@ -74,7 +74,7 @@ describe('formatters', function () {
   })
 
   it('table', async function () {
-    const { stdout } = shell.exec('solhint Foo.sol --formatter table')
+    const { stdout } = shell.exec('solhint Foo.sol --formatter table', { silent: true })
     const lines = stdout.split('\n')
 
     expect(lines[1]).to.eq('Foo.sol')
