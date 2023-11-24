@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "avoid-sha3": "error",
+    "compiler-version": "error",
+    "avoid-throw": "error"
+  }
+}

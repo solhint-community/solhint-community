@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "avoid-sha3": "off",
+    "avoid-throw": "off"
+  }
+}
