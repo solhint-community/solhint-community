@@ -29,7 +29,10 @@ function init() {
     .option('-c, --config [file_name]', 'file to use as your .solhint.json')
     .option('-q, --quiet', 'report errors only - default: false')
     .option('--ignore-path [file_name]', 'file to use as your .solhintignore')
-    .option('--fix', 'automatically fix problems')
+    .option(
+      '--fix',
+      'automatically fix problems. If used in conjunction with stdin, then fixed file will be printed to stdout and report will be omitted'
+    )
     .option('--init', 'create configuration file for solhint')
     .description('Linter for Solidity programming language')
     .action(execMainAction)
@@ -105,12 +108,25 @@ function execMainAction() {
 function processStdin(subcommandOptions) {
   const allOptions = { ...rootCommand.opts(), ...subcommandOptions }
   const STDIN_FILE = 0
-  const stdinBuffer = fs.readFileSync(STDIN_FILE)
+  const inputSrc = fs.readFileSync(STDIN_FILE).toString()
 
-  const report = processStr(stdinBuffer.toString())
+  const report = processStr(inputSrc)
   report.file = allOptions.filename || 'stdin'
-  const formatterFn = getFormatter()
+  if (allOptions.fix) {
+    const fixes = _(report.reports)
+      .filter((x) => x.fix)
+      .map((x) => x.fix(ruleFixer))
+      .sort((a, b) => a.range[0] - b.range[0])
+      .value()
+    const { fixed, output } = applyFixes(fixes, inputSrc)
+    if (fixed) {
+      report.reports = report.reports.filter((x) => !x.fix)
+      console.log(output)
+      process.exit(0)
+    }
+  }
 
+  const formatterFn = getFormatter()
   process.exit(consumeReport([report], formatterFn))
 }
 

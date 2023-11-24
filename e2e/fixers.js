@@ -15,6 +15,15 @@ describe('e2e tests fixers', function () {
         getFixtureFileContentSync('throw-fixed.sol')
       )
     })
+
+    it('GIVEN a file with a throw usage on stdin WHEN fixing THEN it is replaced with revert on stdout', () => {
+      const { code, stdout } = shell.exec(
+        'solhint stdin --fix --filename foo.sol < throw-error.sol',
+        { silent: true }
+      )
+      expect(code).to.equal(0)
+      expect(stdout.trim()).to.eq(getFixtureFileContentSync('throw-fixed.sol').trim())
+    })
   })
 
   describe('avoid-sha3', () => {
