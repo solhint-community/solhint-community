@@ -95,13 +95,6 @@ function execMainAction() {
       }
     }
   }
-
-  if (rootCommand.opts().quiet) {
-    // filter the list of reports, to set errors only.
-    reports.forEach((reporter) => {
-      reporter.reports = reporter.reports.filter((i) => i.severity === 2)
-    })
-  }
   process.exit(consumeReport(reports, formatterFn))
 }
 
@@ -118,15 +111,22 @@ function processStdin(subcommandOptions) {
       .map((x) => x.fix(ruleFixer))
       .sort((a, b) => a.range[0] - b.range[0])
       .value()
-    const { fixed, output } = applyFixes(fixes, inputSrc)
-    if (fixed) {
-      report.reports = report.reports.filter((x) => !x.fix)
-      console.log(output)
-      process.exit(0)
+    const { output } = applyFixes(fixes, inputSrc)
+    if (allOptions.quiet) {
+      report.reports = report.reports.filter((i) => i.severity === 2)
     }
+    report.reports = report.reports.filter((x) => !x.fix)
+    console.log(output)
+    if (
+      report.errorCount > 0 ||
+      (allOptions.maxWarnings >= 0 && report.warningCount > allOptions.maxWarnings)
+    )
+      process.exit(1)
+
+    process.exit(0)
   }
 
-  const formatterFn = getFormatter()
+  const formatterFn = getFormatter(allOptions.formatter)
   process.exit(consumeReport([report], formatterFn))
 }
 
@@ -206,8 +206,15 @@ function getFormatter(formatter) {
     throw ex
   }
 }
+
 // @returns the program's exit value
 function consumeReport(reports, formatterFn) {
+  if (rootCommand.opts().quiet) {
+    // filter the list of reports, to set errors only.
+    reports.forEach((reporter) => {
+      reporter.reports = reporter.reports.filter((i) => i.severity === 2)
+    })
+  }
   const errorsCount = reports.reduce((acc, i) => acc + i.errorCount, 0)
   const warningCount = reports.reduce((acc, i) => acc + i.warningCount, 0)
   const tooManyWarnings =
