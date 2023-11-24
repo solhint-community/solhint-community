@@ -18,4 +18,9 @@ function useFixture(dir) {
     shell.cd(this.testDirPath)
   })
 }
-module.exports = { useFixture }
+
+function getFixtureFileContentSync(relativePath) {
+  return fs.readFileSync(`${shell.pwd()}/${relativePath}`).toString()
+}
+
+module.exports = { useFixture, getFixtureFileContentSync }
