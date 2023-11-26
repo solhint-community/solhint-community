@@ -195,4 +195,40 @@ describe('main executable tests', function () {
       })
     })
   })
+
+  describe('configGetter', function () {
+    let stdout
+    describe('WHEN using a shareable config from an installed package', function () {
+      useFixture('10-configGetter-fetch-via-npm')
+      beforeEach(function () {
+        // this might surprise you, but npm install is slow
+        this.timeout(95000)
+        // install globally since solhint is installed globally for e2e tests
+        // install tarball to keep tests offline-friendly
+        shell.exec('npm install -g solhint-config-web3studio-3.0.0.tgz', { silent: true })
+        ;({ stdout } = shell.exec('solhint list-rules', { silent: true }))
+      })
+      it('THEN list-rules lists the rules defined in the plugin', function () {
+        // coupled to web3studio 3.0.0 shareabe config
+        expect(stdout).to.include('compiler-fixed')
+        expect(stdout).to.include('indent')
+        // no other recommended rules
+        expect(stdout).not.to.include('imports-on-top')
+      })
+    })
+
+    describe('WHEN using a shareable config from a local directory', function () {
+      useFixture('11-configGetter-fetch-local-file')
+      beforeEach(function () {
+        ;({ stdout } = shell.exec('solhint list-rules', { silent: true }))
+      })
+      it('THEN list-rules lists the rules defined in the plugin', function () {
+        // coupled to web3studio 3.0.0 shareabe config
+        expect(stdout).to.include('compiler-fixed')
+        expect(stdout).to.include('indent')
+        // no rules from 'solhint:recommended' or anywhere else
+        expect(stdout).not.to.include('imports-on-top')
+      })
+    })
+  })
 })
