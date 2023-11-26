@@ -6,7 +6,7 @@ const fs = require('fs')
 const process = require('process')
 
 const linter = require('./lib/index')
-const { loadConfig } = require('./lib/config/config-file')
+const { loadConfig, applyExtends } = require('./lib/config/config-file')
 const { validate } = require('./lib/config/config-validator')
 const applyFixes = require('./lib/apply-fixes')
 const ruleFixer = require('./lib/rule-fixer')
@@ -208,7 +208,7 @@ function consumeReport(reports, formatterFn) {
 }
 
 function listRules() {
-  const config = readConfig()
+  const config = applyExtends(readConfig())
   const rulesObject = config.rules
 
   console.log('\nRules: \n')
