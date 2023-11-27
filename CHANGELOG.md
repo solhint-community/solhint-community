@@ -1,4 +1,31 @@
-## [3.7.0-rc01] - 2023-10-16
+## [3.7.0-rc03] - 2023-11-27
+Current release candidate
+
+### Added
+- backport enabling require-ing of a shareable config by full path, usually by
+using require.resolve in .solhintrc.js
+https://github.com/solhint-community/solhint-community/pull/78
+Also fixed a bug in list-rules where it skipped rules enabled by the extended
+configs
+- (backport) list-rules subcommand
+https://github.com/solhint-community/solhint-community/pull/62
+
+### Fixed
+- e2e tests for stdin subcommand, and enabled the subcommand to use root
+command's flags https://github.com/solhint-community/solhint-community/pull/75
+- (backport) make sure json formatter outputs valid JSON and not a js object
+https://github.com/solhint-community/solhint-community/pull/64
+- (backport) removed false positives in check-send-result
+https://github.com/solhint-community/solhint-community/pull/61
+- (backport) documentation improvements
+https://github.com/solhint-community/solhint-community/pull/60
+- (backport + improvements) disabled no-emtpy-blocks on receive function
+https://github.com/solhint-community/solhint-community/pull/59
+- named-parameters-function remove unavoidable  report on native variadic
+functions  https://github.com/solhint-community/solhint-community/pull/58
+
+
+## [3.7.0-rc02] - 2023-10-16
 Current release candidate
 
 ### Added
