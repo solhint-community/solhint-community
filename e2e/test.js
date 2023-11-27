@@ -10,24 +10,24 @@ describe('main executable tests', function () {
     useFixture('01-no-config')
     describe('GIVEN a config file created with solhint --init', function () {
       beforeEach(function () {
-        shell.exec('solhint --init')
+        shell.exec('solhint --init', { silent: true })
       })
 
       it('WHEN linting a file, THEN the config is used ', function () {
-        const { code, stdout } = shell.exec('solhint Foo.sol')
+        const { code, stdout } = shell.exec('solhint Foo.sol', { silent: true })
         expect(code).to.equal(1)
         expect(stdout.trim()).to.contain('Code contains empty blocks')
       })
     })
 
     it('should fail', function () {
-      const { code } = shell.exec('solhint Foo.sol')
+      const { code } = shell.exec('solhint Foo.sol', { silent: true })
 
       expect(code).to.equal(1)
     })
 
     it('should create an initial config with --init', function () {
-      const { code } = shell.exec('solhint --init')
+      const { code } = shell.exec('solhint --init', { silent: true })
 
       expect(code).to.equal(0)
 
@@ -37,7 +37,7 @@ describe('main executable tests', function () {
     })
 
     it('should print usage if called without arguments', function () {
-      const { code, stdout } = shell.exec('solhint')
+      const { code, stdout } = shell.exec('solhint', { silent: true })
 
       expect(code).to.equal(0)
 
@@ -51,7 +51,7 @@ describe('main executable tests', function () {
     useFixture('02-empty-solhint-json')
 
     it('should print nothing', function () {
-      const { code, stdout } = shell.exec('solhint Foo.sol')
+      const { code, stdout } = shell.exec('solhint Foo.sol', { silent: true })
 
       expect(code).to.equal(0)
 
@@ -59,7 +59,7 @@ describe('main executable tests', function () {
     })
 
     it('should show warning when using --init', function () {
-      const { code, stdout } = shell.exec('solhint --init')
+      const { code, stdout } = shell.exec('solhint --init', { silent: true })
 
       expect(code).to.equal(0)
 
@@ -71,7 +71,7 @@ describe('main executable tests', function () {
     useFixture('04-dotSol-on-path')
 
     it('should handle directory names that end with .sol', function () {
-      const { code } = shell.exec('solhint contracts/**/*.sol')
+      const { code } = shell.exec('solhint contracts/**/*.sol', { silent: true })
 
       expect(code).to.equal(0)
     })
@@ -87,7 +87,8 @@ describe('main executable tests', function () {
       describe('WHEN linting with --max-warnings 7 ', function () {
         beforeEach(function () {
           ;({ code, stdout } = shell.exec(
-            'solhint contracts/NoErrors6Warnings.sol --max-warnings 7'
+            'solhint contracts/NoErrors6Warnings.sol --max-warnings 7',
+            { silent: true }
           ))
         })
         it('THEN it does NOT display warnings exceeded message', function () {
@@ -101,7 +102,8 @@ describe('main executable tests', function () {
       describe('WHEN linting with --max-warnings 3 ', function () {
         beforeEach(function () {
           ;({ code, stdout } = shell.exec(
-            'solhint contracts/NoErrors6Warnings.sol --max-warnings 3'
+            'solhint contracts/NoErrors6Warnings.sol --max-warnings 3',
+            { silent: true }
           ))
         })
         it('THEN displays warnings exceeded message', function () {
@@ -117,7 +119,8 @@ describe('main executable tests', function () {
       describe('WHEN linting with --max-warnings 3 ', function () {
         beforeEach(function () {
           ;({ code, stdout } = shell.exec(
-            'solhint contracts/OneError14Warnings.sol --max-warnings 3'
+            'solhint contracts/OneError14Warnings.sol --max-warnings 3',
+            { silent: true }
           ))
         })
         it('THEN it exits error code 1', function () {
@@ -139,7 +142,7 @@ describe('main executable tests', function () {
       useFixture('08-list-rules')
       describe('WHEN executing with list-rules', function () {
         beforeEach(function () {
-          ;({ code, stdout } = shell.exec('solhint list-rules'))
+          ;({ code, stdout } = shell.exec('solhint list-rules', { silent: true }))
         })
         it('THEN it completes without error', function () {
           expect(code).to.equal(0)
@@ -158,7 +161,10 @@ describe('main executable tests', function () {
       useFixture('08-list-rules')
       describe('WHEN executing with list-rules -c config-file-with-weird-name.json', function () {
         beforeEach(function () {
-          ;({ code, stdout } = shell.exec('solhint list-rules -c config-file-with-weird-name.json'))
+          ;({ code, stdout } = shell.exec(
+            'solhint list-rules -c config-file-with-weird-name.json',
+            { silent: true }
+          ))
         })
         it('THEN it completes without error', function () {
           expect(code).to.equal(0)
@@ -180,7 +186,8 @@ describe('main executable tests', function () {
       describe('WHEN executing with list-rules', function () {
         beforeEach(function () {
           ;({ code, stdout, stderr } = shell.exec(
-            'solhint list-rules -c config-file-with-weird-name.json'
+            'solhint list-rules -c config-file-with-weird-name.json',
+            { silent: true }
           ))
         })
         it('THEN it returns error code 1', function () {

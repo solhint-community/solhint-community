@@ -11,7 +11,7 @@ describe('e2e tests for rules', function () {
     useFixture('03-no-empty-blocks')
 
     it('should exit with 1', function () {
-      const { code, stdout } = shell.exec('solhint Foo.sol')
+      const { code, stdout } = shell.exec('solhint Foo.sol', { silent: true })
       expect(code).to.equal(1)
       expect(stdout.trim()).to.contain('Code contains empty blocks')
     })
@@ -40,7 +40,9 @@ describe('e2e tests for rules', function () {
     useFixture('07-foundry-test')
 
     it(`should raise error for wrongFunctionDefinitionName() only`, () => {
-      const { code, stdout } = shell.exec('solhint -c test/.solhint.json test/FooTest.sol')
+      const { code, stdout } = shell.exec('solhint -c test/.solhint.json test/FooTest.sol', {
+        silent: true,
+      })
 
       expect(code).to.equal(1)
       expect(stdout.trim()).to.contain(
