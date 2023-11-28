@@ -1,4 +1,9 @@
-const { assertNoErrors, assertErrorMessage, assertErrorCount } = require('../../common/asserts')
+const {
+  assertNoErrors,
+  assertNoWarnings,
+  assertErrorMessage,
+  assertErrorCount,
+} = require('../../common/asserts')
 const linter = require('../../../lib/index')
 const contracts = require('../../fixtures/best-practises/one-contract-per-file')
 
@@ -77,6 +82,6 @@ describe('Linter - one-contract-per-file', () => {
     })
 
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Found more than One contract per file. 2 contracts found!')
+    assertErrorMessage(report, 'Found more than one contract per file. 2 contracts found!')
   })
 })
