@@ -9,6 +9,29 @@ version](https://badge.fury.io/js/solhint-community.svg)](https://npmjs.org/pack
 This is an open source project for linting [Solidity](http://solidity.readthedocs.io/en/develop/) code. This project
 provides both **Security** and **Style Guide** validations.
 
+## Why use this fork
+This fork was started in mid 2023 to provide the community with an up-to-date
+linter regardless of protofire's funding allocations, which had proven
+inconsistent in the past with a big hiatus in development from 2021-2023 and in
+the middle of 2023.
+
+Currently we're working on a major version change that'll hopefully bring many
+improvements desired by the community (see [issues tagged with
+v4.0.0](https://github.com/solhint-community/solhint-community/issues?q=is%3Aopen+is%3Aissue+label%3Av4.0.0)),
+at the cost of some breaking changes.
+
+## How to help out
+
+- If you're a linter user, please consider using the latest release candidate
+(currently using `"^3.7.0-rc00"` in your `package.json` will get you that),
+where features are first pushed, and report any errors/potential improvements so
+they don't get to affect most users.
+- If you want to help as a developer, grab [some issue tagged with
+good-first-issue](https://github.com/solhint-community/solhint-community/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22+)
+and see [contributing.md](./docs/contributing.md) for a quick start guide. Feel
+free to create new issues or drop by the [telegram
+group](https://t.me/+9TPjopBMry02MmQx) to ask for help!
+
 ## Installation
 
 You can install solhint-community using **npm**:
