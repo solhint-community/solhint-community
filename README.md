@@ -181,7 +181,7 @@ Related documentation you may find [here](https://solhint-community.github.io/so
 
   - **[Sublime Text 3](https://packagecontrol.io/search/solhint)**
   - **[Atom](https://atom.io/packages/atom-solidity-linter)**
-  - **[Vim](https://github.com/sohkai/syntastic-local-solhint)**
+  - **[Vim](https://github.com/dense-analysis/ale)**, **[neovim](https://github.com/mfussenegger/nvim-lint)**
   - **[JetBrains IDEA, WebStorm, CLion, etc.](https://plugins.jetbrains.com/plugin/10177-solidity-solhint)**
   - **[VS Code: Solidity by Juan Blanco](
          https://marketplace.visualstudio.com/items?itemName=JuanBlanco.solidity)**
@@ -198,24 +198,13 @@ Related documentation you may find [here](https://solhint-community.github.io/so
 ## Plugins
 
 - [solhint-plugin-prettier](https://github.com/fvictorio/solhint-plugin-prettier): Integrate Solhint
-  with the [Solidity plugin for Prettier](https://github.com/prettier-solidity/prettier-plugin-solidity).
+  with the [Solidity plugin for Prettier](https://github.com/prettier-solidity/prettier-plugin-solidity) to report & automatically fix formatting issues.
+- [DeFi Wonderland](https://www.npmjs.com/package/@defi-wonderland/solhint-plugin): extra rules defined by Wonderland's team. Some of them now re-implemented here.
 
-## Who uses Solhint?
-[<img src="https://avatars0.githubusercontent.com/u/20820676?s=200&v=4" width="75px" height="75px" alt="OpenZeppelin" title="OpenZeppelin" style="margin: 20px 20px 0 0" />](https://github.com/OpenZeppelin)
-[<img src="https://avatars2.githubusercontent.com/u/28943015?s=200&v=4" width="75px" height="75px" alt="POA Network - Public EVM Sidechain" title="POA Network - Public EVM Sidechain" style="margin: 20px 20px 0 0" />](https://github.com/poanetwork) [<img src="https://avatars3.githubusercontent.com/u/24832717?s=200&v=4" width="75px" height="75px" alt="0x" title="0x" style="margin: 20px 20px 0 0" />](https://github.com/0xProject) [<img src="https://avatars1.githubusercontent.com/u/24954468?s=200&v=4" width="75px" height="75px" alt="GNOSIS" title="GNOSIS" style="margin: 20px 20px 0 0"/>](https://github.com/gnosis)
+## Who uses Solhint-community?
+[<img src="https://github.com/sablier-labs.png" width="75px" height="75px" alt="Sablier Labs" title="Sablier Labs" style="margin: 20px 20px 0 0" />](https://github.com/sablier-labs)
+[<img src="https://github.com/PaulRBerg.png" width="75px" height="75px" alt="PRB-proxy" title="PRB-proxy" style="margin: 20px 20px 0 0" />](https://github.com/PaulRBerg/prb-proxy) [<img src="https://github.com/Mean-Finance.png" width="75px" height="75px" alt="Mean Finance" title="Mean Finance" style="margin: 20px 20px 0 0" />](https://github.com/Mean-Finance/call-simulation) [<img src="https://github.com/hoprnet.png" width="75px" height="75px" alt="HOPR network" title="HOPR network" style="margin: 20px 20px 0 0" />](https://github.com/hoprnet/hoprnet) 
 
-### Projects
-
-- OpenZeppelin:
-  - [openzeppelin-contracts](https://github.com/OpenZeppelin/openzeppelin-contracts)
-- POA Network - Public EVM Sidechain:
-  - [Proof of Physical Address (PoPA)](https://github.com/poanetwork/poa-popa)
-  - [Proof of Bank Account (PoBA)](https://github.com/poanetwork/poa-poba)
-- 0x-Project
-  - [0x-Monorepo](https://github.com/0xProject/0x-monorepo/tree/development/contracts)
-- Gnosis:
-  - [Gnosis Prediction Market Contracts](https://github.com/gnosis/pm-contracts)
-  - [The DutchX decentralized trading protocol](https://github.com/gnosis/dex-contracts)
 
 ## Acknowledgements
 
