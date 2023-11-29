@@ -27,13 +27,19 @@ function init() {
     )
     .option('-w, --max-warnings [maxWarningsNumber]', 'number of allowed warnings')
     .option('-c, --config [file_name]', 'file to use as your .solhint.json')
-    .option('-q, --quiet', 'report errors only - default: false')
+    .option(
+      '-q, --quiet',
+      'report errors only. Takes precedence over --max-warnings - default: false'
+    )
     .option('--ignore-path [file_name]', 'file to use as your .solhintignore')
     .option(
       '--fix',
       'automatically fix problems. If used in conjunction with stdin, then fixed file will be printed to stdout and report will be omitted'
     )
-    .option('--init', 'create configuration file for solhint')
+    .option(
+      '--init',
+      'create configuration file for solhint. This option is deprecated, use init-config subcommand instead'
+    )
     .description('Linter for Solidity programming language')
     .action(execMainAction)
 
@@ -44,13 +50,13 @@ function init() {
     .action(processStdin)
 
   rootCommand
-    .command('init-config', null, { noHelp: true })
+    .command('init-config', null)
     .description('create configuration file for solhint')
     .action(writeSampleConfigFile)
 
   rootCommand
-    .command('list-rules', null, { noHelp: false })
-    .description('display enabled rules of current config')
+    .command('list-rules', null)
+    .description('display enabled rules of current config, including extensions')
     .action(listRules)
 
   if (process.argv.length <= 2) {

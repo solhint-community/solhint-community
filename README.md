@@ -25,7 +25,7 @@ solhint --version
 First initialize a configuration file, if you don't have one:
 
 ```sh
-solhint --init
+solhint init-config
 ```
 
 This will create a `.solhint.json` file with the recommended rules enabled. Then run Solhint with one or more [Globs](https://en.wikipedia.org/wiki/Glob_(programming)) as arguments. For example, to lint all files inside `contracts` directory, you can do:
@@ -43,25 +43,26 @@ solhint contracts/MyToken.sol
 Run `solhint` without arguments to get more information:
 
 ```text
+
 Usage: solhint [options] <file> [...other_files]
 
 Linter for Solidity programming language
 
 Options:
-
   -V, --version                           output the version number
-  -f, --formatter [name]                  report formatter name (stylish, table, tap, unix, json, compact)
+  -f, --formatter [name]                  chosen formatter for reports (stylish, table, tap, unix, json, compact)
   -w, --max-warnings [maxWarningsNumber]  number of allowed warnings
   -c, --config [file_name]                file to use as your .solhint.json
   -q, --quiet                             report errors only - default: false
   --ignore-path [file_name]               file to use as your .solhintignore
-  --fix                                   automatically fix problems
-  --init                                  create configuration file for solhint
-  -h, --help                              output usage information
+  --fix                                   automatically fix problems. If used in conjunction with stdin, then fixed file will be printed to stdout and report will be omitted
+  --init                                  create configuration file for solhint. This option is deprecated, use init-config subcommand instead
+  -h, --help                              display help for command
 
 Commands:
-
   stdin [options]                         linting of source code data provided to STDIN
+  init-config                             create configuration file for solhint
+  list-rules                              display enabled rules of current config, including extensions
 ```
 
 ## Configuration
