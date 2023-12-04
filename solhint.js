@@ -8,8 +8,6 @@ const process = require('process')
 const linter = require('./lib/index')
 const { loadConfig, applyExtends } = require('./lib/config/config-file')
 const { validate } = require('./lib/config/config-validator')
-const applyFixes = require('./lib/apply-fixes')
-const ruleFixer = require('./lib/rule-fixer')
 const packageJson = require('./package.json')
 
 const rootCommand = new Command()
@@ -88,13 +86,7 @@ function execMainAction() {
     for (const report of reports) {
       const inputSrc = fs.readFileSync(report.filePath).toString()
 
-      const fixes = _(report.reports)
-        .filter((x) => x.fix)
-        .map((x) => x.fix(ruleFixer))
-        .sort((a, b) => a.range[0] - b.range[0])
-        .value()
-
-      const { fixed, output } = applyFixes(fixes, inputSrc)
+      const { fixed, output } = linter.fixStr(inputSrc, report)
       if (fixed) {
         report.reports = report.reports.filter((x) => !x.fix)
         fs.writeFileSync(report.filePath, output)
@@ -112,16 +104,13 @@ function processStdin(subcommandOptions) {
   const report = processStr(inputSrc)
   report.file = allOptions.filename || 'stdin'
   if (allOptions.fix) {
-    const fixes = _(report.reports)
-      .filter((x) => x.fix)
-      .map((x) => x.fix(ruleFixer))
-      .sort((a, b) => a.range[0] - b.range[0])
-      .value()
-    const { output } = applyFixes(fixes, inputSrc)
+    const { output } = linter.fixStr(inputSrc, report)
     if (allOptions.quiet) {
       report.reports = report.reports.filter((i) => i.severity === 2)
     }
     report.reports = report.reports.filter((x) => !x.fix)
+    // unconditionally log the output, to prevent usage as a filter from
+    // writing an empty file
     console.log(output)
     if (
       report.errorCount > 0 ||
