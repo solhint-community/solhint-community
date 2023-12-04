@@ -1,0 +1,3 @@
+contract ExplicitTypesError {
+    uint stateVar;
+}
