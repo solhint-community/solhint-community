@@ -1,3 +1,87 @@
+## [3.7.0] - 2023-12-05
+Stable release.
+Current `latest` version.
+Includes all changes for `3.7.0-rc0{0-4}`, listed below.
+
+## [3.7.0-rc04] - 2023-12-04
+
+### Added
+- explicit types fixer, alongside unit & e2e tests not present in
+protofire/solhint https://github.com/solhint-community/solhint-community/pull/86
+- (backport) ignore interfaces in one contract per file
+https://github.com/solhint-community/solhint-community/pull/82
+
+### Added 
+- documentation updates for 3.7.0 release
+https://github.com/solhint-community/solhint-community/pull/83
+
+### Improved
+- e2e tests for root command options https://github.com/solhint-community/solhint-community/pull/81
+- modularize plumbing for applyFixes: https://github.com/solhint-community/solhint-community/pull/87
+
+## [3.7.0-rc03] - 2023-11-27
+### Added
+- backport enabling require-ing of a shareable config by full path, usually by
+using require.resolve in .solhintrc.js
+https://github.com/solhint-community/solhint-community/pull/78
+Also fixed a bug in list-rules where it skipped rules enabled by the extended
+configs
+- (backport) list-rules subcommand
+https://github.com/solhint-community/solhint-community/pull/62
+
+### Fixed
+- e2e tests for stdin subcommand, and enabled the subcommand to use root
+command's flags https://github.com/solhint-community/solhint-community/pull/75
+- (backport) make sure json formatter outputs valid JSON and not a js object
+https://github.com/solhint-community/solhint-community/pull/64
+- (backport) removed false positives in check-send-result
+https://github.com/solhint-community/solhint-community/pull/61
+- (backport) documentation improvements
+https://github.com/solhint-community/solhint-community/pull/60
+- (backport + improvements) disabled no-emtpy-blocks on receive function
+https://github.com/solhint-community/solhint-community/pull/59
+- named-parameters-function remove unavoidable  report on native variadic
+functions  https://github.com/solhint-community/solhint-community/pull/58
+
+
+## [3.7.0-rc02] - 2023-10-16
+### Added
+- backport named-return-variables with small improvements:
+https://github.com/solhint-community/solhint-community/pull/56
+- backport immutable-vars-naming (with a different name:
+immutable-name-snakecase)
+https://github.com/solhint-community/solhint-community/pull/54/
+- backport one-contract-per-file
+https://github.com/solhint-community/solhint-community/pull/52
+- backport custom-errors rule, with improvements
+https://github.com/solhint-community/solhint-community/pull/42
+https://github.com/solhint-community/solhint-community/pull/44
+- backport explicit-types rule, with improvements
+https://github.com/solhint-community/solhint-community/pull/41
+- backport foundry-test-names
+https://github.com/solhint-community/solhint-community/pull/47
+
+### Fixed
+- Improved doc generation
+https://github.com/solhint-community/solhint-community/pull/43
+https://github.com/solhint-community/solhint-community/pull/53
+- Improved CI
+https://github.com/solhint-community/solhint-community/pull/48
+- Updated compiler-version to current solc version (a backport, with some
+improvements): 
+https://github.com/solhint-community/solhint-community/pull/50
+- backport: remove runtime dependency on load-rules
+https://github.com/solhint-community/solhint-community/pull/46
+- backport: solcjs to handle --max-warnings in a manner more consistent with
+eslint: https://github.com/solhint-community/solhint-community/pull/51 (plus
+added tests)
+
+## [3.7.0-rc01] - 2023-07-23
+
+### Updated
+- depreacted solhit:default ruleset:
+https://github.com/solhint-community/solhint-community/pull/36
+
 ## [3.6.1] - 2023-07-31
 
 ### Fixed

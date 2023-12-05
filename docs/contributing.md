@@ -29,7 +29,7 @@ In order to develop Solhint, you'll need:
 Clone this repository and install npm dependencies:
 
     $ git clone git@github.com:solhint-community/solhint-community.git
-    $ cd solhint
+    $ cd solhint-community
     $ npm install
 
 ### Testing changes without re-installing
@@ -49,6 +49,30 @@ If you make changes to the existing code, please make sure that all tests are
 passing. If you contribute with a new feature, please add tests for it. To run the tests:
 
     $ npm test
+
+Git workflow
+------------
+Development for the next major version, `4.0.0` takes place on `master`
+branch.
+
+When working towards a release candidate, we usually have a
+branch for that where we move a bit faster and have a slightly higher tolerance
+for bugs.
+
+All releases pushed to npm get their own tag in this repo with a `v` preppended
+to it.
+
+Currently, the repo looks like so:
+
+```
+*---*---* ---------------*master (v4.0.0-rc)
+    \    \             /
+     \    \---*---*---* release-3.7.0 (v3.7.0, stable)
+      \                \
+       \                \---*(v3.7.1)---*(v3.7.2) release-3-7-x
+        \
+         \---* release-3.6.1 (v3.6.1, stable version)
+```
 
 Pull Requests
 -------------

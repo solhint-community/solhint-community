@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "compiler-version": ["error", "^8.0.0"],
+    "no-empty-blocks": "error",
+    "func-visibility": "off"
+  }
+}

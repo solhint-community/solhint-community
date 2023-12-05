@@ -26,9 +26,17 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 }
 ```
 
+### Notes
+- The rule ignores an empty constructor by default as long as parent contracts are being initialized. See "Empty Constructor" example.
 
 ## Examples
 ### 👍 Examples of **correct** code for this rule
+
+#### empty receive function
+
+```solidity
+receive () external {}
+```
 
 #### empty fallback function
 

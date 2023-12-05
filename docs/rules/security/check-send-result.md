@@ -26,6 +26,9 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 }
 ```
 
+### Notes
+- You should use no-unused-var to track that the variable you assign the return value of .send to is actually used
+- Rule will skip ".send" calls with arity != 1 to avoid false positives on ERC777 sends. you might get a false positive regardless if you define a .send function taking one argument
 
 ## Examples
 ### 👍 Examples of **correct** code for this rule
@@ -34,6 +37,24 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 
 ```solidity
 if(x.send(55)) {}
+```
+
+#### result of "send" call checked within a require
+
+```solidity
+require(payable(walletAddress).send(moneyAmount), "Failed to send moneyAmount");
+```
+
+#### result of "send" assigned to a variable
+
+```solidity
+bool success = payable(walletAddress).send(moneyAmount);
+```
+
+#### result of "send" passed to a function
+
+```solidity
+doThingWithResult(payable(walletAddress).send(moneyAmount));
 ```
 
 ### 👎 Examples of **incorrect** code for this rule

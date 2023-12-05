@@ -1,0 +1,9 @@
+{
+  "rules": {
+    "compiler-version": "error",
+    "no-empty-blocks": "error",
+    "func-visibility": "warn",
+    "no-console": "warn",
+    "not-rely-on-time": "off"
+  }
+}

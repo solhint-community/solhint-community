@@ -84,7 +84,7 @@ ${[
   categoryBadge(rule.meta.docs.category),
   defaultSeverityBadge(defaultSeverity),
   isDefault
-    ? '> The {"extends": "solhint:default"} property in a configuration file enables this rule.\n'
+    ? '> The {"extends": "solhint:default"} property in a configuration file enables this rule. This is currently deprecated and will be removed in version 4.0.0\n'
     : '',
   isRecommended
     ? '> The {"extends": "solhint:recommended"} property in a configuration file enables this rule.\n'
@@ -102,7 +102,7 @@ ${loadOptions(rule)}
 
 ### Example Config
 ${loadExampleConfig(rule)}
-
+${loadNotes(rule)}
 ## Examples
 ${loadExamples(rule)}
 
@@ -176,22 +176,40 @@ function linkToVersion(version) {
   }
 }
 
+function loadNotes(rule) {
+  let textToReturn = ''
+  let noteValue = ''
+  if (rule.meta.docs.notes) {
+    textToReturn = `### Notes\n`
+    for (let i = 0; i < rule.meta.docs.notes.length; i++) {
+      noteValue = rule.meta.docs.notes[i].note
+      textToReturn += `- ${noteValue}\n`
+    }
+  }
+
+  return textToReturn
+}
+
 function linkToSource(rule) {
-  const link = rule.file.replace(path.resolve(path.join(__dirname, '..')), '')
+  const link = localPathToUri(rule.file)
   return `https://github.com/solhint-community/solhint-community/tree/master${link}`
 }
 
 function linkToDocumentSource(rule) {
-  const link = rule.file
-    .replace(path.resolve(path.join(__dirname, '..')), '')
-    .replace('lib/rules', 'docs/rules')
-    .replace(/\.js$/, '.md')
+  const link = localPathToUri(rule.file).replace('lib/rules', 'docs/rules').replace(/\.js$/, '.md')
   return `https://github.com/solhint-community/solhint-community/tree/master${link}`
 }
 
 function linkToTestCase(rule) {
-  const link = rule.file.replace(path.resolve(path.join(__dirname, '..', 'lib', 'rules')), '')
+  const link = localPathToUri(rule.file).replace('lib/rules/', '')
   return `https://github.com/solhint-community/solhint-community/tree/master/test/rules${link}`
+}
+
+function localPathToUri(file) {
+  return file
+    .replace(path.resolve(path.join(__dirname, '..')), '')
+    .split(path.sep)
+    .join('/')
 }
 
 function loadExamples(rule) {
@@ -240,12 +258,13 @@ function getDefaultSeverity(rule) {
 function generateRuleIndex(rulesIndexed) {
   const contents = Object.keys(rulesIndexed)
     .map((category) => {
-      const rows = [['Rule Id', 'Error', 'Recommended']]
+      const rows = [['Rule Id', 'Error', 'Recommended', 'Deprecated']]
       rulesIndexed[category]
         .map((rule) => [
           `[${rule.ruleId}](./rules/${rule.meta.type}/${rule.ruleId}.md)`,
           rule.meta.docs.description,
           rule.meta.recommended && !rule.meta.deprecated ? '✔️' : '',
+          rule.meta.deprecated ? '✔️' : '',
         ])
         .forEach((row) => rows.push(row))
       return `## ${category}
