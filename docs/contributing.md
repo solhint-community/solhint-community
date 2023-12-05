@@ -52,10 +52,10 @@ passing. If you contribute with a new feature, please add tests for it. To run t
 
 Git workflow
 ------------
-Development for the next major version, `4.0.0` should take place on `master`
+Development for the next major version, `4.0.0` takes place on `master`
 branch.
 
-When working towards a release candidate, currently `3.7.0-rc*`, we usually have a
+When working towards a release candidate, we usually have a
 branch for that where we move a bit faster and have a slightly higher tolerance
 for bugs.
 
@@ -63,16 +63,6 @@ All releases pushed to npm get their own tag in this repo with a `v` preppended
 to it.
 
 Currently, the repo looks like so:
-
-```
-*----*----* master (no rc yet, v4.0.0)
-      \    \
-       \    \---*---*---* release-3.7.0 (v3.7.0, 3.7.0-rc)
-        \
-         \---* release-3.6.1 (v3.6.1, stable version)
-```
-
-With the upcoming changes for v4, our history will end up being similar to this:
 
 ```
 *---*---* ---------------*master (v4.0.0-rc)

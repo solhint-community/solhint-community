@@ -1,5 +1,9 @@
+## [3.7.0] - 2023-12-05
+Stable release.
+Current `latest` version.
+Includes all changes for `3.7.0-rc0{0-4}`, listed below.
+
 ## [3.7.0-rc04] - 2023-12-04
-Current release candidate
 
 ### Added
 - explicit types fixer, alongside unit & e2e tests not present in
