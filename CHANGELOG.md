@@ -1,6 +1,21 @@
-## [3.7.0-rc03] - 2023-11-27
+## [3.7.0-rc04] - 2023-12-04
 Current release candidate
 
+### Added
+- explicit types fixer, alongside unit & e2e tests not present in
+protofire/solhint https://github.com/solhint-community/solhint-community/pull/86
+- (backport) ignore interfaces in one contract per file
+https://github.com/solhint-community/solhint-community/pull/82
+
+### Added 
+- documentation updates for 3.7.0 release
+https://github.com/solhint-community/solhint-community/pull/83
+
+### Improved
+- e2e tests for root command options https://github.com/solhint-community/solhint-community/pull/81
+- modularize plumbing for applyFixes: https://github.com/solhint-community/solhint-community/pull/87
+
+## [3.7.0-rc03] - 2023-11-27
 ### Added
 - backport enabling require-ing of a shareable config by full path, usually by
 using require.resolve in .solhintrc.js
@@ -26,8 +41,6 @@ functions  https://github.com/solhint-community/solhint-community/pull/58
 
 
 ## [3.7.0-rc02] - 2023-10-16
-Current release candidate
-
 ### Added
 - backport named-return-variables with small improvements:
 https://github.com/solhint-community/solhint-community/pull/56
