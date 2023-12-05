@@ -1,8 +1,5 @@
-const _ = require('lodash')
 const assert = require('assert')
-const ruleFixer = require('../../../lib/rule-fixer')
 const linter = require('../../../lib/index')
-const applyFixes = require('../../../lib/apply-fixes')
 const contractWith = require('../../common/contract-builder').contractWith
 const {
   assertErrorCount,
@@ -62,12 +59,7 @@ describe('Linter - explicit-types rule', () => {
       const report = linter.processStr(implicitContract, {
         rules: { 'explicit-types': 'error' },
       })
-      const fixes = _(report.reports)
-        .filter((x) => x.fix)
-        .map((x) => x.fix(ruleFixer))
-        .sort((a, b) => a.range[0] - b.range[0])
-        .value()
-      const { output } = applyFixes(fixes, implicitContract)
+      const { output } = linter.fixStr(implicitContract, report)
       assert(output === explicitContract)
     })
 
