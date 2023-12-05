@@ -1,4 +1,8 @@
+const _ = require('lodash')
+const assert = require('assert')
+const ruleFixer = require('../../../lib/rule-fixer')
 const linter = require('../../../lib/index')
+const applyFixes = require('../../../lib/apply-fixes')
 const contractWith = require('../../common/contract-builder').contractWith
 const {
   assertErrorCount,
@@ -50,6 +54,21 @@ describe('Linter - explicit-types rule', () => {
       } else {
         assertErrorMessage(report, 'prefer use of explicit type')
       }
+    })
+    it('should replace implicit type with explicit when fixing', function () {
+      const { implicit, explicit } = FIXTURE[key]
+      const explicitContract = contractWith(explicit)
+      const implicitContract = contractWith(implicit)
+      const report = linter.processStr(implicitContract, {
+        rules: { 'explicit-types': 'error' },
+      })
+      const fixes = _(report.reports)
+        .filter((x) => x.fix)
+        .map((x) => x.fix(ruleFixer))
+        .sort((a, b) => a.range[0] - b.range[0])
+        .value()
+      const { output } = applyFixes(fixes, implicitContract)
+      assert(output === explicitContract)
     })
 
     it(`should NOT raise error for ${key} when using an explicit type`, () => {

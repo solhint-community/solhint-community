@@ -2,25 +2,25 @@ const VAR_DECLARATIONS = {
   // these cases try to make sure I catch every *type* that can be made explicit
   // or implicit
   uint256: {
-    explicit: 'uint256 public varUint256;',
+    explicit: 'uint256 public varUint;',
     implicit: 'uint public varUint;',
     implicitTypeName: 'uint',
     explicitTypeName: 'uint256',
   },
   int256: {
-    explicit: 'int256 public varInt256;',
+    explicit: 'int256 public varInt;',
     implicit: 'int public varInt;',
     implicitTypeName: 'int',
     explicitTypeName: 'int256',
   },
   ufixed128x18: {
-    explicit: 'ufixed128x18 public varUfixed128x18;',
+    explicit: 'ufixed128x18 public varUfixed;',
     implicit: 'ufixed public varUfixed;',
     implicitTypeName: 'ufixed',
     explicitTypeName: 'ufixed128x18',
   },
   fixed128x18: {
-    explicit: 'fixed128x18 public varFixed128x18;',
+    explicit: 'fixed128x18 public varFixed;',
     implicit: 'fixed public varFixed;',
     implicitTypeName: 'fixed',
     explicitTypeName: 'fixed128x18',
@@ -76,7 +76,7 @@ const VAR_DECLARATIONS = {
     explicit: 'uint256[] public arr = [uint256(1),2,3];',
   },
   castInStateVariableDeclaration: {
-    implicit: 'uint256 public varUint256 = uint(1);',
+    implicit: 'uint256 public varUint = uint(1);',
     explicit: 'uint256 public varUint = uint256(1);',
   },
   castInsideFunctionAtDeclarationUint256: {

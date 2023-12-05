@@ -37,4 +37,16 @@ describe('e2e tests fixers', function () {
       )
     })
   })
+
+  describe('explicit-types', () => {
+    useFixture('09-fixers')
+
+    it('GIVEN a contract with an implicit uint state var on disk WHEN fixing THEN it is replaced with uint256', () => {
+      const { code } = shell.exec('solhint --fix explicit-types-error.sol', { silent: false })
+      expect(code).to.equal(0)
+      expect(getFixtureFileContentSync('explicit-types-error.sol')).to.eq(
+        getFixtureFileContentSync('explicit-types-fixed.sol')
+      )
+    })
+  })
 })

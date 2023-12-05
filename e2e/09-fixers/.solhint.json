@@ -1,6 +1,7 @@
 {
   "rules": {
     "avoid-sha3": "error",
+    "explicit-types": "error",
     "avoid-throw": "error"
   }
 }
