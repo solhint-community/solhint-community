@@ -47,6 +47,88 @@ describe('main executable tests', function () {
     })
   })
 
+  describe('invalid config', function () {
+    useFixture('13-invalid-configs')
+    let code
+    let stderr
+    let stdout
+    describe('GIVEN a config file with invalid syntax, WHEN linting', function () {
+      beforeEach(function () {
+        ;({ code, stderr, stdout } = shell.exec('solhint -c broken-json-syntax.json Foo.sol', {
+          silent: true,
+        }))
+      })
+
+      it('THEN linter exits with error 1', function () {
+        expect(code).to.equal(1)
+      })
+      it('AND stdout is empty', function () {
+        expect(stdout.trim()).to.eq('')
+      })
+      it('AND stderr logs whats wrong with the file', function () {
+        expect(stderr.trim()).to.include('Solhint configuration is invalid')
+        expect(stderr.trim()).to.include('JSONError')
+      })
+    })
+
+    describe('GIVEN a config file with an unexpected field, WHEN linting', function () {
+      beforeEach(function () {
+        ;({ code, stderr, stdout } = shell.exec('solhint -c extraneous-field.json Foo.sol', {
+          silent: true,
+        }))
+      })
+
+      it('THEN linter exits with error 1', function () {
+        expect(code).to.equal(1)
+      })
+      it('AND stdout is empty', function () {
+        expect(stdout.trim()).to.eq('')
+      })
+      it('AND stderr logs whats wrong with the file', function () {
+        expect(stderr.trim()).to.include('Solhint configuration is invalid')
+        expect(stderr.trim()).to.include('Unexpected top-level property')
+      })
+    })
+
+    describe('GIVEN a config file with a unexpected field type, WHEN linting', function () {
+      beforeEach(function () {
+        ;({ code, stderr, stdout } = shell.exec('solhint -c broken-schema.json Foo.sol', {
+          silent: true,
+        }))
+      })
+
+      it('THEN linter exits with error 1', function () {
+        expect(code).to.equal(1)
+      })
+      it('AND stdout is empty', function () {
+        expect(stdout.trim()).to.eq('')
+      })
+      it('AND stderr logs whats wrong with the file', function () {
+        expect(stderr.trim()).to.include('Solhint configuration is invalid')
+        expect(stderr.trim()).to.include('is the wrong type')
+      })
+    })
+
+    describe('WHEN the config file extends a inexistent solhint core config', function () {
+      beforeEach(function () {
+        ;({ code, stderr, stdout } = shell.exec('solhint -c inexistent-core-extend.json Foo.sol', {
+          silent: true,
+        }))
+      })
+
+      it('THEN linter exits with error 1', function () {
+        expect(code).to.equal(1)
+      })
+      it('AND stdout is empty', function () {
+        expect(stdout.trim()).to.eq('')
+      })
+      it('AND stderr logs whats wrong with the file', function () {
+        expect(stderr.trim()).to.include('ConfigMissing')
+        expect(stderr.trim()).to.include('Failed to load config "solhint:verygood" to extend from')
+      })
+    })
+  })
+
   describe('empty-config', function () {
     useFixture('02-empty-solhint-json')
 
