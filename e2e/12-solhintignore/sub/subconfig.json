@@ -1,0 +1,8 @@
+{
+  "excludedFiles": [
+    "sub/IgnoredSubdirectory.sol"
+  ],
+  "rules": {
+    "avoid-throw": "error"
+  }
+}

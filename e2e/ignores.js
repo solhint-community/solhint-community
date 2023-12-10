@@ -2,6 +2,66 @@ const { expect } = require('chai')
 const shell = require('shelljs')
 const { useFixture } = require('./utils')
 
+describe('excludedFiles in config file is used', function () {
+  useFixture('12-solhintignore')
+  let code
+  let stdout
+  describe('GIVEN a .solhintignore ignoring a file AND a custom config ignoring another', function () {
+    describe('WHEN linting with a glob that matches both', function () {
+      beforeEach(function () {
+        ;({ code, stdout } = shell.exec(`solhint -c ignoreInConfig.json '*.sol'`, {
+          silent: true,
+        }))
+      })
+      it('THEN no errors are reported on stdout', function () {
+        expect(stdout.trim()).to.eq('')
+      })
+      it('AND the program exits with error code 0', function () {
+        expect(code).to.eq(0)
+      })
+    })
+  })
+})
+
+describe('.solhintignore in subdirectory is not read', function () {
+  useFixture('12-solhintignore')
+  let code
+  let stdout
+  describe('GIVEN a subdirectory with a .solhintignore file', function () {
+    describe('WHEN linting with a glob that matches a file ignored by it', function () {
+      beforeEach(function () {
+        ;({ code, stdout } = shell.exec(`solhint sub/*.sol`, {
+          silent: true,
+        }))
+      })
+      it('THEN the file is NOT ignored', function () {
+        expect(code).to.eq(1)
+        expect(stdout).to.include('1 error')
+        expect(stdout).to.include('IgnoredSubdirectory')
+      })
+    })
+  })
+})
+
+describe('excludeFiles in config is relative to cwd and not config file location', function () {
+  useFixture('12-solhintignore')
+  let code
+  let stdout
+  describe('GIVEN a subdirectory with its own config file ignoring said subdirectory', function () {
+    describe('WHEN linting there with a root-level cwd', function () {
+      beforeEach(function () {
+        ;({ code, stdout } = shell.exec(`solhint -c sub/subconfig.json 'sub/*.sol'`, {
+          silent: true,
+        }))
+      })
+      it('THEN the file is ignored', function () {
+        expect(code).to.eq(0)
+        expect(stdout.trim()).to.eq('')
+      })
+    })
+  })
+})
+
 describe('--ignore-path is used', function () {
   describe('GIVEN IgnoredDefault.sol (1 error) and IgnoredOther.sol (1 error)', function () {
     useFixture('12-solhintignore')
