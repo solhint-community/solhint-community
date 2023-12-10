@@ -70,6 +70,28 @@ describe('main executable tests', function () {
         expect(stderr.trim()).to.include('JSONError')
       })
     })
+    ;['globals', 'env', 'parserOptions'].forEach((field) => {
+      describe(`GIVEN a config file using the deprecated field ${field}, WHEN linting`, function () {
+        beforeEach(function () {
+          ;({ code, stderr, stdout } = shell.exec(`solhint -c deprecated-${field}.json Foo.sol`, {
+            silent: true,
+          }))
+        })
+
+        it('THEN linter exits with error 1', function () {
+          expect(code).to.equal(1)
+        })
+        it('AND stdout is empty', function () {
+          expect(stdout.trim()).to.eq('')
+        })
+        it('AND stderr logs support for the field was removed', function () {
+          expect(stderr.trim()).to.include('Solhint configuration is invalid')
+          expect(stderr.trim()).to.include(
+            `${field}" in solhint config is no longer supported since version 4.0.0`
+          )
+        })
+      })
+    })
 
     describe('GIVEN a config file with an unexpected field, WHEN linting', function () {
       beforeEach(function () {
