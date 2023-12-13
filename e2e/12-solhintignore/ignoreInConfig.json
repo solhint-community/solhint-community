@@ -1,0 +1,8 @@
+{
+  "excludedFiles": [
+    "IgnoredOther.sol"
+  ],
+  "rules": {
+    "avoid-throw": "error"
+  }
+}
