@@ -352,7 +352,7 @@ describe('main executable tests', function () {
           expect(code).to.equal(1)
         })
         it('AND it reports the problem to stderr', function () {
-          expect(stderr).to.contain('config file passed as a parameter does not exist')
+          expect(stderr).to.contain("Failed to load a solhint's config file")
         })
         it('AND it does NOT list disabled rules', function () {
           expect(stdout).to.eq('')
