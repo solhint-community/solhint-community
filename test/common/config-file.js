@@ -1,5 +1,10 @@
 const assert = require('assert')
-const { loadConfig, listConfigsForPath } = require('../../lib/config/config-file')
+const path = require('path')
+const {
+  loadConfig,
+  listConfigsForPath,
+  loadFullConfigurationForPath,
+} = require('../../lib/config/config-file')
 const { ConfigMissingError, InvalidConfigError } = require('../../lib/common/errors')
 
 describe('Config file', () => {
@@ -7,7 +12,11 @@ describe('Config file', () => {
     it('unqualified files', function () {
       assert.deepStrictEqual(listConfigsForPath('foo.sol'), ['.'])
       assert.deepStrictEqual(listConfigsForPath('dir/foo.sol'), ['.', 'dir'])
-      assert.deepStrictEqual(listConfigsForPath('dir/sub/foo.sol'), ['.', 'dir', 'dir/sub'])
+      assert.deepStrictEqual(listConfigsForPath('dir/sub/foo.sol'), [
+        '.',
+        'dir',
+        path.join('dir', 'sub'),
+      ])
     })
     it('empty string', function () {
       assert.deepStrictEqual(listConfigsForPath(''), ['.'])
@@ -16,7 +25,11 @@ describe('Config file', () => {
       assert.deepStrictEqual(listConfigsForPath('.'), ['.'])
       assert.deepStrictEqual(listConfigsForPath('./foo.sol'), ['.'])
       assert.deepStrictEqual(listConfigsForPath('./dir/foo.sol'), ['.', 'dir'])
-      assert.deepStrictEqual(listConfigsForPath('./dir/sub/foo.sol'), ['.', 'dir', 'dir/sub'])
+      assert.deepStrictEqual(listConfigsForPath('./dir/sub/foo.sol'), [
+        '.',
+        'dir',
+        path.join('dir', 'sub'),
+      ])
     })
     it('absolute path', function () {
       assert.deepStrictEqual(listConfigsForPath('/', '/home/user/project'), ['.'])
@@ -32,7 +45,113 @@ describe('Config file', () => {
       )
       assert.deepStrictEqual(
         listConfigsForPath('/home/user/project/test/sub/foo.sol', '/home/user/project'),
-        ['.', 'test', 'test/sub']
+        ['.', 'test', path.join('test', 'sub')]
+      )
+    })
+  })
+  describe('loadFullConfigurationForPath', function () {
+    it('extraConfig overrides all other config files', function () {
+      const { config } = loadFullConfigurationForPath(
+        './test/fixtures/config-file/06-subdirectory/sub/Foo.sol',
+        './test/fixtures/config-file/06-subdirectory/extra.json',
+        './test/fixtures/config-file/06-subdirectory'
+      )
+      assert.deepStrictEqual(config, {
+        excludedFiles: [],
+        extends: [],
+        rules: {
+          'no-console': 'off',
+        },
+      })
+    })
+    it('rule setting in subdirectory overrides root config', function () {
+      const { config } = loadFullConfigurationForPath(
+        './test/fixtures/config-file/06-subdirectory/sub/Foo.sol',
+        undefined,
+        './test/fixtures/config-file/06-subdirectory'
+      )
+      assert.deepStrictEqual(config, {
+        excludedFiles: [],
+        extends: [],
+        rules: {
+          'no-console': 'warn',
+        },
+      })
+    })
+    it('missing extraConfig causes an error', function () {
+      assert.throws(
+        () =>
+          loadFullConfigurationForPath(
+            './test/fixtures/config-file/06-subdirectory/sub/Foo.sol',
+            './test/fixtures/config-file/06-subdirectory/nothere.json',
+            './test/fixtures/config-file/06-subdirectory'
+          ),
+        ConfigMissingError
+      )
+    })
+    it('empty config and no extraConfig causes an error', function () {
+      assert.throws(
+        () =>
+          loadFullConfigurationForPath(
+            './test/fixtures/config-file/07-no-rules-or-extends/Foo.sol',
+            undefined,
+            './test/fixtures/config-file/07-no-rules-or-extends'
+          ),
+        ConfigMissingError
+      )
+    })
+    it('no config causes an error', function () {
+      assert.throws(
+        () =>
+          loadFullConfigurationForPath(
+            './test/fixtures/config-file/01-no-config/Foo.sol',
+            undefined,
+            './test/fixtures/config-file/01-no-config'
+          ),
+        ConfigMissingError
+      )
+    })
+    it('config with only excludedFiles causes an error', function () {
+      assert.throws(
+        () =>
+          loadFullConfigurationForPath(
+            './test/fixtures/config-file/08-only-excludefiles/Foo.sol',
+            undefined,
+            './test/fixtures/config-file/08-only-excludefiles/'
+          ),
+        ConfigMissingError
+      )
+    })
+    it('extends: in subdirectory overrides explicit rule setting in root config', function () {
+      const { config } = loadFullConfigurationForPath(
+        './test/fixtures/config-file/09-extends/sub/Foo.sol',
+        undefined,
+        './test/fixtures/config-file/09-extends'
+      )
+      // it's disabled in the root config but sub/.solhintrc extends
+      // recommended, where it's set as 'warn'
+      assert.equal(config.rules['no-empty-blocks'], 'warn')
+    })
+    it('invalid config in subdirectory causes error', function () {
+      assert.throws(
+        () =>
+          loadFullConfigurationForPath(
+            './test/fixtures/config-file/06-subdirectory/invalid/Foo.sol',
+            undefined,
+            './test/fixtures/config-file/06-subdirectory/'
+          ),
+        InvalidConfigError
+      )
+    })
+    it('no config && empty extraConfig causes error', function () {
+      assert.throws(
+        () =>
+          loadFullConfigurationForPath(
+            './test/fixtures/config-file/01-no-config/Foo.sol',
+            './test/fixtures/config-file/07-no-rules-or-extends/.solhintrc',
+            './test/fixtures/config-file/01-no-config'
+          ),
+        ConfigMissingError
       )
     })
   })
