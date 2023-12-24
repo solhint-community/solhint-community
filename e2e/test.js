@@ -154,12 +154,13 @@ describe('main executable tests', function () {
   describe('empty-config', function () {
     useFixture('02-empty-solhint-json')
 
-    it('should print nothing', function () {
-      const { code, stdout } = shell.exec('solhint Foo.sol', { silent: true })
+    it('should print an error', function () {
+      const { code, stdout, stderr } = shell.exec('solhint Foo.sol', { silent: true })
 
-      expect(code).to.equal(0)
+      expect(code).to.equal(1)
 
       expect(stdout.trim()).to.equal('')
+      expect(stderr).to.include('ConfigMissingError')
     })
 
     it('should show warning when using --init', function () {
