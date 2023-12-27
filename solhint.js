@@ -23,7 +23,7 @@ function init() {
       'chosen formatter for reports (stylish, table, tap, unix, json, compact)'
     )
     .option('-w, --max-warnings [maxWarningsNumber]', 'number of allowed warnings')
-    .option('-c, --config [file_name]', 'file to use as your .solhint.json')
+    .option('-c, --config [file_name]', 'extra config file to source, in addition to the defaults')
     .option(
       '-q, --quiet',
       'report errors only. Takes precedence over --max-warnings - default: false'

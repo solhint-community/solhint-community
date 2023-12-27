@@ -19,7 +19,6 @@ solhint init-config
 This file has the following
 format:
 
-
 ```json
   {
     "extends": "solhint:recommended",
@@ -35,6 +34,25 @@ format:
   }
 ```
 A full list of all supported rules can be found [here](https://github.com/solhint-community/solhint-community/blob/master/docs/rules.md). 
+
+You may use additional config files in subdirectories to add rules that apply to
+files contained therein. For example, let's say you have the following directory
+structure
+
+```
+project
+\- .solhintrc.json
+\- src
+|   \- Foo.sol
+\- test
+    \- .solhintrc.json
+    \- TestFoo.sol
+```
+
+When you run `solhint **/*.sol`, `src/Foo.sol` will be linted according to
+settings defined in `project/.solhintrc.json`, and `test/TestFoo.sol` will be
+linted according to settings defined in `project/.solhintrc.json` AND
+`project/test/.solhintrc.json`, with the latter taking precedence.
 
 To ignore files / folders that do not require validation you may use `.solhintignore` file. It supports rules in
 `.gitignore` format.

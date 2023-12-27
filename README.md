@@ -66,7 +66,6 @@ solhint contracts/MyToken.sol
 Run `solhint` without arguments to get more information:
 
 ```text
-
 Usage: solhint [options] <file> [...other_files]
 
 Linter for Solidity programming language
@@ -75,8 +74,8 @@ Options:
   -V, --version                           output the version number
   -f, --formatter [name]                  chosen formatter for reports (stylish, table, tap, unix, json, compact)
   -w, --max-warnings [maxWarningsNumber]  number of allowed warnings
-  -c, --config [file_name]                file to use as your .solhint.json
-  -q, --quiet                             report errors only - default: false
+  -c, --config [file_name]                extra config file to source, in addition to the defaults
+  -q, --quiet                             report errors only. Takes precedence over --max-warnings - default: false
   --ignore-path [file_name]               file to use as your .solhintignore
   --fix                                   automatically fix problems. If used in conjunction with stdin, then fixed file will be printed to stdout and report will be omitted
   --init                                  create configuration file for solhint. This option is deprecated, use init-config subcommand instead
