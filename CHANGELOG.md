@@ -1,3 +1,22 @@
+## [4.0.0-rc01] - 2023-12-29
+
+## Added
+- support for config files in subdirectories https://github.com/solhint-community/solhint-community/pull/93
+
+## Breaking
+- remove `solhint:default` ruleset https://github.com/solhint-community/solhint-community/pull/103
+- remove `mark-callable-contract` rule https://github.com/solhint-community/solhint-community/pull/103
+- remove `func-order` rule https://github.com/solhint-community/solhint-community/pull/103
+- remove `--init` flag https://github.com/solhint-community/solhint-community/pull/103
+- `-c` flag adds a config file to the list of config files to source instead of
+replacing the default
+https://github.com/solhint-community/solhint-community/pull/103
+- remove unused config fields https://github.com/solhint-community/solhint-community/pull/100
+
+## Updated
+- cache npm dependencies for faster CI https://github.com/solhint-community/solhint-community/pull/95
+- increase mocha timeout https://github.com/solhint-community/solhint-community/pull/99
+
 ## [3.7.0] - 2023-12-05
 Stable release.
 Current `latest` version.
