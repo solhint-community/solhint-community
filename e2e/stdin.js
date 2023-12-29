@@ -9,11 +9,11 @@ describe('e2e: stdin subcommand', function () {
   let code
   let stdout
   let stderr
-  describe('WHEN passing --init ', function () {
+  describe('WHEN passing init-config ', function () {
     let originalConfig
     beforeEach(function () {
       originalConfig = getFixtureFileContentSync('.solhint.json')
-      ;({ code, stdout, stderr } = shell.exec('solhint stdin --init < throw-error.sol', {
+      ;({ code, stdout, stderr } = shell.exec('solhint stdin init-config < throw-error.sol', {
         silent: true,
       }))
     })
