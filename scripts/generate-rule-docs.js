@@ -65,9 +65,7 @@ class GitHelper {
 }
 
 function generateRuleDoc(rule) {
-  const isDefault = !rule.meta.deprecated && rule.meta.isDefault
-  const isRecommended = !rule.meta.deprecated && rule.meta.recommended
-  const isDeprecated = rule.meta.deprecated
+  const isRecommended = rule.meta.recommended
   const version = GitHelper.getFirstVersionOfFile(rule.file)
   const defaultSeverity = getDefaultSeverity(rule)
 
@@ -80,16 +78,11 @@ title:       "${rule.ruleId} | Solhint"
 # ${rule.ruleId}
 ${[
   recommendedBadge(isRecommended),
-  deprecatedBadge(isDeprecated),
   categoryBadge(rule.meta.docs.category),
   defaultSeverityBadge(defaultSeverity),
-  isDefault
-    ? '> The {"extends": "solhint:default"} property in a configuration file enables this rule. This is currently deprecated and will be removed in version 4.0.0\n'
-    : '',
   isRecommended
     ? '> The {"extends": "solhint:recommended"} property in a configuration file enables this rule.\n'
     : '',
-  isDeprecated ? '> This rule is **deprecated**\n' : '',
 ]
   .filter((s) => s !== '')
   .join('\n')}
@@ -126,10 +119,6 @@ function recommendedBadge(isRecommended) {
   return isRecommended
     ? `![Recommended Badge](https://img.shields.io/badge/-Recommended-brightgreen)`
     : ''
-}
-
-function deprecatedBadge(isDeprecated) {
-  return isDeprecated ? `![Deprecated Badge](https://img.shields.io/badge/-Deprecated-yellow)` : ''
 }
 
 function defaultSeverityBadge(severity) {
@@ -258,13 +247,12 @@ function getDefaultSeverity(rule) {
 function generateRuleIndex(rulesIndexed) {
   const contents = Object.keys(rulesIndexed)
     .map((category) => {
-      const rows = [['Rule Id', 'Error', 'Recommended', 'Deprecated']]
+      const rows = [['Rule Id', 'Error', 'Recommended']]
       rulesIndexed[category]
         .map((rule) => [
           `[${rule.ruleId}](./rules/${rule.meta.type}/${rule.ruleId}.md)`,
           rule.meta.docs.description,
-          rule.meta.recommended && !rule.meta.deprecated ? '✔️' : '',
-          rule.meta.deprecated ? '✔️' : '',
+          rule.meta.recommended ? '✔️' : '',
         ])
         .forEach((row) => rows.push(row))
       return `## ${category}

@@ -129,7 +129,6 @@ additional-tests.sol
 
 The extendable rulesets provided by solhint are the following:
 
-+ ~~solhint:default~~ Deprecated as of 3.7.0
 + solhint:recommended
 
 Use one of these as the value for the "extends" property in your configuration file.
