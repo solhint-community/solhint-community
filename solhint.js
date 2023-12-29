@@ -33,10 +33,6 @@ function init() {
       '--fix',
       'automatically fix problems. If used in conjunction with stdin, then fixed file will be printed to stdout and report will be omitted'
     )
-    .option(
-      '--init',
-      'create configuration file for solhint. This option is deprecated, use init-config subcommand instead'
-    )
     .description('Linter for Solidity programming language')
     .action(execMainAction)
 
@@ -64,10 +60,6 @@ function init() {
 }
 
 function execMainAction() {
-  if (rootCommand.opts().init) {
-    writeSampleConfigFile()
-  }
-
   let formatterFn
 
   try {

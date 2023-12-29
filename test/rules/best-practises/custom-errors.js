@@ -3,7 +3,6 @@ const {
   assertNoErrors,
   assertErrorMessage,
   assertErrorCount,
-  assertWarnsCount,
 } = require('../../common/asserts')
 const linter = require('../../../lib/index')
 const { funcWith } = require('../../common/contract-builder')
@@ -84,18 +83,5 @@ describe('Linter - custom-errors', () => {
 
     assertNoErrors(report)
     assertNoWarnings(report)
-  })
-
-  it('should NOT raise error for default config', () => {
-    const code = funcWith(`require(!has(role, account), "Roles: account already has role");
-        revert("RevertMessage");
-        revert CustomError();
-    `)
-    const report = linter.processStr(code, {
-      extends: 'solhint:default',
-    })
-
-    assertWarnsCount(report, 0)
-    assertErrorCount(report, 0)
   })
 })

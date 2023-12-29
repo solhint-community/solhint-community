@@ -8,9 +8,9 @@ const { useFixture } = require('./utils')
 describe('main executable tests', function () {
   describe('no config', function () {
     useFixture('01-no-config')
-    describe('GIVEN a config file created with solhint --init', function () {
+    describe('GIVEN a config file created with solhint init-config', function () {
       beforeEach(function () {
-        shell.exec('solhint --init', { silent: true })
+        shell.exec('solhint init-config', { silent: true })
       })
 
       it('WHEN linting a file, THEN the config is used ', function () {
@@ -26,8 +26,8 @@ describe('main executable tests', function () {
       expect(code).to.equal(1)
     })
 
-    it('should create an initial config with --init', function () {
-      const { code } = shell.exec('solhint --init', { silent: true })
+    it('should create an initial config with init-config', function () {
+      const { code } = shell.exec('solhint init-config', { silent: true })
 
       expect(code).to.equal(0)
 
@@ -163,8 +163,8 @@ describe('main executable tests', function () {
       expect(stderr).to.include('ConfigMissingError')
     })
 
-    it('should show warning when using --init', function () {
-      const { code, stdout } = shell.exec('solhint --init', { silent: true })
+    it('should show warning when using init-config', function () {
+      const { code, stdout } = shell.exec('solhint init-config', { silent: true })
 
       expect(code).to.equal(0)
 

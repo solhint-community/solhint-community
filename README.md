@@ -78,7 +78,6 @@ Options:
   -q, --quiet                             report errors only. Takes precedence over --max-warnings - default: false
   --ignore-path [file_name]               file to use as your .solhintignore
   --fix                                   automatically fix problems. If used in conjunction with stdin, then fixed file will be printed to stdout and report will be omitted
-  --init                                  create configuration file for solhint. This option is deprecated, use init-config subcommand instead
   -h, --help                              display help for command
 
 Commands:
@@ -94,7 +93,7 @@ You can use a `.solhint.json` file to configure Solhint for the whole project.
 To generate a new  sample `.solhint.json` file in current folder you can do:
 
 ```sh
-solhint --init 
+solhint init-config
 ```
 
 This file has the following format:
@@ -130,7 +129,6 @@ additional-tests.sol
 
 The extendable rulesets provided by solhint are the following:
 
-+ ~~solhint:default~~ Deprecated as of 3.7.0
 + solhint:recommended
 
 Use one of these as the value for the "extends" property in your configuration file.
