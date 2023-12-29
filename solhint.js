@@ -6,8 +6,7 @@ const fs = require('fs')
 const process = require('process')
 
 const linter = require('./lib/index')
-const { loadConfig, applyExtends } = require('./lib/config/config-file')
-const { validate } = require('./lib/config/config-validator')
+const { loadFullConfigurationForPath } = require('./lib/config/config-file')
 const packageJson = require('./package.json')
 
 const rootCommand = new Command()
@@ -24,7 +23,7 @@ function init() {
       'chosen formatter for reports (stylish, table, tap, unix, json, compact)'
     )
     .option('-w, --max-warnings [maxWarningsNumber]', 'number of allowed warnings')
-    .option('-c, --config [file_name]', 'file to use as your .solhint.json')
+    .option('-c, --config [file_name]', 'extra config file to source, in addition to the defaults')
     .option(
       '-q, --quiet',
       'report errors only. Takes precedence over --max-warnings - default: false'
@@ -101,7 +100,7 @@ function processStdin(subcommandOptions) {
   const STDIN_FILE = 0
   const inputSrc = fs.readFileSync(STDIN_FILE).toString()
 
-  const report = processStr(inputSrc)
+  const report = processStr(inputSrc, allOptions)
   report.file = allOptions.filename || 'stdin'
   if (allOptions.fix) {
     const { output } = linter.fixStr(inputSrc, report)
@@ -163,31 +162,13 @@ const readIgnore = _.memoize(() => {
   }
 })
 
-const readConfig = _.memoize(() => {
-  let config = {}
-
-  try {
-    config = loadConfig(rootCommand.opts().config)
-  } catch (e) {
-    console.error(e.message)
-    process.exit(1)
-  }
-
-  const configExcludeFiles = _.flatten(config.excludedFiles)
-  config.excludedFiles = _.concat(configExcludeFiles, readIgnore())
-
-  // validate the configuration before continuing
-  validate(config)
-
-  return config
-})
-
-function processStr(input) {
-  return linter.processStr(input, readConfig())
+function processStr(input, options) {
+  const { config } = loadFullConfigurationForPath(options.filename || '.', options.config)
+  return linter.processStr(input, config)
 }
 
 function processPath(path) {
-  return linter.processPath(path, readConfig())
+  return linter.processPath(path, readIgnore(), rootCommand.opts().config)
 }
 
 function getFormatter(formatter) {
@@ -230,7 +211,7 @@ function consumeReport(reports, formatterFn) {
 }
 
 function listRules() {
-  const config = applyExtends(readConfig())
+  const { config } = loadFullConfigurationForPath('.', rootCommand.opts().config)
   const rulesObject = config.rules
 
   console.log('\nRules: \n')

@@ -2,13 +2,13 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 
-function tmpFilePath() {
+function tmpFilePath(filename = 'test.sol') {
   const tempDirPath = os.tmpdir()
-  return path.resolve(tempDirPath, 'test.sol')
+  return path.resolve(tempDirPath, filename)
 }
 
-function storeAsFile(code) {
-  const filePath = tmpFilePath()
+function storeAsFile(code, filename) {
+  const filePath = tmpFilePath(filename)
 
   fs.writeFileSync(filePath, code, 'utf-8')
 

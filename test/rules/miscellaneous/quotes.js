@@ -83,11 +83,9 @@ describe('Linter - quotes', () => {
       this.skip()
     }
     const filePath = storeAsFile(contractWith("string private a = 'test';"))
+    const configPath = storeAsFile('{"rules": {"quotes": "error"}}', 'config.json')
 
-    const reports = linter.processPath(filePath, {
-      rules: { quotes: 'error' },
-    })
-
+    const reports = linter.processPath(filePath, [], configPath)
     assertErrorCount(reports[0], 1)
   })
 })
