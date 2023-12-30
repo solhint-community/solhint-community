@@ -23,7 +23,7 @@ at the cost of some breaking changes.
 ## How to help out
 
 - If you're a linter user, please consider using the latest release candidate
-(currently using `"^3.7.0-rc00"` in your `package.json` will get you that),
+(currently using `"^4.0.0-rc00"` in your `package.json` will get you that),
 where features are first pushed, and report any errors/potential improvements so
 they don't get to affect most users.
 - If you want to help as a developer, grab [some issue tagged with
