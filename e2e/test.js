@@ -149,6 +149,25 @@ describe('main executable tests', function () {
         expect(stderr.trim()).to.include('Failed to load config "solhint:verygood" to extend from')
       })
     })
+
+    describe('WHEN the config file extends solhint:default core config (which is no longer supported)', function () {
+      beforeEach(function () {
+        ;({ code, stderr, stdout } = shell.exec('solhint -c extends-solhint-default.json Foo.sol', {
+          silent: true,
+        }))
+      })
+
+      it('THEN linter exits with error 1', function () {
+        expect(code).to.equal(1)
+      })
+      it('AND stdout is empty', function () {
+        expect(stdout.trim()).to.eq('')
+      })
+      it('AND stderr logs whats wrong with the file', function () {
+        expect(stderr.trim()).to.include('ConfigMissing')
+        expect(stderr.trim()).to.include('Failed to load config "solhint:default" to extend from')
+      })
+    })
   })
 
   describe('empty-config', function () {
