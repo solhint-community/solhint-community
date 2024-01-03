@@ -72,7 +72,7 @@ describe('Linter - custom-errors', () => {
     assertNoErrors(report)
   })
 
-  it('should not be included in [recommended] config', () => {
+  it('should be included in [recommended] config', () => {
     const code = funcWith(`require(!has(role, account), "Roles: account already has role");
         revert("RevertMessage");
         revert CustomError();
@@ -81,7 +81,8 @@ describe('Linter - custom-errors', () => {
       rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
     })
 
-    assertNoErrors(report)
-    assertNoWarnings(report)
+    assertErrorCount(report, 2)
+    assertErrorMessage(report, 0, 'Use Custom Errors instead of require statements')
+    assertErrorMessage(report, 1, 'Use Custom Errors instead of revert statements')
   })
 })
