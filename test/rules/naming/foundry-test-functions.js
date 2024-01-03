@@ -1,4 +1,5 @@
 const assert = require('assert')
+const { configGetter } = require('../../../lib/config/config-file')
 const linter = require('../../../lib/index')
 const contractWith = require('../../common/contract-builder').contractWith
 const { assertErrorCount, assertNoErrors, assertErrorMessage } = require('../../common/asserts')
@@ -146,8 +147,7 @@ describe('Linter - foundry-test-functions', () => {
       function invalidFunction2() external { testNumber = 45; }`)
 
     const report = linter.processStr(code, {
-      extends: 'solhint:recommended',
-      rules: { 'compiler-version': 'off' },
+      rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
     })
 
     assertNoErrors(report)

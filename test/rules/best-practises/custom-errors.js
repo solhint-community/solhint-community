@@ -4,6 +4,7 @@ const {
   assertErrorMessage,
   assertErrorCount,
 } = require('../../common/asserts')
+const { configGetter } = require('../../../lib/config/config-file')
 const linter = require('../../../lib/index')
 const { funcWith } = require('../../common/contract-builder')
 
@@ -77,8 +78,7 @@ describe('Linter - custom-errors', () => {
         revert CustomError();
     `)
     const report = linter.processStr(code, {
-      extends: 'solhint:recommended',
-      rules: { 'compiler-version': 'off' },
+      rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
     })
 
     assertNoErrors(report)
