@@ -1,8 +1,10 @@
 const assert = require('assert')
 const linter = require('../../../lib/index')
 const contractWith = require('../../common/contract-builder').contractWith
+const { configGetter } = require('../../../lib/config/config-file')
 const {
   assertErrorCount,
+  assertWarnsCount,
   assertNoErrors,
   assertErrorMessage,
   assertLineNumber,
@@ -34,6 +36,15 @@ describe('Linter - explicit-types rule', () => {
     })
     assertErrorCount(report, 1)
     assertLineNumber(report.reports[0], 5)
+  })
+
+  it('should be included in [recommended] config with severity: warning', () => {
+    const code = contractWith('uint public foo; ')
+    const report = linter.processStr(code, {
+      rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
+    })
+
+    assertWarnsCount(report, 1)
   })
 
   for (const key in FIXTURE) {
