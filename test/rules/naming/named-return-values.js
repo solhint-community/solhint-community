@@ -51,16 +51,15 @@ describe('Linter - named-return-values', () => {
     assert.equal(report.reports[1].message, `4-th return value does not have a name`)
   })
 
-  it('should NOT raise error for solhint:recommended setup', () => {
+  it('should raise warning for solhint:recommended setup', () => {
     const code = contractWith(
-      `function getBalanceFromTokens(address wallet) public returns(address, address, uint256, uint256) { balance = 1; }`
+      `function getBalanceFromTokens(address) public returns(uint256) { balance = 1; }`
     )
 
     const report = linter.processStr(code, {
       rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
     })
-
-    assertNoErrors(report)
+    assertWarnsCount(report, 1)
   })
 
   it('should raise error for solhint:all setup', () => {
