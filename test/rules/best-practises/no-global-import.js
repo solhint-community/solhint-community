@@ -1,4 +1,5 @@
 const linter = require('../../../lib/index')
+const { configGetter } = require('../../../lib/config/config-file')
 const {
   assertNoWarnings,
   assertLineNumber,
@@ -31,8 +32,7 @@ describe('Linter - no-global-import', () => {
     const code = `import "./A.sol";`
 
     const report = linter.processStr(code, {
-      extends: 'solhint:recommended',
-      rules: { 'compiler-version': 'off' },
+      rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
     })
     assertWarnsCount(report, 1)
     assertErrorMessage(report, 'global import')

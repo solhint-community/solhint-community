@@ -1,4 +1,5 @@
 const linter = require('../../../lib/index')
+const { configGetter } = require('../../../lib/config/config-file')
 const {
   assertNoErrors,
   assertErrorMessage,
@@ -51,8 +52,7 @@ describe('Linter - no-unused-import', () => {
     const code = `import {A} from "./A.sol";`
 
     const report = linter.processStr(code, {
-      extends: 'solhint:recommended',
-      rules: { 'compiler-version': 'off' },
+      rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
     })
     assertWarnsCount(report, 1)
     assertErrorMessage(report, 'imported name A is not used')

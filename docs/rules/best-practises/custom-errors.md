@@ -5,20 +5,23 @@ title:       "custom-errors | Solhint"
 ---
 
 # custom-errors
+![Recommended Badge](https://img.shields.io/badge/-Recommended-brightgreen)
 ![Category Badge](https://img.shields.io/badge/-Best%20Practise%20Rules-informational)
-![Default Severity Badge warn](https://img.shields.io/badge/Default%20Severity-warn-yellow)
+![Default Severity Badge error](https://img.shields.io/badge/Default%20Severity-error-red)
+> The {"extends": "solhint:recommended"} property in a configuration file enables this rule.
+
 
 ## Description
 Enforces the use of Custom Errors over Require and Revert statements
 
 ## Options
-This rule accepts a string option of rule severity. Must be one of "error", "warn", "off". Default to warn.
+This rule accepts a string option of rule severity. Must be one of "error", "warn", "off". Default to error.
 
 ### Example Config
 ```json
 {
   "rules": {
-    "custom-errors": "warn"
+    "custom-errors": "error"
   }
 }
 ```

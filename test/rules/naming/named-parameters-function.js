@@ -1,4 +1,6 @@
 const linter = require('../../../lib/index')
+
+const { configGetter } = require('../../../lib/config/config-file')
 const { assertNoWarnings, assertWarnsCount, assertErrorMessage } = require('../../common/asserts')
 const { contractWith, multiLine, funcWith } = require('../../common/contract-builder')
 
@@ -140,14 +142,17 @@ describe('Linter - named-parameters-function', () => {
   it('GIVEN a recommended solhint config, THEN the rule is disabled and no errors are reported', () => {
     const code = contractWith(
       multiLine(
-        'function foo(uint a, uint b, uint c, uint d) public {}',
+        'function foo(uint256 a, uint256 b, uint256 c, uint256 d) public {}',
         `function bar () public {foo(1,2,3,4);}`
       )
     )
 
     const report = linter.processStr(code, {
-      extends: 'solhint:recommended',
-      rules: { 'compiler-version': 'off', 'no-empty-blocks': 'off' },
+      rules: {
+        ...configGetter('solhint:recommended').rules,
+        'compiler-version': 'off',
+        'no-empty-blocks': 'off',
+      },
     })
 
     assertNoWarnings(report)

@@ -1,9 +1,21 @@
-## [4.0.0-rc01] - 2023-12-29
-
-## Added
-- support for config files in subdirectories https://github.com/solhint-community/solhint-community/pull/93
+## [4.0.0-rc01] - XXX-XX-XX
 
 ## Breaking
+-  promoted to recommended https://github.com/solhint-community/solhint-community/pull/106
+    -  `named-return-values`
+    -  `explicit-types`
+    -  `custom-errors`
+-  demoted `not-rely-on-time` out of recommended https://github.com/solhint-community/solhint-community/pull/106
+
+## Updated
+-  fully removed code for solhint:default ruleset https://github.com/solhint-community/solhint-community/pull/105
+
+## [4.0.0-rc00] - 2023-12-29
+
+### Added
+- support for config files in subdirectories https://github.com/solhint-community/solhint-community/pull/93
+
+### Breaking
 - remove `solhint:default` ruleset https://github.com/solhint-community/solhint-community/pull/103
 - remove `mark-callable-contract` rule https://github.com/solhint-community/solhint-community/pull/103
 - remove `func-order` rule https://github.com/solhint-community/solhint-community/pull/103
@@ -13,7 +25,7 @@ replacing the default
 https://github.com/solhint-community/solhint-community/pull/103
 - remove unused config fields https://github.com/solhint-community/solhint-community/pull/100
 
-## Updated
+### Updated
 - cache npm dependencies for faster CI https://github.com/solhint-community/solhint-community/pull/95
 - increase mocha timeout https://github.com/solhint-community/solhint-community/pull/99
 

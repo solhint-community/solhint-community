@@ -5,6 +5,8 @@
 
 module.exports = Object.freeze({
   rules: {
+    'custom-errors': 'error',
+    'explicit-types': ['warn'],
     'max-states-count': ['warn', 15],
     'no-console': 'error',
     'no-empty-blocks': 'warn',
@@ -23,6 +25,7 @@ module.exports = Object.freeze({
     'contract-name-camelcase': 'warn',
     'event-name-camelcase': 'warn',
     'func-name-mixedcase': 'warn',
+    'named-return-values': 'warn',
     'use-forbidden-name': 'warn',
     'var-name-mixedcase': 'warn',
     'imports-on-top': 'warn',
@@ -45,7 +48,6 @@ module.exports = Object.freeze({
     'no-complex-fallback': 'warn',
     'no-inline-assembly': 'warn',
     'not-rely-on-block-hash': 'warn',
-    'not-rely-on-time': 'warn',
     reentrancy: 'warn',
     'state-visibility': 'warn',
   },

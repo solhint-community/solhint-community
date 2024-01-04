@@ -5,8 +5,11 @@ title:       "named-return-values | Solhint"
 ---
 
 # named-return-values
+![Recommended Badge](https://img.shields.io/badge/-Recommended-brightgreen)
 ![Category Badge](https://img.shields.io/badge/-Style%20Guide%20Rules-informational)
 ![Default Severity Badge warn](https://img.shields.io/badge/Default%20Severity-warn-yellow)
+> The {"extends": "solhint:recommended"} property in a configuration file enables this rule.
+
 
 ## Description
 Ensure function return parameters are named

@@ -9,8 +9,8 @@ title:       "Rule Index of Solhint"
 | Rule Id                                                                  | Error                                                                                                                                      | Recommended |
 | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | [code-complexity](./rules/best-practises/code-complexity.md)             | Function has cyclomatic complexity "current" but allowed no more than maxcompl.                                                            |             |
-| [custom-errors](./rules/best-practises/custom-errors.md)                 | Enforces the use of Custom Errors over Require and Revert statements                                                                       |             |
-| [explicit-types](./rules/best-practises/explicit-types.md)               | Enforce explicit types (like uint256) over implicit ones(like uint).                                                                       |             |
+| [custom-errors](./rules/best-practises/custom-errors.md)                 | Enforces the use of Custom Errors over Require and Revert statements                                                                       | ✔️          |
+| [explicit-types](./rules/best-practises/explicit-types.md)               | Enforce explicit types (like uint256) over implicit ones(like uint).                                                                       | ✔️          |
 | [function-max-lines](./rules/best-practises/function-max-lines.md)       | Function body contains "count" lines but allowed no more than maxlines.                                                                    |             |
 | [max-line-length](./rules/best-practises/max-line-length.md)             | Line length must be no more than maxlen.                                                                                                   |             |
 | [max-states-count](./rules/best-practises/max-states-count.md)           | Contract has "some count" states declarations but allowed no more than maxstates.                                                          | ✔️          |
@@ -47,7 +47,7 @@ title:       "Rule Index of Solhint"
 | [immutable-name-snakecase](./rules/naming/immutable-name-snakecase.md)               | Check Immutable variables are SNAKE_CASE.                                              |             |
 | [modifier-name-mixedcase](./rules/naming/modifier-name-mixedcase.md)                 | Modifier name must be in mixedCase.                                                    |             |
 | [named-parameters-mapping](./rules/naming/named-parameters-mapping.md)               | Solidity v0.8.18 introduced named parameters on the mappings definition                |             |
-| [named-return-values](./rules/naming/named-return-values.md)                         | Ensure function return parameters are named                                            |             |
+| [named-return-values](./rules/naming/named-return-values.md)                         | Ensure function return parameters are named                                            | ✔️          |
 | [private-vars-leading-underscore](./rules/naming/private-vars-leading-underscore.md) | Private and internal names must start with a single underscore.                        |             |
 | [use-forbidden-name](./rules/naming/use-forbidden-name.md)                           | Avoid to use letters 'I', 'l', 'O' as identifiers.                                     | ✔️          |
 | [var-name-mixedcase](./rules/naming/var-name-mixedcase.md)                           | Variable name must be in mixedCase.                                                    | ✔️          |
@@ -73,7 +73,7 @@ title:       "Rule Index of Solhint"
 | [no-complex-fallback](./rules/security/no-complex-fallback.md)       | Fallback function must be simple.                                        | ✔️          |
 | [no-inline-assembly](./rules/security/no-inline-assembly.md)         | Avoid to use inline assembly. It is acceptable only in rare cases.       | ✔️          |
 | [not-rely-on-block-hash](./rules/security/not-rely-on-block-hash.md) | Do not rely on "block.blockhash". Miners can influence its value.        | ✔️          |
-| [not-rely-on-time](./rules/security/not-rely-on-time.md)             | Avoid making time-based decisions in your business logic.                | ✔️          |
+| [not-rely-on-time](./rules/security/not-rely-on-time.md)             | Avoid making time-based decisions in your business logic.                |             |
 | [reentrancy](./rules/security/reentrancy.md)                         | Possible reentrancy vulnerabilities. Avoid state changes after transfer. | ✔️          |
 | [state-visibility](./rules/security/state-visibility.md)             | Explicitly mark visibility of state.                                     | ✔️          |
         

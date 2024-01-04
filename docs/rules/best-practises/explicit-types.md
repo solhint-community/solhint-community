@@ -5,8 +5,11 @@ title:       "explicit-types | Solhint"
 ---
 
 # explicit-types
+![Recommended Badge](https://img.shields.io/badge/-Recommended-brightgreen)
 ![Category Badge](https://img.shields.io/badge/-Best%20Practise%20Rules-informational)
 ![Default Severity Badge warn](https://img.shields.io/badge/Default%20Severity-warn-yellow)
+> The {"extends": "solhint:recommended"} property in a configuration file enables this rule.
+
 
 ## Description
 Enforce explicit types (like uint256) over implicit ones(like uint).
