@@ -9,6 +9,7 @@ module.exports = Object.freeze({
     'custom-errors': 'error',
     'explicit-types': ['warn'],
     'function-max-lines': ['warn', 50],
+    'interface-starts-with-i': 'error',
     'max-line-length': ['error', 120],
     'max-states-count': ['warn', 15],
     'no-console': 'error',
