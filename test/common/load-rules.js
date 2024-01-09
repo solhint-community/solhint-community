@@ -19,7 +19,7 @@ describe('Load Rules', () => {
   })
 
   it('should load a single rule', () => {
-    const rule = loadRule('func-param-name-mixedcase')
+    const rule = loadRule('var-name-mixedcase')
 
     assert.equal(typeof rule, 'object')
     assert.equal(_.has(rule, 'meta'), true)

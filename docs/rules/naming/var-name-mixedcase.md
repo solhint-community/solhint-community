@@ -12,7 +12,7 @@ title:       "var-name-mixedcase | Solhint"
 
 
 ## Description
-Variable name must be in mixedCase.
+Identifier name must be in mixedCase.
 
 ## Options
 This rule accepts a string option of rule severity. Must be one of "error", "warn", "off". Default to warn.
@@ -28,7 +28,53 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 
 
 ## Examples
-This rule does not have examples.
+### 👍 Examples of **correct** code for this rule
+
+#### state variable in mixedCase
+
+```solidity
+contract { uint public fooBar; }
+```
+
+#### stack variable in mixedCase
+
+```solidity
+contract {
+function foo() {
+  uint fooStack;
+}
+}
+```
+
+#### function variable in mixedCase
+
+```solidity
+contract {
+function foo(uint fooParam) { }
+}
+```
+
+#### event parameter in mixedCase
+
+```solidity
+contract {
+event Foo(uint fooParam) { }
+}
+```
+
+### 👎 Examples of **incorrect** code for this rule
+
+#### name in CapWords
+
+```solidity
+contract { uint public FooBar; }
+```
+
+#### name in UPPER_SNAKE_CASE
+
+```solidity
+contract { uint public FOO_BAR; }
+```
 
 ## Version
 This rule was introduced in [Solhint 2.0.0-alpha.0](https://github.com/solhint-community/solhint-community/tree/v2.0.0-alpha.0)
