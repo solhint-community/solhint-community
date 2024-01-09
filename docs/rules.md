@@ -26,17 +26,11 @@ title:       "Rule Index of Solhint"
 | [named-parameters-function](./rules/naming/named-parameters-function.md) | Enforce using named parameters when invoking a function with more than N arguments                                                         |             |
         
 
-## Miscellaneous
-
-| Rule Id                                                                     | Error                                                                                                                                  | Recommended |
-| --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| [comprehensive-interface](./rules/miscellaneous/comprehensive-interface.md) | Check that all public or external functions are override. This is iseful to make sure that the whole API is extracted in an interface. |             |
-        
-
 ## Style Guide Rules
 
 | Rule Id                                                                              | Error                                                                                  | Recommended |
 | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | ----------- |
+| [interface-starts-with-i](./rules/naming/interface-starts-with-i.md)                 | Interfaces name should start with `I`                                                  | ✔️          |
 | [quotes](./rules/miscellaneous/quotes.md)                                            | Use double quotes for string literals. Values must be 'single' or 'double'.            | ✔️          |
 | [const-name-snakecase](./rules/naming/const-name-snakecase.md)                       | Constant name must be in capitalized SNAKE_CASE.                                       | ✔️          |
 | [contract-name-camelcase](./rules/naming/contract-name-camelcase.md)                 | Contract name must be in CamelCase.                                                    | ✔️          |
@@ -54,6 +48,13 @@ title:       "Rule Index of Solhint"
 | [imports-on-top](./rules/order/imports-on-top.md)                                    | Import statements must be on top.                                                      | ✔️          |
 | [ordering](./rules/order/ordering.md)                                                | Check order of elements in file and inside each contract, according to the style guide |             |
 | [visibility-modifier-order](./rules/order/visibility-modifier-order.md)              | Visibility modifier must be first in list of modifiers.                                | ✔️          |
+        
+
+## Miscellaneous
+
+| Rule Id                                                                     | Error                                                                                                                                  | Recommended |
+| --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| [comprehensive-interface](./rules/miscellaneous/comprehensive-interface.md) | Check that all public or external functions are override. This is iseful to make sure that the whole API is extracted in an interface. |             |
         
 
 ## Security Rules

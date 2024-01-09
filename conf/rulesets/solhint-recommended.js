@@ -7,6 +7,7 @@ module.exports = Object.freeze({
   rules: {
     'custom-errors': 'error',
     'explicit-types': ['warn'],
+    'interface-starts-with-i': 'error',
     'max-states-count': ['warn', 15],
     'no-console': 'error',
     'no-empty-blocks': 'warn',
