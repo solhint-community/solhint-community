@@ -6,6 +6,8 @@
   `definition-name-capwords`: https://github.com/solhint-community/solhint-community/pull/108
 - removed `event-name-camelcase`, moved functionality to `definition-name-capwords` 
   https://github.com/solhint-community/solhint-community/pull/108
+- removed `func-param-name-mixedcase` since functionality was already covered by
+`var-name-mixedcase` https://github.com/solhint-community/solhint-community/pull/110
 - promoted to recommended https://github.com/solhint-community/solhint-community/pull/106
     -  `named-return-values`
     -  `explicit-types`
