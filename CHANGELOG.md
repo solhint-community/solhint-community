@@ -1,14 +1,19 @@
 ## [4.0.0-rc01] - XXX-XX-XX
 
 ## Breaking
--  promoted to recommended https://github.com/solhint-community/solhint-community/pull/106
+- removed `contract-name-camelcase`, which checked event, struct, enum and
+  contract names were in CapWords. moved that functionality into new rule
+  `definition-name-capwords`: https://github.com/solhint-community/solhint-community/pull/108
+- removed `event-name-camelcase`, moved functionality to `definition-name-capwords` 
+  https://github.com/solhint-community/solhint-community/pull/108
+- promoted to recommended https://github.com/solhint-community/solhint-community/pull/106
     -  `named-return-values`
     -  `explicit-types`
     -  `custom-errors`
--  demoted `not-rely-on-time` out of recommended https://github.com/solhint-community/solhint-community/pull/106
+- demoted `not-rely-on-time` out of recommended https://github.com/solhint-community/solhint-community/pull/106
 
 ## Updated
--  fully removed code for solhint:default ruleset https://github.com/solhint-community/solhint-community/pull/105
+- fully removed code for solhint:default ruleset https://github.com/solhint-community/solhint-community/pull/105
 
 ## [4.0.0-rc00] - 2023-12-29
 
