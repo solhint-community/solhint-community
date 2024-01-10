@@ -33,8 +33,7 @@ title:       "Rule Index of Solhint"
 | [interface-starts-with-i](./rules/naming/interface-starts-with-i.md)                 | Interfaces name should start with `I`                                                  | ✔️          |
 | [quotes](./rules/miscellaneous/quotes.md)                                            | Use double quotes for string literals. Values must be 'single' or 'double'.            | ✔️          |
 | [const-name-snakecase](./rules/naming/const-name-snakecase.md)                       | Constant name must be in capitalized SNAKE_CASE.                                       | ✔️          |
-| [contract-name-camelcase](./rules/naming/contract-name-camelcase.md)                 | Contract name must be in CamelCase.                                                    | ✔️          |
-| [event-name-camelcase](./rules/naming/event-name-camelcase.md)                       | Event name must be in CamelCase.                                                       | ✔️          |
+| [definition-name-capwords](./rules/naming/definition-name-capwords.md)               | Contract, interface, library, struct, enum and event names must be in CapWords.        | ✔️          |
 | [foundry-test-functions](./rules/naming/foundry-test-functions.md)                   | Enforce naming convention on functions for Foundry test cases                          |             |
 | [func-name-mixedcase](./rules/naming/func-name-mixedcase.md)                         | Function name must be in mixedCase.                                                    | ✔️          |
 | [func-param-name-mixedcase](./rules/naming/func-param-name-mixedcase.md)             | Function param name must be in mixedCase                                               |             |

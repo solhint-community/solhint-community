@@ -3,25 +3,34 @@ const linter = require('../../../lib/index')
 const contractWith = require('../../common/contract-builder').contractWith
 
 describe('Linter - modifier-name-mixedcase', () => {
-  it('should raise modifier name error', () => {
-    const code = contractWith('modifier owned_by(address a) { }')
+  ;['snake_case', 'twoTrailingUnderscores__', 'threeTrailingUnderscores___'].forEach((name) => {
+    it(`should raise modifier name error on ${name}`, () => {
+      const code = contractWith(`modifier ${name}(address a) { }`)
 
-    const report = linter.processStr(code, {
-      rules: { 'modifier-name-mixedcase': 'error' },
+      const report = linter.processStr(code, {
+        rules: { 'modifier-name-mixedcase': 'error' },
+      })
+
+      assert.equal(report.errorCount, 1)
+      assert.ok(report.messages[0].message.includes('mixedCase'))
     })
-
-    assert.equal(report.errorCount, 1)
-    assert.ok(report.messages[0].message.includes('mixedCase'))
   })
+  ;[
+    'mixedCase',
+    '_leadingUnderscore',
+    '__twoLeadingUnderscores',
+    '___threeLeadingUnderscores',
+    'trailingUnderscore_',
+  ].forEach((name) => {
+    it(`should not raise modifier name error on ${name}`, () => {
+      const code = contractWith(`modifier ${name}(address a) { }`)
 
-  it('should not raise modifier name error', () => {
-    const code = contractWith('modifier ownedBy(address a) { }')
+      const report = linter.processStr(code, {
+        rules: { 'modifier-name-mixedcase': 'error' },
+      })
 
-    const report = linter.processStr(code, {
-      rules: { 'modifier-name-mixedcase': 'error' },
+      assert.equal(report.errorCount, 0)
     })
-
-    assert.equal(report.errorCount, 0)
   })
 
   describe('with $ character', () => {
