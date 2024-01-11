@@ -32,7 +32,6 @@ module.exports = Object.freeze({
     'definition-name-capwords': 'error',
     'foundry-test-functions': ['off', ['setUp']],
     'func-name-mixedcase': 'warn',
-    'func-param-name-mixedcase': 'warn',
     'immutable-name-snakecase': ['warn'],
     'modifier-name-mixedcase': 'warn',
     'named-parameters-function': ['warn', 3],

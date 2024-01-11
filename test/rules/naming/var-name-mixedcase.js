@@ -15,6 +15,28 @@ describe('Linter - var-name-mixedcase', () => {
     assert.ok(report.messages.map((i) => i.message).some((i) => i.includes('name')))
   })
 
+  it('should raise incorrect func param name error', () => {
+    const code = contractWith('function funcName (uint A) public {}')
+
+    const report = linter.processStr(code, {
+      rules: { 'var-name-mixedcase': 'error' },
+    })
+
+    assert.equal(report.errorCount, 1)
+    assert.ok(report.messages[0].message.includes('name'))
+  })
+
+  it('should raise var name error for event arguments illegal styling', () => {
+    const code = contractWith('event Event1(uint B);')
+
+    const report = linter.processStr(code, {
+      rules: { 'var-name-mixedcase': 'error' },
+    })
+
+    assert.equal(report.errorCount, 1)
+    assert.ok(report.messages[0].message.includes('mixedCase'))
+  })
+
   it('should raise incorrect var name error for typed declaration', () => {
     const code = funcWith('uint B = 1;')
 
