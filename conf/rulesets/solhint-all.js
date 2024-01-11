@@ -36,6 +36,7 @@ module.exports = Object.freeze({
     'named-parameters-function': ['warn', 3],
     'named-parameters-mapping': 'warn',
     'named-return-values': ['warn', 1],
+    'non-state-vars-leading-underscore': ['warn'],
     'private-vars-leading-underscore': [
       'warn',
       {

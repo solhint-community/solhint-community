@@ -164,6 +164,7 @@ describe('Linter - named-return-values', () => {
         ...configGetter('solhint:all').rules,
         'compiler-version': 'off',
         'foundry-test-functions': 'off',
+        'non-state-vars-leading-underscore': 'off',
       },
     })
 
