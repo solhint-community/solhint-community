@@ -19,7 +19,7 @@ title:       "Rule Index of Solhint"
 | [no-global-import](./rules/best-practises/no-global-import.md)           | Import statement includes an entire file instead of selected symbols                                                                       | ✔️          |
 | [no-unused-import](./rules/best-practises/no-unused-import.md)           | Reports a warning when an imported name is not used                                                                                        | ✔️          |
 | [no-unused-vars](./rules/best-practises/no-unused-vars.md)               | Variable "name" is unused.                                                                                                                 | ✔️          |
-| [one-contract-per-file](./rules/best-practises/one-contract-per-file.md) | Enforces the use of ONE Contract per file see [here](https://docs.soliditylang.org/en/v0.8.21/style-guide.html#contract-and-library-names) |             |
+| [one-contract-per-file](./rules/best-practises/one-contract-per-file.md) | Enforces the use of ONE Contract per file see [here](https://docs.soliditylang.org/en/v0.8.21/style-guide.html#contract-and-library-names) | ✔️          |
 | [payable-fallback](./rules/best-practises/payable-fallback.md)           | When fallback is not payable you will not be able to receive ethers.                                                                       | ✔️          |
 | [reason-string](./rules/best-practises/reason-string.md)                 | Require or revert statement must have a reason string and check that each reason string is at most N characters long.                      | ✔️          |
 | [constructor-syntax](./rules/best-practises/constructor-syntax.md)       | Constructors should use the new constructor keyword.                                                                                       |             |
@@ -37,7 +37,7 @@ title:       "Rule Index of Solhint"
 | [foundry-test-functions](./rules/naming/foundry-test-functions.md)                   | Enforce naming convention on functions for Foundry test cases                          |             |
 | [func-name-mixedcase](./rules/naming/func-name-mixedcase.md)                         | Function name must be in mixedCase.                                                    | ✔️          |
 | [immutable-name-snakecase](./rules/naming/immutable-name-snakecase.md)               | Check Immutable variables are SNAKE_CASE.                                              |             |
-| [modifier-name-mixedcase](./rules/naming/modifier-name-mixedcase.md)                 | Modifier name must be in mixedCase.                                                    |             |
+| [modifier-name-mixedcase](./rules/naming/modifier-name-mixedcase.md)                 | Modifier name must be in mixedCase.                                                    | ✔️          |
 | [named-parameters-mapping](./rules/naming/named-parameters-mapping.md)               | Solidity v0.8.18 introduced named parameters on the mappings definition                |             |
 | [named-return-values](./rules/naming/named-return-values.md)                         | Ensure function return parameters are named                                            | ✔️          |
 | [private-vars-leading-underscore](./rules/naming/private-vars-leading-underscore.md) | Private and internal names must start with a single underscore.                        |             |

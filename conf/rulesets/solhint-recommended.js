@@ -14,6 +14,7 @@ module.exports = Object.freeze({
     'no-global-import': 'warn',
     'no-unused-import': 'warn',
     'no-unused-vars': 'warn',
+    'one-contract-per-file': 'warn',
     'payable-fallback': 'warn',
     'reason-string': [
       'warn',
@@ -25,6 +26,7 @@ module.exports = Object.freeze({
     'const-name-snakecase': 'warn',
     'definition-name-capwords': 'error',
     'func-name-mixedcase': 'warn',
+    'modifier-name-mixedcase': 'warn',
     'named-return-values': 'warn',
     'use-forbidden-name': 'warn',
     'var-name-mixedcase': 'warn',

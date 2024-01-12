@@ -3,11 +3,25 @@ const {
   assertNoWarnings,
   assertErrorMessage,
   assertErrorCount,
+  assertWarnsCount,
 } = require('../../common/asserts')
 const linter = require('../../../lib/index')
+const { configGetter } = require('../../../lib/config/config-file')
 const contracts = require('../../fixtures/best-practises/one-contract-per-file')
 
 describe('Linter - one-contract-per-file', () => {
+  it('should be included in recommended config', () => {
+    const report = linter.processStr(contracts.TWO_CONTRACTS, {
+      rules: {
+        ...configGetter('solhint:recommended').rules,
+        'no-empty-blocks': 'off',
+        'compiler-version': 'off',
+      },
+    })
+    assertWarnsCount(report, 1)
+    assertErrorMessage(report, 'Found more than one contract per file. 2 contracts found!')
+  })
+
   it('should not raise error for zero contracts', () => {
     const report = linter.processStr('pragma solidity ^0.8.14;', {
       rules: { 'one-contract-per-file': 'error' },
