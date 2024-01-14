@@ -293,6 +293,20 @@ describe('Linter - no-unused-vars', () => {
       `,
       },
       {
+        description: 'Import is used in the initializator of a variable declaration',
+        code: `
+        import { Bar } from "./bar.sol";
+
+        contract Foo {
+            address public venue;
+            constructor () {
+              address venue_ = address(new Bar());
+              venue = venue_;
+            }
+        }
+      `,
+      },
+      {
         description: 'Import is used in the left side of a using for statement',
         code: `
         pragma solidity >=0.8.19;
@@ -364,6 +378,24 @@ describe('Linter - no-unused-vars', () => {
       })
     })
   })
+
+  it(`should NOT raise warn for unused state variable`, () => {
+    const report = linter.processStr(contractWith('uint public foo;'), {
+      rules: { 'no-unused-vars': 'warn' },
+    })
+
+    assertWarnsCount(report, 0)
+  })
+
+  it(`should raise warn for unused stack variable that got shadowed`, () => {
+    const report = linter.processStr(funcWith(multiLine('uint a;', '{uint a = 450; a;}')), {
+      rules: { 'no-unused-vars': 'warn' },
+    })
+
+    assertWarnsCount(report, 1)
+    assertErrorMessage(report, 'unused')
+  })
+
   const UNUSED_VARS = [
     contractWith('function a(uint a, uint b) public { b += 1; }'),
     funcWith('uint a = 0;'),
