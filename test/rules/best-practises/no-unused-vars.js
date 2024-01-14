@@ -12,7 +12,7 @@ describe('Linter - no-unused-vars', () => {
         rules: { 'no-unused-vars': 'warn' },
       })
       assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'imported name A is not used')
+      assertErrorMessage(report, 'Variable "A" is unused')
     })
 
     it('should raise when name created in import "path" as name is not used', () => {
@@ -22,7 +22,7 @@ describe('Linter - no-unused-vars', () => {
         rules: { 'no-unused-vars': 'warn' },
       })
       assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'imported name A is not used')
+      assertErrorMessage(report, 'Variable "A" is unused')
     })
 
     it('should not crash on, but also not recognize, malformed inheritdoc statements', () => {
@@ -42,7 +42,7 @@ describe('Linter - no-unused-vars', () => {
         rules: { 'no-unused-vars': 'warn' },
       })
       assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'imported name A is not used')
+      assertErrorMessage(report, 'Variable "A" is unused')
     })
 
     it('should raise error when using solhint:recommended', () => {
@@ -52,7 +52,7 @@ describe('Linter - no-unused-vars', () => {
         rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
       })
       assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'imported name A is not used')
+      assertErrorMessage(report, 'Variable "A" is unused')
     })
 
     it('should report correct name when unused import is aliased', () => {
@@ -62,7 +62,7 @@ describe('Linter - no-unused-vars', () => {
         rules: { 'no-unused-vars': 'warn' },
       })
       assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'imported name B is not used')
+      assertErrorMessage(report, 'Variable "B" is unused')
     })
 
     it('should raise when some of the imported names are not used', () => {
@@ -72,7 +72,7 @@ describe('Linter - no-unused-vars', () => {
         rules: { 'no-unused-vars': 'warn' },
       })
       assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'imported name B is not used')
+      assertErrorMessage(report, 'Variable "B" is unused')
     })
 
     it('should raise when an imported name is not used but shadowed in a variable declaration', () => {
@@ -82,6 +82,7 @@ describe('Linter - no-unused-vars', () => {
       contract C {
         function foo () public {
           uint A = 40;
+          A +=1;
         }
       }`
 
@@ -89,7 +90,7 @@ describe('Linter - no-unused-vars', () => {
         rules: { 'no-unused-vars': 'warn' },
       })
       assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'imported name A is not used')
+      assertErrorMessage(report, 'Variable "A" is unused')
     })
 
     it('should raise when an imported name is shadowed and then used', () => {
@@ -107,7 +108,7 @@ describe('Linter - no-unused-vars', () => {
         rules: { 'no-unused-vars': 'warn' },
       })
       assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'imported name A is not used')
+      assertErrorMessage(report, 'Variable "A" is unused')
     })
 
     it('should not raise when contract name is used as a type for a memory variable', () => {
@@ -116,6 +117,7 @@ describe('Linter - no-unused-vars', () => {
     contract A {
       function fun () public {
         ERC20 funToken = address(0);
+        funToken.foo();
       }
     }`
 
@@ -149,6 +151,7 @@ describe('Linter - no-unused-vars', () => {
             contract A {
               function fun () public {
                 B[] memory someArray;
+                someArray[0];
               }
             }`,
       },
@@ -158,6 +161,7 @@ describe('Linter - no-unused-vars', () => {
             contract A {
               function fun () public {
                 B.field[] memory someArray;
+                someArray[0];
               }
             }`,
       },
@@ -229,7 +233,7 @@ describe('Linter - no-unused-vars', () => {
         import { IERC721Metadata } from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 
         contract MyContract {
-            function tokenURI(uint256 streamId) public view override(IERC721Metadata, ERC721) returns (string memory uri) {
+            function tokenURI(uint256) public view override(IERC721Metadata, ERC721) returns (string memory uri) {
                 uri = "example.com";
             }
         }
