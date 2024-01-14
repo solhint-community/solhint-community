@@ -398,6 +398,12 @@ describe('Linter - no-unused-vars', () => {
 
   const UNUSED_VARS = [
     contractWith('function a(uint a, uint b) public { b += 1; }'),
+    contractWith(
+      multiLine(
+        'function a(uint b) public returns (uint) { return 1; }',
+        'function z() public returns (uint) { uint b = 4; return b; }'
+      )
+    ),
     funcWith('uint a = 0;'),
     funcWith('var (a) = 1;'),
     contractWith('function a(uint a, uint b) public { uint c = a + b; }'),
