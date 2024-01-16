@@ -1,3 +1,4 @@
+const assert = require('assert')
 const { assertNoWarnings, assertErrorMessage, assertWarnsCount } = require('../../common/asserts')
 const { configGetter } = require('../../../lib/config/config-file')
 const linter = require('../../../lib/index')
@@ -13,6 +14,16 @@ describe('Linter - no-unused-vars', () => {
       })
       assertWarnsCount(report, 1)
       assertErrorMessage(report, 'Variable "A" is unused')
+    })
+
+    it('should report error on the Identifier node, NOT on the entire import statement', () => {
+      const code = `import {A} from './A.sol';`
+
+      const report = linter.processStr(code, {
+        rules: { 'no-unused-vars': 'warn' },
+      })
+      assert.equal(report.reports[0].line, 1)
+      assert.equal(report.reports[0].column, 9)
     })
 
     it('should raise when name created in import "path" as name is not used', () => {
