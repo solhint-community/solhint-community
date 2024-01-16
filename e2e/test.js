@@ -3,6 +3,7 @@ const { expect } = require('chai')
 const fs = require('fs-extra')
 const path = require('path')
 const shell = require('shelljs')
+const glob = require('glob')
 const { useFixture } = require('./utils')
 
 describe('main executable tests', function () {
@@ -376,6 +377,36 @@ describe('main executable tests', function () {
         })
         it('AND it does NOT list disabled rules', function () {
           expect(stdout).to.eq('')
+        })
+      })
+    })
+  })
+
+  describe('plugins', function () {
+    describe('GIVEN a node project set up with solhint-plugin-prettier', function () {
+      const projectRoot = process.cwd()
+      useFixture('15-plugins')
+      beforeEach(function () {
+        // this might surprise you, but npm install is slow
+        this.timeout(95000)
+        // using `npm i solhint-community*.tgz` would be easier but that doesn't
+        // work under windows
+        const tgz = glob.sync('solhint-community*.tgz', { cwd: projectRoot })
+        shell.exec(`cp ${projectRoot}/${tgz} . `, { silent: true })
+        shell.exec(`npm i ${tgz}`, { silent: true })
+      })
+      describe('WHEN linting a file for which prettier/prettier reports an error', function () {
+        let stdout
+        let stderr
+        beforeEach(function () {
+          ;({ stdout, stderr } = shell.exec('npx solhint PrettierErrors.sol', { silent: true }))
+        })
+        it('AND the rule exists', function () {
+          expect(stderr).not.to.include("Warning: Rule 'prettier/prettier' doesn't exist")
+          expect(stdout).not.to.include("Warning: Rule 'prettier/prettier' doesn't exist")
+        })
+        it('AND an error is reported on it', function () {
+          expect(stdout).to.include('error  Insert ·  prettier/prettier')
         })
       })
     })
