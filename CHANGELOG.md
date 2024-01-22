@@ -14,6 +14,11 @@
     -  `explicit-types`
     -  `custom-errors`
 - demoted `not-rely-on-time` out of recommended https://github.com/solhint-community/solhint-community/pull/106
+- `ordering`: enums have to go before structs (previously, all type definitions
+  were equivalent) https://github.com/solhint-community/solhint-community/pull/126
+- `ordering`: order of state variable declarations has to be constant ->
+  immutable -> mutable (previously all state variable definitions were equivalent)
+  https://github.com/solhint-community/solhint-community/pull/126
 
 ## Updated
 - fully removed code for solhint:default ruleset https://github.com/solhint-community/solhint-community/pull/105
