@@ -1,6 +1,7 @@
 ## [4.0.0-rc01] - XXX-XX-XX
 
 ## Breaking
+- removed `no-unused-import`, is now a special case of `no-unused-vars` https://github.com/solhint-community/solhint-community/pull/22
 - removed `contract-name-camelcase`, which checked event, struct, enum and
   contract names were in CapWords. moved that functionality into new rule
   `definition-name-capwords`: https://github.com/solhint-community/solhint-community/pull/108
@@ -16,6 +17,9 @@
 
 ## Updated
 - fully removed code for solhint:default ruleset https://github.com/solhint-community/solhint-community/pull/105
+
+## Fixed
+- recognize shadowing of imports and stack variables https://github.com/solhint-community/solhint-community/pull/22
 
 ## [4.0.0-rc00] - 2023-12-29
 

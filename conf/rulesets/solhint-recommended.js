@@ -12,7 +12,6 @@ module.exports = Object.freeze({
     'no-console': 'error',
     'no-empty-blocks': 'warn',
     'no-global-import': 'warn',
-    'no-unused-import': 'warn',
     'no-unused-vars': 'warn',
     'one-contract-per-file': 'warn',
     'payable-fallback': 'warn',
