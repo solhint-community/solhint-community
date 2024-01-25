@@ -35,6 +35,31 @@ describe('non-state-vars-leading-underscore', () => {
       })
     })
   })
+  describe("'state' vars that dont actually use storage should start with underscore", function () {
+    ;[
+      {
+        description: 'immutable variable',
+        underscore: contractWith('uint256 immutable public _FOO;'),
+        noUnderscore: contractWith('uint256 immutable public FOO;'),
+      },
+      {
+        description: 'constant variable',
+        underscore: contractWith('uint256 constant public _FOO;'),
+        noUnderscore: contractWith('uint256 constant public FOO;'),
+      },
+    ].forEach(({ description, underscore, noUnderscore }) => {
+      it(`should raise an error if a ${description} does not start with an underscore`, () => {
+        const report = processStr(noUnderscore, config)
+        assert.equal(report.errorCount, 1)
+        assert(report.messages[0].message.includes('should start with _'))
+      })
+
+      it(`should NOT raise an error if a ${description} starts with an underscore`, () => {
+        const report = processStr(underscore, config)
+        assert.equal(report.errorCount, 0)
+      })
+    })
+  })
   describe('non state vars should have a leading underscore', function () {
     ;[
       {
@@ -71,34 +96,16 @@ describe('non-state-vars-leading-underscore', () => {
     })
   })
 
-  describe('state vars should NOT have a leading underscore', function () {
-    ;[
-      {
-        description: 'immutable state variable',
-        noUnderscore: contractWith('uint256 immutable foo;'),
-        withUnderscore: contractWith('uint256 immutable _foo;'),
-      },
-      {
-        description: 'constant state "variable"',
-        noUnderscore: contractWith('uint256 constant foo;'),
-        withUnderscore: contractWith('uint256 constant _foo;'),
-      },
-      {
-        description: 'mutable state variable',
-        noUnderscore: contractWith('uint256 foo;'),
-        withUnderscore: contractWith('uint256 _foo;'),
-      },
-    ].forEach(({ description, noUnderscore, withUnderscore }) => {
-      it(`should raise an error if a ${description} starts with an underscore`, () => {
-        const report = processStr(withUnderscore, config)
-        assert.equal(report.errorCount, 1)
-        assert(report.messages[0].message.includes('should not start with _'))
-      })
+  describe('state-using state vars should NOT have a leading underscore', function () {
+    it(`should raise an error if a mutablestate variable starts with an underscore`, () => {
+      const report = processStr(contractWith('uint256 _foo;'), config)
+      assert.equal(report.errorCount, 1)
+      assert(report.messages[0].message.includes('should not start with _'))
+    })
 
-      it(`should NOT raise an error if a ${description} doesnt start with an underscore`, () => {
-        const report = processStr(noUnderscore, config)
-        assert.equal(report.errorCount, 0)
-      })
+    it(`should NOT raise an error if a mutable state variable doesnt start with an underscore`, () => {
+      const report = processStr(contractWith('uint256 foo;'), config)
+      assert.equal(report.errorCount, 0)
     })
   })
 })
