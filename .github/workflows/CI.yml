@@ -73,9 +73,8 @@ jobs:
       run: npm run generate-rulesets
     - name: Generate docs
       run: npm run docs
-    # documentation generation is broken on Windows, see issue 49
-    # - name: Ensure docs and rulesets are up to date
-    #   run: git diff --exit-code
+    - name: Ensure docs and rulesets are up to date
+      run: git diff --exit-code
     - name: Run unitary tests
       run: npm test
     - name: Package executable
