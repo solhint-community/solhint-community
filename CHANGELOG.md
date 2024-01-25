@@ -20,6 +20,11 @@
   immutable -> mutable (previously all state variable definitions were equivalent)
   https://github.com/solhint-community/solhint-community/pull/126
 
+### Added
+- ported non-state-vars-leading-underscore from wonderland's plugin, alongside
+  some improvements making it more opinionated & useful for hunting for storage
+  operations https://github.com/solhint-community/solhint-community/pull/114
+
 ### Updated
 - fully removed code for solhint:default ruleset https://github.com/solhint-community/solhint-community/pull/105
 
