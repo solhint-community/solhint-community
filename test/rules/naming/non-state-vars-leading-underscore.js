@@ -7,6 +7,34 @@ const config = {
 }
 
 describe('non-state-vars-leading-underscore', () => {
+  ;[
+    {
+      description: 'struct member',
+      underscore: contractWith('struct Foo { uint256 _foo; }'),
+      noUnderscore: contractWith('struct Foo { uint256 _foo; }'),
+    },
+    {
+      description: 'event parameter',
+      underscore: contractWith('event Foo ( uint256 _foo );'),
+      noUnderscore: contractWith('event Foo ( uint256 foo );'),
+    },
+    {
+      description: 'custom error parameter',
+      underscore: contractWith('error Foo ( uint256 _foo );'),
+      noUnderscore: contractWith('error Foo ( uint256 foo );'),
+    },
+  ].forEach(({ description, underscore, noUnderscore }) => {
+    describe(`${description} names should be ignored since they just define a type`, function () {
+      it('they can start with underscore', function () {
+        const report = processStr(underscore, config)
+        assert.equal(report.errorCount, 0)
+      })
+      it('they can start without underscore', function () {
+        const report = processStr(noUnderscore, config)
+        assert.equal(report.errorCount, 0)
+      })
+    })
+  })
   describe('non state vars should have a leading underscore', function () {
     ;[
       {
