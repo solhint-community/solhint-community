@@ -1,0 +1,14 @@
+{
+  "name": "15-plugins",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "solhint-plugin-prettier": "^0.1.0"
+  }
+}

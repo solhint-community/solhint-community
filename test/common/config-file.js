@@ -59,6 +59,7 @@ describe('Config file', () => {
       assert.deepStrictEqual(config, {
         excludedFiles: [],
         extends: [],
+        plugins: [],
         rules: {
           'no-console': 'off',
         },
@@ -73,6 +74,7 @@ describe('Config file', () => {
       assert.deepStrictEqual(config, {
         excludedFiles: [],
         extends: [],
+        plugins: [],
         rules: {
           'no-console': 'warn',
         },
