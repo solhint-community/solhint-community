@@ -1,4 +1,4 @@
-## [4.0.0-rc01] - XXX-XX-XX
+## [4.0.0-rc01] - 2024-01-28
 
 ### Breaking
 - removed `no-unused-import`, is now a special case of `no-unused-vars` https://github.com/solhint-community/solhint-community/pull/22
@@ -19,6 +19,10 @@
 - `ordering`: order of state variable declarations has to be constant ->
   immutable -> mutable (previously all state variable definitions were equivalent)
   https://github.com/solhint-community/solhint-community/pull/126
+- promoted `one-contract-per-file` to recommended ruleset
+  https://github.com/solhint-community/solhint-community/pull/115
+- promoted `modifier-name-mixedcase` to recommended ruleset
+  https://github.com/solhint-community/solhint-community/pull/115
 
 ### Added
 - ported non-state-vars-leading-underscore from wonderland's plugin, alongside
@@ -37,12 +41,18 @@
 ### Fixed
 - recognize shadowing of imports and stack variables https://github.com/solhint-community/solhint-community/pull/22
 - `plugins` field was being silently dropped from configs in last release
-candidate. Fixed that. https://github.com/solhint-community/solhint-community/pull/121
+  candidate. Fixed that. https://github.com/solhint-community/solhint-community/pull/121
+- ensure rules `named-parameters-mapping` and `foundry-test-functions` don't have a
+  default severity of 'off', which would've disabled them in `solhint:all`
+  https://github.com/solhint-community/solhint-community/pull/118/files
+- run doc genereation under windows in CI and ensure they don't differ from the
+  commited ones https://github.com/solhint-community/solhint-community/pull/127
 
 ## [4.0.0-rc00] - 2023-12-29
 
 ### Added
 - support for config files in subdirectories https://github.com/solhint-community/solhint-community/pull/93
+- include interface-starts-with-i from wonderland's plugin: https://github.com/solhint-community/solhint-community/pull/107
 
 ### Breaking
 - remove `solhint:default` ruleset https://github.com/solhint-community/solhint-community/pull/103
