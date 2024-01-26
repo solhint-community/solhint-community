@@ -23,6 +23,12 @@
 ### Updated
 - fully removed code for solhint:default ruleset https://github.com/solhint-community/solhint-community/pull/105
 
+### Added
+- added a config parameter to `named-return-values` to ignore functions with
+  less than N return values, and set the default to 1, to make it a less
+  disruptive addition to the recommended ruleset
+  https://github.com/solhint-community/solhint-community/pull/128
+
 ### Fixed
 - recognize shadowing of imports and stack variables https://github.com/solhint-community/solhint-community/pull/22
 - `plugins` field was being silently dropped from configs in last release

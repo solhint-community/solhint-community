@@ -38,7 +38,97 @@ describe('Linter - named-return-values', () => {
     assertNoErrors(report)
   })
 
-  it('should raise error for 2 unnamed return values', () => {
+  describe('config: zero max unnamed return values', function () {
+    it('should raise error for one single unnamed return value', () => {
+      const code = contractWith(
+        `function getBalanceFromTokens(address wallet) public returns(uint256) {}`
+      )
+      const report = linter.processStr(code, {
+        rules: { 'named-return-values': ['error', 0] },
+      })
+      assertErrorCount(report, 1)
+      assert.equal(report.reports[0].message, `first return value does not have a name`)
+    })
+  })
+
+  describe('config: two max unnamed return values', function () {
+    const config = {
+      rules: { 'named-return-values': ['error', 2] },
+    }
+    it('should NOT raise error for one single unnamed return value', () => {
+      const code = contractWith(
+        `function getBalanceFromTokens(address wallet) public returns(uint256) {}`
+      )
+      const report = linter.processStr(code, config)
+      assertNoErrors(report)
+    })
+
+    it('should NOT raise error for 2/2 unnamed return values', () => {
+      const code = contractWith(
+        `function getBalanceFromTokens(address wallet) public returns(uint256, address) {}`
+      )
+      const report = linter.processStr(code, config)
+      assertNoErrors(report)
+    })
+
+    it('should raise error for 2/3 unnamed return values', () => {
+      const code = contractWith(
+        `function getBalanceFromTokens(address wallet) public returns(uint256, address me, address whoeverElse) {}`
+      )
+      const report = linter.processStr(code, config)
+      assertErrorCount(report, 1)
+      assert.equal(report.reports[0].message, `first return value does not have a name`)
+    })
+  })
+
+  describe('no config ', function () {
+    it('should raise warning for solhint:recommended setup with two anonymous return values', () => {
+      const code = contractWith(
+        `function getBalanceFromTokens(address) public returns(uint256, uint256) {return (4,5);}`
+      )
+      const report = linter.processStr(code, {
+        rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
+      })
+      assertWarnsCount(report, 2)
+      assert.equal(report.reports[0].message, 'first return value does not have a name')
+      assert.equal(report.reports[1].message, 'second return value does not have a name')
+    })
+
+    it('should raise error for two unnamed return values out of two', () => {
+      const code = contractWith(
+        `function getBalanceFromTokens(address wallet) public returns(address, uint256) {}`
+      )
+      const report = linter.processStr(code, {
+        rules: { 'named-return-values': 'error' },
+      })
+      assertErrorCount(report, 2)
+      assert.equal(report.reports[0].message, `first return value does not have a name`)
+      assert.equal(report.reports[1].message, `second return value does not have a name`)
+    })
+
+    it('should raise error for one unnamed return values out of two', () => {
+      const code = contractWith(
+        `function getBalanceFromTokens(address wallet) public returns(address who, uint256) {}`
+      )
+      const report = linter.processStr(code, {
+        rules: { 'named-return-values': 'error' },
+      })
+      assertErrorCount(report, 1)
+      assert.equal(report.reports[0].message, `second return value does not have a name`)
+    })
+
+    it('should NOT raise error for a single unnamed return value', () => {
+      const code = contractWith(
+        `function getBalanceFromTokens(address wallet) public returns(uint256) {}`
+      )
+      const report = linter.processStr(code, {
+        rules: { 'named-return-values': 'error' },
+      })
+      assertNoErrors(report)
+    })
+  })
+
+  it('should raise error for 2 unnamed return values out of four', () => {
     const code = contractWith(
       `function getBalanceFromTokens(address wallet) public returns(address user, address, uint256 amount, uint256) { balance = 1; }`
     )
@@ -51,15 +141,17 @@ describe('Linter - named-return-values', () => {
     assert.equal(report.reports[1].message, `4-th return value does not have a name`)
   })
 
-  it('should raise warning for solhint:recommended setup', () => {
+  it('should raise error for 2 unnamed return values out of four', () => {
     const code = contractWith(
-      `function getBalanceFromTokens(address) public returns(uint256) { balance = 1; }`
+      `function getBalanceFromTokens(address wallet) public returns(address user, address, uint256 amount, uint256) { balance = 1; }`
     )
-
     const report = linter.processStr(code, {
-      rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
+      rules: { 'named-return-values': 'error' },
     })
-    assertWarnsCount(report, 1)
+
+    assertErrorCount(report, 2)
+    assert.equal(report.reports[0].message, `second return value does not have a name`)
+    assert.equal(report.reports[1].message, `4-th return value does not have a name`)
   })
 
   it('should raise error for solhint:all setup', () => {
