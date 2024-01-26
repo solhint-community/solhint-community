@@ -15,13 +15,19 @@ title:       "named-return-values | Solhint"
 Ensure function return parameters are named
 
 ## Options
-This rule accepts a string option of rule severity. Must be one of "error", "warn", "off". Default to warn.
+This rule accepts an array of options:
+
+| Index | Description                                                                                                             | Default Value |
+| ----- | ----------------------------------------------------------------------------------------------------------------------- | ------------- |
+| 0     | Rule severity. Must be one of "error", "warn", "off".                                                                   | warn          |
+| 1     | An integer specifying the max amount of return values a function can have while still allowing them to remain anonymous | 1             |
+
 
 ### Example Config
 ```json
 {
   "rules": {
-    "named-return-values": "warn"
+    "named-return-values": ["warn",1]
   }
 }
 ```

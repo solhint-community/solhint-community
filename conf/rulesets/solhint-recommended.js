@@ -26,7 +26,7 @@ module.exports = Object.freeze({
     'definition-name-capwords': 'error',
     'func-name-mixedcase': 'warn',
     'modifier-name-mixedcase': 'warn',
-    'named-return-values': 'warn',
+    'named-return-values': ['warn', 1],
     'use-forbidden-name': 'warn',
     'var-name-mixedcase': 'warn',
     'imports-on-top': 'warn',
