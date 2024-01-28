@@ -54,6 +54,13 @@ title:       "Rule Index of Solhint"
 | [comprehensive-interface](./rules/miscellaneous/comprehensive-interface.md) | Check that all public or external functions are override. This is iseful to make sure that the whole API is extracted in an interface. |             |
         
 
+## Best Practice Rules
+
+| Rule Id                                                                                  | Error                                                                                                                                                                                                                                                                     | Recommended |
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| [non-state-vars-leading-underscore](./rules/naming/non-state-vars-leading-underscore.md) | Variables that are not in contract state should start with underscore. Conversely, variables that can cause an SLOAD/SSTORE should NOT start with an underscore. This makes it evident which operations cause expensive storage access when hunting for gas optimizations |             |
+        
+
 ## Security Rules
 
 | Rule Id                                                              | Error                                                                    | Recommended |
