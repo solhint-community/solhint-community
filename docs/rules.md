@@ -40,6 +40,7 @@ title:       "Rule Index of Solhint"
 | [named-parameters-mapping](./rules/naming/named-parameters-mapping.md)               | Solidity v0.8.18 introduced named parameters on the mappings definition                |             |
 | [named-return-values](./rules/naming/named-return-values.md)                         | Ensure function return parameters are named                                            | ✔️          |
 | [private-vars-leading-underscore](./rules/naming/private-vars-leading-underscore.md) | Private and internal names must start with a single underscore.                        |             |
+| [style-guide-casing](./rules/naming/style-guide-casing.md)                           | Check identifier and type name casing conforms to the style guide                      | ✔️          |
 | [use-forbidden-name](./rules/naming/use-forbidden-name.md)                           | Avoid to use letters 'I', 'l', 'O' as identifiers.                                     | ✔️          |
 | [var-name-mixedcase](./rules/naming/var-name-mixedcase.md)                           | Identifier name must be in mixedCase.                                                  | ✔️          |
 | [imports-on-top](./rules/order/imports-on-top.md)                                    | Import statements must be on top.                                                      | ✔️          |

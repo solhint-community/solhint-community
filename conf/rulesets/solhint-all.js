@@ -43,6 +43,7 @@ module.exports = Object.freeze({
         strict: false,
       },
     ],
+    'style-guide-casing': ['warn'],
     'use-forbidden-name': 'warn',
     'var-name-mixedcase': 'warn',
     'imports-on-top': 'warn',
