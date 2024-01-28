@@ -15,6 +15,7 @@ describe('Linter - one-contract-per-file', () => {
       rules: {
         ...configGetter('solhint:recommended').rules,
         'no-empty-blocks': 'off',
+        'style-guide-casing': 'off',
         'compiler-version': 'off',
       },
     })
