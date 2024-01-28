@@ -7,11 +7,9 @@ describe('style-guide-casing', function () {
   describe('immutable names should be in SNAKE_CASE', () => {
     it('should raise error when variable is in camelCase', () => {
       const code = contractWith('uint32 private immutable camelCase;')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 1)
       assert.ok(
         report.messages[0].message.includes(
@@ -22,11 +20,9 @@ describe('style-guide-casing', function () {
 
     it('should raise error when variable is in lowercase_snakecase', () => {
       const code = contractWith('uint32 private immutable snake_case;')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 1)
       assert.ok(
         report.messages[0].message.includes(
@@ -50,7 +46,6 @@ describe('style-guide-casing', function () {
           const report = processStr(code, {
             rules: { 'style-guide-casing': 'error' },
           })
-
           assert.equal(report.errorCount, 0)
         })
       }
@@ -60,11 +55,9 @@ describe('style-guide-casing', function () {
   describe('constant names should be in SNAKE_CASE', () => {
     it('should raise const name error', () => {
       const code = contractWith('uint private constant a;')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 1)
       assert.ok(report.messages[0].message.includes('SNAKE_CASE'))
     })
@@ -81,53 +74,27 @@ describe('style-guide-casing', function () {
 
     it('should not raise const name error for constants in snake case with single leading underscore', () => {
       const code = contractWith('uint32 private constant _THE_CONSTANT = 10;')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 0)
     })
 
     it('should not raise const name error for constants in snake case with double leading underscore', () => {
       const code = contractWith('uint32 private constant __THE_CONSTANT = 10;')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 0)
     })
 
     it('should raise const name error for constants in snake case with more than two leading underscores', () => {
       const code = contractWith('uint32 private constant ___THE_CONSTANT = 10;')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 1)
       assert.ok(report.messages[0].message.includes('SNAKE_CASE'))
-    })
-
-    it('should not raise const name error for immutable variables in SNAKE_CASE', () => {
-      const code = contractWith('uint32 private immutable SNAKE_CASE;')
-
-      const report = processStr(code, {
-        rules: { 'style-guide-casing': 'error' },
-      })
-
-      assert.equal(report.errorCount, 0)
-    })
-
-    it('should not raise const name error for immutable variables in camelCase', () => {
-      const code = contractWith('uint32 private immutable camelCase;')
-
-      const report = processStr(code, {
-        rules: { 'style-guide-casing': 'error' },
-      })
-
-      assert.equal(report.errorCount, 0)
     })
 
     describe('constant name with $ character', () => {
@@ -152,22 +119,18 @@ describe('style-guide-casing', function () {
   describe('function names should be in mixedCase', () => {
     it('should raise incorrect func name error', () => {
       const code = contractWith('function AFuncName () public {}')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 1)
       assert.ok(report.messages[0].message.includes('mixedCase'))
     })
 
-    it('should dot raise incorrect func name error', () => {
+    it('should not raise incorrect func name error', () => {
       const code = contractWith('function aFunc1Nam23e () public {}')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 0)
     })
 
@@ -184,7 +147,6 @@ describe('style-guide-casing', function () {
           const report = processStr(code, {
             rules: { 'style-guide-casing': 'error' },
           })
-
           assert.equal(report.errorCount, 0)
         })
       }
@@ -195,11 +157,9 @@ describe('style-guide-casing', function () {
     ;['snake_case', 'twoTrailingUnderscores__', 'threeTrailingUnderscores___'].forEach((name) => {
       it(`should raise modifier name error on ${name}`, () => {
         const code = contractWith(`modifier ${name}(address a) { }`)
-
         const report = processStr(code, {
           rules: { 'style-guide-casing': 'error' },
         })
-
         assert.equal(report.errorCount, 1)
         assert.ok(report.messages[0].message.includes('mixedCase'))
       })
@@ -213,11 +173,9 @@ describe('style-guide-casing', function () {
     ].forEach((name) => {
       it(`should not raise modifier name error on ${name}`, () => {
         const code = contractWith(`modifier ${name}(address a) { }`)
-
         const report = processStr(code, {
           rules: { 'style-guide-casing': 'error' },
         })
-
         assert.equal(report.errorCount, 0)
       })
     })
@@ -235,7 +193,6 @@ describe('style-guide-casing', function () {
           const report = processStr(code, {
             rules: { 'style-guide-casing': 'error' },
           })
-
           assert.equal(report.errorCount, 0)
         })
       }
@@ -244,87 +201,47 @@ describe('style-guide-casing', function () {
   describe('mutable variable names should be in mixedCase', () => {
     it('should raise incorrect var name error', () => {
       const code = funcWith('var (a, B);')
-
       const report = processStr(code, {
-        rules: { 'no-unused-vars': 'error', 'style-guide-casing': 'error' },
+        rules: { 'style-guide-casing': 'error' },
       })
-
       assert.ok(report.errorCount > 0)
-      assert.ok(report.messages.map((i) => i.message).some((i) => i.includes('name')))
+      assert.equal(report.messages[0].message, 'Variable name must be in mixedCase')
     })
 
     it('should raise incorrect func param name error', () => {
       const code = contractWith('function funcName (uint A) public {}')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 1)
       assert.ok(report.messages[0].message.includes('name'))
     })
 
     it('should raise var name error for event arguments illegal styling', () => {
       const code = contractWith('event Event1(uint B);')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 1)
       assert.ok(report.messages[0].message.includes('mixedCase'))
     })
 
     it('should raise incorrect var name error for typed declaration', () => {
       const code = funcWith('uint B = 1;')
-
       const report = processStr(code, {
-        rules: { 'no-unused-vars': 'error', 'style-guide-casing': 'error' },
+        rules: { 'style-guide-casing': 'error' },
       })
-
       assert.ok(report.errorCount > 0)
-      assert.ok(report.messages.map((i) => i.message).some((i) => i.includes('name')))
+      assert.equal(report.messages[0].message, 'Variable name must be in mixedCase')
     })
 
     it('should raise incorrect var name error for state declaration', () => {
       const code = contractWith('uint32 private D = 10;')
-
       const report = processStr(code, {
-        rules: { 'no-unused-vars': 'error', 'style-guide-casing': 'error' },
+        rules: { 'style-guide-casing': 'error' },
       })
-
       assert.equal(report.errorCount, 1)
       assert.ok(report.messages[0].message.includes('Variable name'))
-    })
-
-    it('should not raise var name error for constants', () => {
-      const code = contractWith('uint32 private constant D = 10;')
-
-      const report = processStr(code, {
-        rules: { 'no-unused-vars': 'error', 'style-guide-casing': 'error' },
-      })
-
-      assert.equal(report.errorCount, 0)
-    })
-
-    it('should not raise const name error for immutable variables in SNAKE_CASE', () => {
-      const code = contractWith('uint32 private immutable SNAKE_CASE;')
-
-      const report = processStr(code, {
-        rules: { 'no-unused-vars': 'error', 'style-guide-casing': 'error' },
-      })
-
-      assert.equal(report.errorCount, 0)
-    })
-
-    it('should not raise const name error for immutable variables in camelCase', () => {
-      const code = contractWith('uint32 private immutable camelCase;')
-
-      const report = processStr(code, {
-        rules: { 'no-unused-vars': 'error', 'style-guide-casing': 'error' },
-      })
-
-      assert.equal(report.errorCount, 0)
     })
 
     describe('with $ character', () => {
@@ -340,7 +257,6 @@ describe('style-guide-casing', function () {
           const report = processStr(code, {
             rules: { 'style-guide-casing': 'error' },
           })
-
           assert.equal(report.errorCount, 0)
         })
       }
