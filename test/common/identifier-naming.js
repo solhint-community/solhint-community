@@ -23,6 +23,7 @@ describe('identifier-naming', () => {
       '_$Foo',
       'my$tuff',
       'foo$',
+      'foo_',
     ].forEach((name) => {
       it(`${name} is mixedCase`, function () {
         assert(isMixedCase(name))
@@ -38,7 +39,7 @@ describe('identifier-naming', () => {
   })
 
   describe('isCapWords', function () {
-    ;['F', 'Foo', 'FooBar', '$', '$foo', '$Foo', 'My$tuff'].forEach((name) => {
+    ;['F', 'Foo', 'FooBar', '$', '$foo', '$Foo', 'My$tuff', 'CollisionFoo_'].forEach((name) => {
       it(`${name} is CapWords`, function () {
         assert(isCapWords(name))
       })
@@ -47,7 +48,6 @@ describe('identifier-naming', () => {
       '_PrivateFoo', // most things defined as CapWords cannot really be private
       '__PrivateBar', // since they are definitions, so leading underscores are
       '_private_foo', // not supported
-      'CollisionFoo_', // we shouldn't have name collisions either, right?
       '_F',
       '_',
       'foo_bar',

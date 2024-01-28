@@ -18,6 +18,14 @@ describe('style-guide-casing', function () {
       )
     })
 
+    it('should NOT raise error when variable is in SNAKE_CASE and has a trailing underscore', () => {
+      const code = contractWith('uint32 private immutable SNAKE_CASE_;')
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': 'error' },
+      })
+      assert.equal(report.errorCount, 0)
+    })
+
     it('should raise error when variable is in lowercase_snakecase', () => {
       const code = contractWith('uint32 private immutable snake_case;')
       const report = processStr(code, {
@@ -64,11 +72,17 @@ describe('style-guide-casing', function () {
 
     it('should not raise const name error for constants in snake case', () => {
       const code = contractWith('uint32 private constant THE_CONSTANT = 10;')
-
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
       })
+      assert.equal(report.errorCount, 0)
+    })
 
+    it('should not raise const name error for constants in snake case with a trailing underscore', () => {
+      const code = contractWith('uint32 private constant THE_CONSTANT_ = 10;')
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': 'error' },
+      })
       assert.equal(report.errorCount, 0)
     })
 
@@ -116,6 +130,7 @@ describe('style-guide-casing', function () {
       }
     })
   })
+
   describe('function names should be in mixedCase', () => {
     it('should raise incorrect func name error', () => {
       const code = contractWith('function AFuncName () public {}')
@@ -166,6 +181,7 @@ describe('style-guide-casing', function () {
     })
     ;[
       'mixedCase',
+      'mixedCaseWithOneTrailingUnderscore_',
       '_leadingUnderscore',
       '__twoLeadingUnderscores',
       '___threeLeadingUnderscores',
@@ -226,6 +242,14 @@ describe('style-guide-casing', function () {
       assert.ok(report.messages[0].message.includes('mixedCase'))
     })
 
+    it('should NOT raise var name error for variable with trailing underscore', () => {
+      const code = contractWith('uint256 private foo_;')
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': 'error' },
+      })
+      assert.equal(report.errorCount, 0)
+    })
+
     it('should raise incorrect var name error for typed declaration', () => {
       const code = funcWith('uint B = 1;')
       const report = processStr(code, {
@@ -266,6 +290,8 @@ describe('style-guide-casing', function () {
     ;[
       { name: 'contract', correct: 'contract FooBar{}', incorrect: 'contract foobar {}' },
       { name: 'interface', correct: 'interface FooBar{}', incorrect: 'interface foobar {}' },
+      { name: 'interface', correct: 'interface FooBar{}', incorrect: 'interface foobar {}' },
+      { name: 'interface', correct: 'interface FooBar_{}', incorrect: 'interface foobar_ {}' },
       { name: 'library', correct: 'library FooBar{}', incorrect: 'library foobar {}' },
       {
         name: 'enum',
