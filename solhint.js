@@ -69,7 +69,7 @@ function execMainAction() {
     formatterFn = getFormatter(rootCommand.opts().formatter)
   } catch (ex) {
     console.error(ex.message)
-    process.exit(1)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
   }
 
   const reportLists = rootCommand.args.filter(_.isString).map(processPath)
