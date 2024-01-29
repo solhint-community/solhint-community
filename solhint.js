@@ -74,6 +74,10 @@ function execMainAction() {
 
   const reportLists = rootCommand.args.filter(_.isString).map(processPath)
   const reports = _.flatten(reportLists)
+  if (reports.length === 0) {
+    console.error(`No files to lint! check glob arguments "${rootCommand.args}" and ignore files.`)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
+  }
 
   if (rootCommand.opts().fix) {
     for (const report of reports) {

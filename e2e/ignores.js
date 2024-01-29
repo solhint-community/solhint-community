@@ -9,15 +9,15 @@ describe('excludedFiles in config file is used', function () {
   describe('GIVEN a .solhintignore ignoring a file AND a custom config ignoring another', function () {
     describe('WHEN linting with a glob that matches both', function () {
       beforeEach(function () {
-        ;({ code, stdout } = shell.exec(`solhint -c ignoreInConfig.json '*.sol'`, {
+        ;({ code, stdout } = shell.exec(`solhint -c ignoreInConfig.json 'Ignored*.sol'`, {
           silent: true,
         }))
       })
       it('THEN no errors are reported on stdout', function () {
         expect(stdout.trim()).to.eq('')
       })
-      it('AND the program exits with error code 0', function () {
-        expect(code).to.eq(0)
+      it('AND the program exits with error code 255 since no files were linted', function () {
+        expect(code).to.eq(255)
       })
     })
   })
@@ -46,17 +46,17 @@ describe('.solhintignore in subdirectory is not read', function () {
 describe('excludeFiles in config is relative to cwd and not config file location', function () {
   useFixture('12-solhintignore')
   let code
-  let stdout
+  let stderr
   describe('GIVEN a subdirectory with its own config file ignoring said subdirectory', function () {
     describe('WHEN linting there with a root-level cwd', function () {
       beforeEach(function () {
-        ;({ code, stdout } = shell.exec(`solhint -c sub/subconfig.json 'sub/*.sol'`, {
+        ;({ code, stderr } = shell.exec(`solhint -c sub/subconfig.json 'sub/*.sol'`, {
           silent: true,
         }))
       })
       it('THEN the file is ignored', function () {
-        expect(code).to.eq(0)
-        expect(stdout.trim()).to.eq('')
+        expect(code).to.eq(255)
+        expect(stderr).to.include('No files to lint')
       })
     })
   })
@@ -121,13 +121,13 @@ describe('--ignore-path is used', function () {
       // it needlessly hard for editor integrations
       describe('AND passing an ignored file as a parameter', function () {
         beforeEach(function () {
-          ;({ code, stdout } = shell.exec('solhint IgnoredDefault.sol', {
+          ;({ code, stderr } = shell.exec('solhint IgnoredDefault.sol', {
             silent: true,
           }))
         })
         it('THEN the file is ignored', function () {
-          expect(code).to.eq(0)
-          expect(stdout.trim()).to.equal('')
+          expect(code).to.eq(255)
+          expect(stderr).to.include('No files to lint')
         })
       })
 
@@ -169,7 +169,7 @@ describe('--ignore-path is used', function () {
 
       describe('AND passing an ignored file as a parameter', function () {
         beforeEach(function () {
-          ;({ code, stdout } = shell.exec(
+          ;({ code, stderr } = shell.exec(
             'solhint --ignore-path other-solhintignore IgnoredOther.sol',
             {
               silent: true,
@@ -177,8 +177,8 @@ describe('--ignore-path is used', function () {
           ))
         })
         it('THEN the file is ignored', function () {
-          expect(code).to.eq(0)
-          expect(stdout.trim()).to.equal('')
+          expect(code).to.eq(255)
+          expect(stderr).to.include('No files to lint')
         })
       })
 
