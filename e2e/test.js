@@ -310,6 +310,33 @@ describe('main executable tests', function () {
     })
   })
 
+  describe('no files to lint', function () {
+    let code
+    let stderr
+    let stdout
+    useFixture('03-no-empty-blocks')
+    describe('WHEN calling solhint with no arguments', function () {
+      beforeEach(function () {
+        ;({ code, stdout } = shell.exec('solhint', { silent: true }))
+      })
+      it('THEN prints a help message AND reports no error', function () {
+        expect(code).to.eq(0)
+        expect(stdout).to.include('Linter for Solidity programming language')
+      })
+    })
+
+    describe('WHEN calling solhint with an argument matching zero files', function () {
+      beforeEach(function () {
+        ;({ code, stderr } = shell.exec('solhint wrongfile.sol', { silent: true }))
+      })
+      it('THEN it exits with bad options code AND reports an error on stderr', function () {
+        expect(code).to.eq(255)
+        expect(stderr).to.include('No files to lint')
+        expect(stderr).to.include('check glob arguments "wrongfile.sol"')
+      })
+    })
+  })
+
   describe('list-rules ', function () {
     let code
     let stdout
