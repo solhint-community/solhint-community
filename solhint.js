@@ -131,6 +131,7 @@ function writeSampleConfigFile() {
     console.log('Configuration file created!')
   } else {
     console.log('Configuration file already exists')
+    process.exit(EXIT_CODES.BAD_OPTIONS)
   }
 
   process.exit(EXIT_CODES.OK)

@@ -183,12 +183,10 @@ describe('main executable tests', function () {
       expect(stderr).to.include('ConfigMissingError')
     })
 
-    it('should show warning when using init-config', function () {
+    it('should exit with bad options code and print an error when calling init-config', function () {
       const { code, stdout } = shell.exec('solhint init-config', { silent: true })
-
-      expect(code).to.equal(0)
-
-      expect(stdout.trim()).to.equal('Configuration file already exists')
+      expect(stdout.trim()).to.contain('Configuration file already exists')
+      expect(code).to.eq(255)
     })
   })
 
