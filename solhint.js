@@ -11,6 +11,8 @@ const packageJson = require('./package.json')
 
 const rootCommand = new Command()
 
+const EXIT_CODES = { BAD_OPTIONS: 255, OK: 0, REPORTED_ERRORS: 1 }
+
 function init() {
   const version = packageJson.version
   rootCommand.version(version)
@@ -148,7 +150,8 @@ const readIgnore = _.memoize(() => {
       .map((i) => i.trim())
   } catch (e) {
     if (rootCommand.opts().ignorePath && e.code === 'ENOENT') {
-      console.error(`\nERROR: ${ignoreFile} is not a valid path.`)
+      console.error(`\nERROR: custom ignore file not found at provided path ${ignoreFile}.`)
+      process.exit(EXIT_CODES.BAD_OPTIONS)
     }
     return []
   }

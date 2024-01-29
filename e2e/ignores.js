@@ -79,17 +79,17 @@ describe('--ignore-path is used', function () {
           ))
         })
         it('THEN an error is printed to stderr', function () {
-          expect(stderr).to.include('ERROR: does-not-exist is not a valid path.')
+          expect(stderr).to.include(
+            'ERROR: custom ignore file not found at provided path does-not-exist.'
+          )
         })
-        // FIXME: we should exit early on v4
-        it('AND no ignore file is used, so errors are reported on the file', function () {
-          expect(stdout).to.include('1 problem')
-          expect(stdout).to.include('IgnoredDefault')
+        it('AND the linter exits early, not reporting anything', function () {
+          expect(stdout.trim()).to.eq('')
         })
         // FIXME: we should use a different error code for bad
         // settings/parameters on v4
-        it('AND the program exits with error code 1', function () {
-          expect(code).to.eq(1)
+        it('AND the program exits with error code 255 for bad options', function () {
+          expect(code).to.eq(255)
         })
       })
 
@@ -103,14 +103,15 @@ describe('--ignore-path is used', function () {
           ))
         })
         it('THEN an error is printed to stderr', function () {
-          expect(stderr).to.include('ERROR: does-not-exist is not a valid path.')
+          expect(stderr).to.include(
+            'ERROR: custom ignore file not found at provided path does-not-exist.'
+          )
         })
         it('AND no errors are reported on stdout', function () {
           expect(stdout.trim()).to.eq('')
         })
-        // FIXME: I seriously do not agree with this. Change on v4
-        it('AND the program exits with error code 0', function () {
-          expect(code).to.eq(0)
+        it('AND the program exits with error code 255 for bad options', function () {
+          expect(code).to.eq(255)
         })
       })
     })
