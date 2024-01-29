@@ -71,6 +71,13 @@ function execMainAction() {
     console.error(ex.message)
     process.exit(EXIT_CODES.BAD_OPTIONS)
   }
+
+  const customConfig = rootCommand.opts().config
+  if (customConfig && !fs.existsSync(customConfig)) {
+    console.error(`Extra config file "${customConfig}" couldnt be found.`)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
+  }
+
   let reports
   try {
     const reportLists = rootCommand.args.filter(_.isString).map(processPath)
@@ -216,7 +223,13 @@ function consumeReport(reports, formatterFn) {
 }
 
 function listRules() {
-  const { config } = loadFullConfigurationForPath('.', rootCommand.opts().config)
+  const customConfig = rootCommand.opts().config
+  if (customConfig && !fs.existsSync(customConfig)) {
+    console.error(`Extra config file "${customConfig}" couldnt be found.`)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
+  }
+
+  const { config } = loadFullConfigurationForPath('.', customConfig)
   const rulesObject = config.rules
 
   console.log('\nRules: \n')

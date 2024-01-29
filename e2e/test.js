@@ -53,6 +53,24 @@ describe('main executable tests', function () {
     let code
     let stderr
     let stdout
+
+    describe('GIVEN a non-existing extra config file passed with -c WHEN linting', function () {
+      beforeEach(function () {
+        ;({ code, stderr, stdout } = shell.exec('solhint -c nothere.json Foo.sol', {
+          silent: true,
+        }))
+      })
+
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
+      })
+      it('AND stdout is empty', function () {
+        expect(stdout.trim()).to.eq('')
+      })
+      it('AND stderr logs the file wasnt found', function () {
+        expect(stderr.trim()).to.include('Extra config file "nothere.json" couldnt be found')
+      })
+    })
     describe('GIVEN a config file with invalid syntax, WHEN linting', function () {
       beforeEach(function () {
         ;({ code, stderr, stdout } = shell.exec('solhint -c broken-json-syntax.json Foo.sol', {
@@ -394,11 +412,13 @@ describe('main executable tests', function () {
             { silent: true }
           ))
         })
-        it('THEN it returns error code 1', function () {
-          expect(code).to.equal(1)
+        it('THEN it returns error code 255 for bad options', function () {
+          expect(code).to.equal(255)
         })
-        it('AND it reports the problem to stderr', function () {
-          expect(stderr).to.contain("Failed to load a solhint's config file")
+        it('AND stderr logs the file wasnt found', function () {
+          expect(stderr.trim()).to.include(
+            'Extra config file "config-file-with-weird-name.json" couldnt be found'
+          )
         })
         it('AND it does NOT list disabled rules', function () {
           expect(stdout).to.eq('')
