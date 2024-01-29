@@ -109,9 +109,9 @@ function processStdin(subcommandOptions) {
       report.errorCount > 0 ||
       (allOptions.maxWarnings >= 0 && report.warningCount > allOptions.maxWarnings)
     )
-      process.exit(1)
+      process.exit(EXIT_CODES.REPORTED_ERRORS)
 
-    process.exit(0)
+    process.exit(EXIT_CODES.OK)
   }
 
   const formatterFn = getFormatter(allOptions.formatter)
@@ -133,7 +133,7 @@ function writeSampleConfigFile() {
     console.log('Configuration file already exists')
   }
 
-  process.exit(0)
+  process.exit(EXIT_CODES.OK)
 }
 
 const readIgnore = _.memoize(() => {
@@ -200,9 +200,9 @@ function consumeReport(reports, formatterFn) {
   }
 
   if (errorsCount > 0 || tooManyWarnings) {
-    return 1
+    return EXIT_CODES.REPORTED_ERRORS
   }
-  return 0
+  return EXIT_CODES.OK
 }
 
 function listRules() {
