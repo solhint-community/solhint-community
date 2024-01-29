@@ -24,7 +24,7 @@ describe('main executable tests', function () {
     it('should fail', function () {
       const { code } = shell.exec('solhint Foo.sol', { silent: true })
 
-      expect(code).to.equal(1)
+      expect(code).to.equal(255)
     })
 
     it('should create an initial config with init-config', function () {
@@ -60,8 +60,8 @@ describe('main executable tests', function () {
         }))
       })
 
-      it('THEN linter exits with error 1', function () {
-        expect(code).to.equal(1)
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
       })
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
@@ -79,8 +79,8 @@ describe('main executable tests', function () {
           }))
         })
 
-        it('THEN linter exits with error 1', function () {
-          expect(code).to.equal(1)
+        it('THEN linter exits with error 255 for bad options', function () {
+          expect(code).to.equal(255)
         })
         it('AND stdout is empty', function () {
           expect(stdout.trim()).to.eq('')
@@ -101,8 +101,8 @@ describe('main executable tests', function () {
         }))
       })
 
-      it('THEN linter exits with error 1', function () {
-        expect(code).to.equal(1)
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
       })
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
@@ -120,8 +120,8 @@ describe('main executable tests', function () {
         }))
       })
 
-      it('THEN linter exits with error 1', function () {
-        expect(code).to.equal(1)
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
       })
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
@@ -139,8 +139,8 @@ describe('main executable tests', function () {
         }))
       })
 
-      it('THEN linter exits with error 1', function () {
-        expect(code).to.equal(1)
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
       })
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
@@ -158,8 +158,8 @@ describe('main executable tests', function () {
         }))
       })
 
-      it('THEN linter exits with error 1', function () {
-        expect(code).to.equal(1)
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
       })
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
@@ -177,7 +177,7 @@ describe('main executable tests', function () {
     it('should print an error', function () {
       const { code, stdout, stderr } = shell.exec('solhint Foo.sol', { silent: true })
 
-      expect(code).to.equal(1)
+      expect(code).to.equal(255)
 
       expect(stdout.trim()).to.equal('')
       expect(stderr).to.include('ConfigMissingError')

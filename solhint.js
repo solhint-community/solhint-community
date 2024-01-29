@@ -71,9 +71,14 @@ function execMainAction() {
     console.error(ex.message)
     process.exit(EXIT_CODES.BAD_OPTIONS)
   }
-
-  const reportLists = rootCommand.args.filter(_.isString).map(processPath)
-  const reports = _.flatten(reportLists)
+  let reports
+  try {
+    const reportLists = rootCommand.args.filter(_.isString).map(processPath)
+    reports = _.flatten(reportLists)
+  } catch (e) {
+    console.error(e)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
+  }
   if (reports.length === 0) {
     console.error(`No files to lint! check glob arguments "${rootCommand.args}" and ignore files.`)
     process.exit(EXIT_CODES.BAD_OPTIONS)
