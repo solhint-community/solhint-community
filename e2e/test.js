@@ -7,7 +7,7 @@ const glob = require('glob')
 const { useFixture } = require('./utils')
 
 describe('main executable tests', function () {
-  describe('no config', function () {
+  describe('GIVEN a directory without a config', function () {
     useFixture('01-no-config')
     describe('GIVEN a config file created with solhint init-config', function () {
       beforeEach(function () {
@@ -21,10 +21,46 @@ describe('main executable tests', function () {
       })
     })
 
-    it('should fail', function () {
-      const { code } = shell.exec('solhint Foo.sol', { silent: true })
+    describe('WHEN linting a file', function () {
+      let code
+      let stdout
+      let stderr
+      beforeEach(function () {
+        ;({ code, stderr, stdout } = shell.exec('solhint Foo.sol', { silent: true }))
+      })
+      it('THEN it returns error code 1 for found errors', function () {
+        expect(code).to.equal(1)
+      })
+      it('AND it reports errors on recommended rules', function () {
+        expect(stdout).to.include('compiler-version')
+        expect(stdout).to.include('no-empty-blocks')
+        expect(stdout).to.include('2 problems')
+      })
+      it('AND it prints a warning to stderr to let the dev know no config was found', function () {
+        expect(stderr).to.include(
+          'No rule configuration provided for file "Foo.sol"! proceeding with solhint:recommended'
+        )
+      })
+    })
 
-      expect(code).to.equal(255)
+    describe('WHEN linting a file AND passing a non-existent extra config via -c', function () {
+      let code
+      let stdout
+      let stderr
+      beforeEach(function () {
+        ;({ code, stderr, stdout } = shell.exec('solhint -c nothere.json Foo.sol', {
+          silent: true,
+        }))
+      })
+      it('THEN it returns error code 255 for bad options', function () {
+        expect(code).to.equal(255)
+      })
+      it('AND no errors are reported on stdout', function () {
+        expect(stdout.trim()).to.eq('')
+      })
+      it('AND it prints an error to stderr to let the dev know no config was found', function () {
+        expect(stderr).to.include('Extra config file "nothere.json" couldnt be found')
+      })
     })
 
     it('should create an initial config with init-config', function () {
@@ -189,16 +225,32 @@ describe('main executable tests', function () {
     })
   })
 
-  describe('empty-config', function () {
+  describe('GIVEN a valid but empty .solhint.json file', function () {
+    let stdout
+    let stderr
+    let code
     useFixture('02-empty-solhint-json')
 
-    it('should print an error', function () {
-      const { code, stdout, stderr } = shell.exec('solhint Foo.sol', { silent: true })
-
-      expect(code).to.equal(255)
-
-      expect(stdout.trim()).to.equal('')
-      expect(stderr).to.include('ConfigMissingError')
+    describe('WHEN linting a file', function () {
+      beforeEach(function () {
+        ;({ code, stderr, stdout } = shell.exec('solhint Foo.sol', { silent: true }))
+      })
+      it('THEN it returns error code 1 for found errors', function () {
+        expect(code).to.equal(1)
+      })
+      it('AND it reports errors on recommended rules', function () {
+        expect(stdout).to.include('compiler-version')
+        expect(stdout).to.include('no-empty-blocks')
+        expect(stdout).to.include('2 problems')
+      })
+      it('AND it prints a warning to stderr to let the dev know the config defined zero rules', function () {
+        // TODO: it'd be nice to have a different message when no config was
+        // found vs when it didn't define any rules, but that'd mean rewriting
+        // too much of loadFullConfigurationForPath and no-one would see it
+        expect(stderr).to.include(
+          'No rule configuration provided for file "Foo.sol"! proceeding with solhint:recommended'
+        )
+      })
     })
 
     it('should exit with bad options code and print an error when calling init-config', function () {
