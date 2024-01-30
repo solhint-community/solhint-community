@@ -129,7 +129,7 @@ This rule accepts an array of options:
 ```
 
 ## Version
-This rule is introduced in the latest version.
+This rule was introduced in [Solhint 4.0.0-rc01](https://github.com/solhint-community/solhint-community/tree/v4.0.0-rc01)
 
 ## Resources
 - [Rule source](https://github.com/solhint-community/solhint-community/tree/master/lib/rules/naming/non-state-vars-leading-underscore.js)

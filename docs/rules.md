@@ -31,17 +31,12 @@ title:       "Rule Index of Solhint"
 | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | ----------- |
 | [interface-starts-with-i](./rules/naming/interface-starts-with-i.md)                 | Interfaces name should start with `I`                                                  | ✔️          |
 | [quotes](./rules/miscellaneous/quotes.md)                                            | Use double quotes for string literals. Values must be 'single' or 'double'.            | ✔️          |
-| [const-name-snakecase](./rules/naming/const-name-snakecase.md)                       | Constant name must be in capitalized SNAKE_CASE.                                       | ✔️          |
-| [definition-name-capwords](./rules/naming/definition-name-capwords.md)               | Contract, interface, library, struct, enum and event names must be in CapWords.        | ✔️          |
 | [foundry-test-functions](./rules/naming/foundry-test-functions.md)                   | Enforce naming convention on functions for Foundry test cases                          |             |
-| [func-name-mixedcase](./rules/naming/func-name-mixedcase.md)                         | Function name must be in mixedCase.                                                    | ✔️          |
-| [immutable-name-snakecase](./rules/naming/immutable-name-snakecase.md)               | Check Immutable variables are SNAKE_CASE.                                              |             |
-| [modifier-name-mixedcase](./rules/naming/modifier-name-mixedcase.md)                 | Modifier name must be in mixedCase.                                                    | ✔️          |
 | [named-parameters-mapping](./rules/naming/named-parameters-mapping.md)               | Solidity v0.8.18 introduced named parameters on the mappings definition                |             |
 | [named-return-values](./rules/naming/named-return-values.md)                         | Ensure function return parameters are named                                            | ✔️          |
 | [private-vars-leading-underscore](./rules/naming/private-vars-leading-underscore.md) | Private and internal names must start with a single underscore.                        |             |
+| [style-guide-casing](./rules/naming/style-guide-casing.md)                           | Check identifier and type name casing conforms to the style guide                      | ✔️          |
 | [use-forbidden-name](./rules/naming/use-forbidden-name.md)                           | Avoid to use letters 'I', 'l', 'O' as identifiers.                                     | ✔️          |
-| [var-name-mixedcase](./rules/naming/var-name-mixedcase.md)                           | Identifier name must be in mixedCase.                                                  | ✔️          |
 | [imports-on-top](./rules/order/imports-on-top.md)                                    | Import statements must be on top.                                                      | ✔️          |
 | [ordering](./rules/order/ordering.md)                                                | Check order of elements in file and inside each contract, according to the style guide |             |
 | [visibility-modifier-order](./rules/order/visibility-modifier-order.md)              | Visibility modifier must be first in list of modifiers.                                | ✔️          |
