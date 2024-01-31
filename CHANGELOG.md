@@ -1,3 +1,11 @@
+## [4.0.0-rc02] - XXXX-XX-XX
+
+### Breaking
+- exit with a different code when linter is configured incorrectly (255) vs
+  when errors are found in linted files (1) https://github.com/solhint-community/solhint-community/pull/134
+    - also exit eagerly when a misconfiguration is detected, to help the programmer
+    realize of their mistake sooner
+
 ## [4.0.0-rc01] - 2024-01-28
 
 ### Breaking
