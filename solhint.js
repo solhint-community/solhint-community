@@ -6,8 +6,7 @@ const fs = require('fs')
 const process = require('process')
 
 const linter = require('./lib/index')
-const { ConfigMissingError } = require('./lib/common/errors')
-const { loadFullConfigurationForPath, emptyConfig } = require('./lib/config/config-file')
+const { loadFullConfigurationForPath } = require('./lib/config/config-file')
 const packageJson = require('./package.json')
 
 const rootCommand = new Command()
@@ -73,12 +72,6 @@ function execMainAction() {
     process.exit(EXIT_CODES.BAD_OPTIONS)
   }
 
-  const customConfig = rootCommand.opts().config
-  if (customConfig && !fs.existsSync(customConfig)) {
-    console.error(`Extra config file "${customConfig}" couldnt be found.`)
-    process.exit(EXIT_CODES.BAD_OPTIONS)
-  }
-
   let reports
   try {
     const reportLists = rootCommand.args.filter(_.isString).map(processPath)
@@ -111,7 +104,13 @@ function processStdin(subcommandOptions) {
   const STDIN_FILE = 0
   const inputSrc = fs.readFileSync(STDIN_FILE).toString()
 
-  const report = processStr(inputSrc, allOptions)
+  let report
+  try {
+    report = processStr(inputSrc, allOptions)
+  } catch (e) {
+    console.error(e)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
+  }
   report.file = allOptions.filename || 'stdin'
   if (allOptions.fix) {
     const { output } = linter.fixStr(inputSrc, report)
@@ -176,26 +175,12 @@ const readIgnore = _.memoize(() => {
 })
 
 function processStr(input, options) {
-  const customConfigPath = options.config
-  if (customConfigPath && !fs.existsSync(customConfigPath)) {
-    console.error(`Extra config file "${customConfigPath}" couldnt be found.`)
-    process.exit(EXIT_CODES.BAD_OPTIONS)
-  }
-
-  let config
-  try {
-    ;({ config } = loadFullConfigurationForPath(options.filename || '.', customConfigPath))
-  } catch (e) {
-    if (e instanceof ConfigMissingError) {
-      console.error(
-        `No rule configuration provided for ${
-          options.filename ? 'file "' + options.filename : '"stdin'
-        }"! proceeding with solhint:recommended`
-      )
-      config = { ...emptyConfig(), extends: 'solhint:recommended' }
-    } else {
-      throw e
-    }
+  const { config, isFallback } = loadFullConfigurationForPath(
+    options.filename || '.',
+    options.config
+  )
+  if (isFallback) {
+    console.error('No rule configuration provided for stdin! proceeding with solhint:recommended')
   }
   return linter.processStr(input, config)
 }
@@ -244,13 +229,13 @@ function consumeReport(reports, formatterFn) {
 }
 
 function listRules() {
-  const customConfig = rootCommand.opts().config
-  if (customConfig && !fs.existsSync(customConfig)) {
-    console.error(`Extra config file "${customConfig}" couldnt be found.`)
+  let config
+  try {
+    ;({ config } = loadFullConfigurationForPath('.', rootCommand.opts().config))
+  } catch (e) {
+    console.error(e)
     process.exit(EXIT_CODES.BAD_OPTIONS)
   }
-
-  const { config } = loadFullConfigurationForPath('.', customConfig)
   const rulesObject = config.rules
 
   console.log('\nRules: \n')

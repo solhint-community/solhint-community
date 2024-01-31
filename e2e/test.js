@@ -58,8 +58,8 @@ describe('main executable tests', function () {
       it('AND no errors are reported on stdout', function () {
         expect(stdout.trim()).to.eq('')
       })
-      it('AND it prints an error to stderr to let the dev know no config was found', function () {
-        expect(stderr).to.include('Extra config file "nothere.json" couldnt be found')
+      it('AND it vomits a ConfigMissing exception', function () {
+        expect(stderr).to.include('ConfigMissingError')
       })
     })
 
@@ -103,8 +103,8 @@ describe('main executable tests', function () {
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
       })
-      it('AND stderr logs the file wasnt found', function () {
-        expect(stderr.trim()).to.include('Extra config file "nothere.json" couldnt be found')
+      it('AND it vomits a ConfigMissing exception', function () {
+        expect(stderr).to.include('ConfigMissingError')
       })
     })
     describe('GIVEN a config file with invalid syntax, WHEN linting', function () {
@@ -467,10 +467,8 @@ describe('main executable tests', function () {
         it('THEN it returns error code 255 for bad options', function () {
           expect(code).to.equal(255)
         })
-        it('AND stderr logs the file wasnt found', function () {
-          expect(stderr.trim()).to.include(
-            'Extra config file "config-file-with-weird-name.json" couldnt be found'
-          )
+        it('AND it vomits a ConfigMissing exception', function () {
+          expect(stderr).to.include('ConfigMissingError')
         })
         it('AND it does NOT list disabled rules', function () {
           expect(stdout).to.eq('')

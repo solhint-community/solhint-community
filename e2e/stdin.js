@@ -160,9 +160,12 @@ describe('e2e: stdin subcommand', function () {
       useFixture('09-fixers')
       describe('WHEN linting a file AND passing a non-existent extra config via -c', function () {
         beforeEach(function () {
-          ;({ code, stderr, stdout } = shell.exec('solhint stdin -c nothere.json < throw-error.sol', {
-            silent: true,
-          }))
+          ;({ code, stderr, stdout } = shell.exec(
+            'solhint stdin -c nothere.json < throw-error.sol',
+            {
+              silent: true,
+            }
+          ))
         })
         it('THEN it returns error code 255 for bad options', function () {
           expect(code).to.equal(255)
@@ -170,8 +173,8 @@ describe('e2e: stdin subcommand', function () {
         it('AND no errors are reported on stdout', function () {
           expect(stdout.trim()).to.eq('')
         })
-        it('AND it prints an error to stderr to let the dev know no config was found', function () {
-          expect(stderr).to.include('Extra config file "nothere.json" couldnt be found')
+        it('AND it vomits a ConfigMissing exception', function () {
+          expect(stderr).to.include('ConfigMissingError')
         })
       })
 
@@ -208,7 +211,7 @@ describe('e2e: stdin subcommand', function () {
         })
         it('AND it prints a warning to stderr to let the dev know no config was found', function () {
           expect(stderr).to.include(
-            'No rule configuration provided for "stdin"! proceeding with solhint:recommended'
+            'No rule configuration provided for stdin! proceeding with solhint:recommended'
           )
         })
       })
@@ -225,8 +228,8 @@ describe('e2e: stdin subcommand', function () {
         it('AND no errors are reported on stdout', function () {
           expect(stdout.trim()).to.eq('')
         })
-        it('AND it prints an error to stderr to let the dev know no config was found', function () {
-          expect(stderr).to.include('Extra config file "nothere.json" couldnt be found')
+        it('AND it vomits a ConfigMissing exception', function () {
+          expect(stderr).to.include('ConfigMissingError')
         })
       })
     })
