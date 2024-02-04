@@ -24,7 +24,7 @@ describe('main executable tests', function () {
     it('should fail', function () {
       const { code } = shell.exec('solhint Foo.sol', { silent: true })
 
-      expect(code).to.equal(1)
+      expect(code).to.equal(255)
     })
 
     it('should create an initial config with init-config', function () {
@@ -53,6 +53,24 @@ describe('main executable tests', function () {
     let code
     let stderr
     let stdout
+
+    describe('GIVEN a non-existing extra config file passed with -c WHEN linting', function () {
+      beforeEach(function () {
+        ;({ code, stderr, stdout } = shell.exec('solhint -c nothere.json Foo.sol', {
+          silent: true,
+        }))
+      })
+
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
+      })
+      it('AND stdout is empty', function () {
+        expect(stdout.trim()).to.eq('')
+      })
+      it('AND stderr logs the file wasnt found', function () {
+        expect(stderr.trim()).to.include('Extra config file "nothere.json" couldnt be found')
+      })
+    })
     describe('GIVEN a config file with invalid syntax, WHEN linting', function () {
       beforeEach(function () {
         ;({ code, stderr, stdout } = shell.exec('solhint -c broken-json-syntax.json Foo.sol', {
@@ -60,8 +78,8 @@ describe('main executable tests', function () {
         }))
       })
 
-      it('THEN linter exits with error 1', function () {
-        expect(code).to.equal(1)
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
       })
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
@@ -79,8 +97,8 @@ describe('main executable tests', function () {
           }))
         })
 
-        it('THEN linter exits with error 1', function () {
-          expect(code).to.equal(1)
+        it('THEN linter exits with error 255 for bad options', function () {
+          expect(code).to.equal(255)
         })
         it('AND stdout is empty', function () {
           expect(stdout.trim()).to.eq('')
@@ -101,8 +119,8 @@ describe('main executable tests', function () {
         }))
       })
 
-      it('THEN linter exits with error 1', function () {
-        expect(code).to.equal(1)
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
       })
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
@@ -120,8 +138,8 @@ describe('main executable tests', function () {
         }))
       })
 
-      it('THEN linter exits with error 1', function () {
-        expect(code).to.equal(1)
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
       })
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
@@ -139,8 +157,8 @@ describe('main executable tests', function () {
         }))
       })
 
-      it('THEN linter exits with error 1', function () {
-        expect(code).to.equal(1)
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
       })
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
@@ -158,8 +176,8 @@ describe('main executable tests', function () {
         }))
       })
 
-      it('THEN linter exits with error 1', function () {
-        expect(code).to.equal(1)
+      it('THEN linter exits with error 255 for bad options', function () {
+        expect(code).to.equal(255)
       })
       it('AND stdout is empty', function () {
         expect(stdout.trim()).to.eq('')
@@ -177,18 +195,16 @@ describe('main executable tests', function () {
     it('should print an error', function () {
       const { code, stdout, stderr } = shell.exec('solhint Foo.sol', { silent: true })
 
-      expect(code).to.equal(1)
+      expect(code).to.equal(255)
 
       expect(stdout.trim()).to.equal('')
       expect(stderr).to.include('ConfigMissingError')
     })
 
-    it('should show warning when using init-config', function () {
+    it('should exit with bad options code and print an error when calling init-config', function () {
       const { code, stdout } = shell.exec('solhint init-config', { silent: true })
-
-      expect(code).to.equal(0)
-
-      expect(stdout.trim()).to.equal('Configuration file already exists')
+      expect(stdout.trim()).to.contain('Configuration file already exists')
+      expect(code).to.eq(255)
     })
   })
 
@@ -312,6 +328,33 @@ describe('main executable tests', function () {
     })
   })
 
+  describe('no files to lint', function () {
+    let code
+    let stderr
+    let stdout
+    useFixture('03-no-empty-blocks')
+    describe('WHEN calling solhint with no arguments', function () {
+      beforeEach(function () {
+        ;({ code, stdout } = shell.exec('solhint', { silent: true }))
+      })
+      it('THEN prints a help message AND reports no error', function () {
+        expect(code).to.eq(0)
+        expect(stdout).to.include('Linter for Solidity programming language')
+      })
+    })
+
+    describe('WHEN calling solhint with an argument matching zero files', function () {
+      beforeEach(function () {
+        ;({ code, stderr } = shell.exec('solhint wrongfile.sol', { silent: true }))
+      })
+      it('THEN it exits with bad options code AND reports an error on stderr', function () {
+        expect(code).to.eq(255)
+        expect(stderr).to.include('No files to lint')
+        expect(stderr).to.include('check glob arguments "wrongfile.sol"')
+      })
+    })
+  })
+
   describe('list-rules ', function () {
     let code
     let stdout
@@ -369,11 +412,13 @@ describe('main executable tests', function () {
             { silent: true }
           ))
         })
-        it('THEN it returns error code 1', function () {
-          expect(code).to.equal(1)
+        it('THEN it returns error code 255 for bad options', function () {
+          expect(code).to.equal(255)
         })
-        it('AND it reports the problem to stderr', function () {
-          expect(stderr).to.contain("Failed to load a solhint's config file")
+        it('AND stderr logs the file wasnt found', function () {
+          expect(stderr.trim()).to.include(
+            'Extra config file "config-file-with-weird-name.json" couldnt be found'
+          )
         })
         it('AND it does NOT list disabled rules', function () {
           expect(stdout).to.eq('')

@@ -86,6 +86,12 @@ Commands:
   list-rules                              display enabled rules of current config, including extensions
 ```
 
+## Exit codes
+
+- `0`: linted files had no errors
+- `1`: linted files had 1 or more errors, or more warnings than `--max-warnings`
+- `255`: provided command-line options were invalid, see stderr for details
+
 ## Configuration
 
 You can use a `.solhint.json` file to configure Solhint for the whole project.

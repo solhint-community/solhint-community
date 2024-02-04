@@ -11,6 +11,8 @@ const packageJson = require('./package.json')
 
 const rootCommand = new Command()
 
+const EXIT_CODES = { BAD_OPTIONS: 255, OK: 0, REPORTED_ERRORS: 1 }
+
 function init() {
   const version = packageJson.version
   rootCommand.version(version)
@@ -67,11 +69,27 @@ function execMainAction() {
     formatterFn = getFormatter(rootCommand.opts().formatter)
   } catch (ex) {
     console.error(ex.message)
-    process.exit(1)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
   }
 
-  const reportLists = rootCommand.args.filter(_.isString).map(processPath)
-  const reports = _.flatten(reportLists)
+  const customConfig = rootCommand.opts().config
+  if (customConfig && !fs.existsSync(customConfig)) {
+    console.error(`Extra config file "${customConfig}" couldnt be found.`)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
+  }
+
+  let reports
+  try {
+    const reportLists = rootCommand.args.filter(_.isString).map(processPath)
+    reports = _.flatten(reportLists)
+  } catch (e) {
+    console.error(e)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
+  }
+  if (reports.length === 0) {
+    console.error(`No files to lint! check glob arguments "${rootCommand.args}" and ignore files.`)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
+  }
 
   if (rootCommand.opts().fix) {
     for (const report of reports) {
@@ -107,9 +125,9 @@ function processStdin(subcommandOptions) {
       report.errorCount > 0 ||
       (allOptions.maxWarnings >= 0 && report.warningCount > allOptions.maxWarnings)
     )
-      process.exit(1)
+      process.exit(EXIT_CODES.REPORTED_ERRORS)
 
-    process.exit(0)
+    process.exit(EXIT_CODES.OK)
   }
 
   const formatterFn = getFormatter(allOptions.formatter)
@@ -129,9 +147,10 @@ function writeSampleConfigFile() {
     console.log('Configuration file created!')
   } else {
     console.log('Configuration file already exists')
+    process.exit(EXIT_CODES.BAD_OPTIONS)
   }
 
-  process.exit(0)
+  process.exit(EXIT_CODES.OK)
 }
 
 const readIgnore = _.memoize(() => {
@@ -148,7 +167,8 @@ const readIgnore = _.memoize(() => {
       .map((i) => i.trim())
   } catch (e) {
     if (rootCommand.opts().ignorePath && e.code === 'ENOENT') {
-      console.error(`\nERROR: ${ignoreFile} is not a valid path.`)
+      console.error(`\nERROR: custom ignore file not found at provided path ${ignoreFile}.`)
+      process.exit(EXIT_CODES.BAD_OPTIONS)
     }
     return []
   }
@@ -197,13 +217,19 @@ function consumeReport(reports, formatterFn) {
   }
 
   if (errorsCount > 0 || tooManyWarnings) {
-    return 1
+    return EXIT_CODES.REPORTED_ERRORS
   }
-  return 0
+  return EXIT_CODES.OK
 }
 
 function listRules() {
-  const { config } = loadFullConfigurationForPath('.', rootCommand.opts().config)
+  const customConfig = rootCommand.opts().config
+  if (customConfig && !fs.existsSync(customConfig)) {
+    console.error(`Extra config file "${customConfig}" couldnt be found.`)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
+  }
+
+  const { config } = loadFullConfigurationForPath('.', customConfig)
   const rulesObject = config.rules
 
   console.log('\nRules: \n')

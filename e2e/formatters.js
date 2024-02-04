@@ -4,6 +4,16 @@ const { useFixture } = require('./utils')
 
 describe('formatters', function () {
   useFixture('03-no-empty-blocks')
+  it('non existent formatter', async function () {
+    const { stdout, stderr, code } = shell.exec(
+      'solhint Foo.sol --formatter hexadecimal-spaceship',
+      { silent: true }
+    )
+    expect(code).to.eq(255) // code for bad options
+    expect(stdout.trim()).to.eq('')
+    expect(stderr).to.include('There was a problem loading formatter option')
+  })
+
   it('unix', async function () {
     const { stdout } = shell.exec('solhint Foo.sol --formatter unix', { silent: true })
     const lines = stdout.split('\n')
