@@ -65,6 +65,31 @@ describe('Config file', () => {
         },
       })
     })
+    it('when config is found at default location, isFallback returns false', function () {
+      const { isFallback } = loadFullConfigurationForPath(
+        './test/fixtures/config-file/06-subdirectory/sub/Foo.sol',
+        undefined,
+        './test/fixtures/config-file/06-subdirectory'
+      )
+      assert(!isFallback)
+    })
+    it('when config is found at default location AND at extra config path, isFallback returns false', function () {
+      const { isFallback } = loadFullConfigurationForPath(
+        './test/fixtures/config-file/06-subdirectory/sub/Foo.sol',
+        './test/fixtures/config-file/06-subdirectory/extra.json',
+        './test/fixtures/config-file/06-subdirectory'
+      )
+      assert(!isFallback)
+    })
+
+    it('when config is found only at extra config path, isFallback returns false', function () {
+      const { isFallback } = loadFullConfigurationForPath(
+        './test/fixtures/config-file/01-no-config/Foo.sol',
+        './test/fixtures/config-file/06-subdirectory/extra.json',
+        './test/fixtures/config-file/01-no-config'
+      )
+      assert(!isFallback)
+    })
     it('rule setting in subdirectory overrides root config', function () {
       const { config } = loadFullConfigurationForPath(
         './test/fixtures/config-file/06-subdirectory/sub/Foo.sol',
@@ -91,38 +116,47 @@ describe('Config file', () => {
         ConfigMissingError
       )
     })
-    it('empty config and no extraConfig causes an error', function () {
-      assert.throws(
-        () =>
-          loadFullConfigurationForPath(
-            './test/fixtures/config-file/07-no-rules-or-extends/Foo.sol',
-            undefined,
-            './test/fixtures/config-file/07-no-rules-or-extends'
-          ),
-        ConfigMissingError
+    it('empty config and no extraConfig returns solhint:recommended and isFallback: true', function () {
+      const { config, isFallback } = loadFullConfigurationForPath(
+        './test/fixtures/config-file/07-no-rules-or-extends/Foo.sol',
+        undefined,
+        './test/fixtures/config-file/07-no-rules-or-extends'
       )
+      assert(isFallback)
+      assert.deepStrictEqual(config, {
+        excludedFiles: [],
+        extends: ['solhint:recommended'],
+        plugins: [],
+        rules: {},
+      })
     })
-    it('no config causes an error', function () {
-      assert.throws(
-        () =>
-          loadFullConfigurationForPath(
-            './test/fixtures/config-file/01-no-config/Foo.sol',
-            undefined,
-            './test/fixtures/config-file/01-no-config'
-          ),
-        ConfigMissingError
+    it('no config returns solhint:recommended and isFallback: true', function () {
+      const { config, isFallback } = loadFullConfigurationForPath(
+        './test/fixtures/config-file/01-no-config/Foo.sol',
+        undefined,
+        './test/fixtures/config-file/01-no-config'
       )
+      assert(isFallback)
+      assert.deepStrictEqual(config, {
+        excludedFiles: [],
+        extends: ['solhint:recommended'],
+        plugins: [],
+        rules: {},
+      })
     })
-    it('config with only excludedFiles causes an error', function () {
-      assert.throws(
-        () =>
-          loadFullConfigurationForPath(
-            './test/fixtures/config-file/08-only-excludefiles/Foo.sol',
-            undefined,
-            './test/fixtures/config-file/08-only-excludefiles/'
-          ),
-        ConfigMissingError
+    it('config with only excludedFiles returns solhint:recommended and isFallback: true, but also preserves the excludedFiles field', function () {
+      const { config, isFallback } = loadFullConfigurationForPath(
+        './test/fixtures/config-file/08-only-excludefiles/Foo.sol',
+        undefined,
+        './test/fixtures/config-file/08-only-excludefiles/'
       )
+      assert(isFallback)
+      assert.deepStrictEqual(config, {
+        excludedFiles: ['Foo.sol'],
+        extends: ['solhint:recommended'],
+        plugins: [],
+        rules: {},
+      })
     })
     it('extends: in subdirectory overrides explicit rule setting in root config', function () {
       const { config } = loadFullConfigurationForPath(
@@ -145,16 +179,19 @@ describe('Config file', () => {
         InvalidConfigError
       )
     })
-    it('no config && empty extraConfig causes error', function () {
-      assert.throws(
-        () =>
-          loadFullConfigurationForPath(
-            './test/fixtures/config-file/01-no-config/Foo.sol',
-            './test/fixtures/config-file/07-no-rules-or-extends/.solhintrc',
-            './test/fixtures/config-file/01-no-config'
-          ),
-        ConfigMissingError
+    it('no config && empty extraConfig returns solhint:recommended and isFallback: true', function () {
+      const { config, isFallback } = loadFullConfigurationForPath(
+        './test/fixtures/config-file/01-no-config/Foo.sol',
+        './test/fixtures/config-file/07-no-rules-or-extends/.solhintrc',
+        './test/fixtures/config-file/01-no-config'
       )
+      assert(isFallback)
+      assert.deepStrictEqual(config, {
+        excludedFiles: [],
+        extends: ['solhint:recommended'],
+        plugins: [],
+        rules: {},
+      })
     })
   })
 

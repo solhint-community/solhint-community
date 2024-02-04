@@ -72,12 +72,6 @@ function execMainAction() {
     process.exit(EXIT_CODES.BAD_OPTIONS)
   }
 
-  const customConfig = rootCommand.opts().config
-  if (customConfig && !fs.existsSync(customConfig)) {
-    console.error(`Extra config file "${customConfig}" couldnt be found.`)
-    process.exit(EXIT_CODES.BAD_OPTIONS)
-  }
-
   let reports
   try {
     const reportLists = rootCommand.args.filter(_.isString).map(processPath)
@@ -110,7 +104,13 @@ function processStdin(subcommandOptions) {
   const STDIN_FILE = 0
   const inputSrc = fs.readFileSync(STDIN_FILE).toString()
 
-  const report = processStr(inputSrc, allOptions)
+  let report
+  try {
+    report = processStr(inputSrc, allOptions)
+  } catch (e) {
+    console.error(e)
+    process.exit(EXIT_CODES.BAD_OPTIONS)
+  }
   report.file = allOptions.filename || 'stdin'
   if (allOptions.fix) {
     const { output } = linter.fixStr(inputSrc, report)
@@ -175,7 +175,13 @@ const readIgnore = _.memoize(() => {
 })
 
 function processStr(input, options) {
-  const { config } = loadFullConfigurationForPath(options.filename || '.', options.config)
+  const { config, isFallback } = loadFullConfigurationForPath(
+    options.filename || '.',
+    options.config
+  )
+  if (isFallback) {
+    console.error('No rule configuration provided for stdin! proceeding with solhint:recommended')
+  }
   return linter.processStr(input, config)
 }
 
@@ -223,13 +229,13 @@ function consumeReport(reports, formatterFn) {
 }
 
 function listRules() {
-  const customConfig = rootCommand.opts().config
-  if (customConfig && !fs.existsSync(customConfig)) {
-    console.error(`Extra config file "${customConfig}" couldnt be found.`)
+  let config
+  try {
+    ;({ config } = loadFullConfigurationForPath('.', rootCommand.opts().config))
+  } catch (e) {
+    console.error(e)
     process.exit(EXIT_CODES.BAD_OPTIONS)
   }
-
-  const { config } = loadFullConfigurationForPath('.', customConfig)
   const rulesObject = config.rules
 
   console.log('\nRules: \n')

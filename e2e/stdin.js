@@ -5,11 +5,11 @@ const shell = require('shelljs')
 const { useFixture, getFixtureFileContentSync } = require('./utils')
 
 describe('e2e: stdin subcommand', function () {
-  useFixture('09-fixers')
   let code
   let stdout
   let stderr
   describe('WHEN passing init-config ', function () {
+    useFixture('09-fixers')
     let originalConfig
     beforeEach(function () {
       originalConfig = getFixtureFileContentSync('.solhint.json')
@@ -28,6 +28,7 @@ describe('e2e: stdin subcommand', function () {
   })
 
   describe('WHEN passing --ignore-path ', function () {
+    useFixture('09-fixers')
     beforeEach(function () {
       ;({ code, stdout, stderr } = shell.exec(
         'solhint stdin --ignore-path ignore-throw-error --filename throw-error.sol < throw-error.sol',
@@ -43,6 +44,7 @@ describe('e2e: stdin subcommand', function () {
   })
 
   describe('--quiet is respected', function () {
+    useFixture('09-fixers')
     describe('WHEN checking a file with one warning and one error AND using --quiet', function () {
       beforeEach(function () {
         ;({ code, stdout } = shell.exec(
@@ -62,6 +64,7 @@ describe('e2e: stdin subcommand', function () {
   })
 
   describe('--quiet drops warnings so --max-warnings has no effect', function () {
+    useFixture('09-fixers')
     describe('WHEN checking a file with one warning AND using --quiet AND using --max-warnings 0', function () {
       beforeEach(function () {
         ;({ code, stdout } = shell.exec(
@@ -83,6 +86,7 @@ describe('e2e: stdin subcommand', function () {
   })
 
   describe('--filename value is used for report ', () => {
+    useFixture('09-fixers')
     describe('WHEN running the linter on a file with an error on stdin', function () {
       beforeEach(function () {
         ;({ code, stdout } = shell.exec('solhint stdin < throw-error.sol', {
@@ -133,6 +137,7 @@ describe('e2e: stdin subcommand', function () {
   })
 
   describe('--formatter is used', () => {
+    useFixture('09-fixers')
     describe('WHEN running the linter on a file with an error on stdin AND choosing the unix formatter', function () {
       beforeEach(function () {
         ;({ code, stdout } = shell.exec('solhint stdin --formatter unix < throw-error.sol', {
@@ -151,24 +156,87 @@ describe('e2e: stdin subcommand', function () {
   })
 
   describe('--config is used', () => {
-    describe('WHEN running the linter on a file with an error on stdin AND a config file that disables the rule for said error', function () {
-      beforeEach(function () {
-        ;({ code, stdout } = shell.exec(
-          'solhint stdin --config disabled-rules.json < throw-error.sol',
-          { silent: true }
-        ))
+    describe('GIVEN a directory with a config', function () {
+      useFixture('09-fixers')
+      describe('WHEN linting a file AND passing a non-existent extra config via -c', function () {
+        beforeEach(function () {
+          ;({ code, stderr, stdout } = shell.exec(
+            'solhint stdin -c nothere.json < throw-error.sol',
+            {
+              silent: true,
+            }
+          ))
+        })
+        it('THEN it returns error code 255 for bad options', function () {
+          expect(code).to.equal(255)
+        })
+        it('AND no errors are reported on stdout', function () {
+          expect(stdout.trim()).to.eq('')
+        })
+        it('AND it vomits a ConfigMissing exception', function () {
+          expect(stderr).to.include('ConfigMissingError')
+        })
       })
 
-      it('THEN it exits with code 0', function () {
-        expect(code).to.eq(0)
+      describe('WHEN running the linter on a file with an error on stdin AND a config file that disables the rule for said error', function () {
+        beforeEach(function () {
+          ;({ code, stdout } = shell.exec(
+            'solhint stdin --config disabled-rules.json < throw-error.sol',
+            { silent: true }
+          ))
+        })
+
+        it('THEN it exits with code 0', function () {
+          expect(code).to.eq(0)
+        })
+        it('AND reports no errors', function () {
+          expect(stdout.trim()).to.eq('')
+        })
       })
-      it('AND reports no errors', function () {
-        expect(stdout.trim()).to.eq('')
+    })
+
+    describe('GIVEN a directory without a config', function () {
+      useFixture('01-no-config')
+      describe('WHEN linting a file via stdin', function () {
+        beforeEach(function () {
+          ;({ code, stderr, stdout } = shell.exec('solhint stdin < Foo.sol', { silent: true }))
+        })
+        it('THEN it returns error code 1 for found errors', function () {
+          expect(code).to.equal(1)
+        })
+        it('AND it reports errors on recommended rules', function () {
+          expect(stdout).to.include('compiler-version')
+          expect(stdout).to.include('no-empty-blocks')
+          expect(stdout).to.include('2 problems')
+        })
+        it('AND it prints a warning to stderr to let the dev know no config was found', function () {
+          expect(stderr).to.include(
+            'No rule configuration provided for stdin! proceeding with solhint:recommended'
+          )
+        })
+      })
+
+      describe('WHEN linting a file AND passing a non-existent extra config via -c', function () {
+        beforeEach(function () {
+          ;({ code, stderr, stdout } = shell.exec('solhint stdin -c nothere.json < Foo.sol', {
+            silent: true,
+          }))
+        })
+        it('THEN it returns error code 255 for bad options', function () {
+          expect(code).to.equal(255)
+        })
+        it('AND no errors are reported on stdout', function () {
+          expect(stdout.trim()).to.eq('')
+        })
+        it('AND it vomits a ConfigMissing exception', function () {
+          expect(stderr).to.include('ConfigMissingError')
+        })
       })
     })
   })
 
   describe('--max-warnings is used', () => {
+    useFixture('09-fixers')
     describe('WHEN running the linter on a file with a warning', function () {
       beforeEach(function () {
         ;({ code, stdout } = shell.exec(
@@ -204,6 +272,7 @@ describe('e2e: stdin subcommand', function () {
   })
 
   describe('--fix triggers filter mode', () => {
+    useFixture('09-fixers')
     describe('WHEN running as a fixer on a stdin stream with only one fixable error', function () {
       beforeEach(function () {
         ;({ code, stdout } = shell.exec('solhint stdin --fix < throw-error.sol', { silent: true }))
