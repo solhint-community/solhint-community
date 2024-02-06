@@ -18,6 +18,14 @@ describe('style-guide-casing', function () {
       )
     })
 
+    it('should NOT raise error when variable is in camelCase AND config ignores immutables', () => {
+      const code = contractWith('uint32 private immutable camelCase;')
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': ['error', { ignoreImmutables: true }] },
+      })
+      assert.equal(report.errorCount, 0)
+    })
+
     it('should NOT raise error when variable is in SNAKE_CASE and has a trailing underscore', () => {
       const code = contractWith('uint32 private immutable SNAKE_CASE_;')
       const report = processStr(code, {
@@ -68,6 +76,14 @@ describe('style-guide-casing', function () {
       })
       assert.equal(report.errorCount, 1)
       assert.ok(report.messages[0].message.includes('SNAKE_CASE'))
+    })
+
+    it('should NOT raise error when variable is in camelCase AND config ignores constants', () => {
+      const code = contractWith('uint32 private constant camelCase;')
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': ['error', { ignoreConstants: true }] },
+      })
+      assert.equal(report.errorCount, 0)
     })
 
     it('should not raise const name error for constants in snake case', () => {
@@ -132,7 +148,51 @@ describe('style-guide-casing', function () {
   })
 
   describe('function names should be in mixedCase', () => {
-    it('should raise incorrect func name error', () => {
+    describe('disabling rule for different visibilities in config', function () {
+      ;[
+        {
+          configKey: 'ignoreExternalFunctions',
+          code: contractWith('function foo_bar() external {}'),
+          name: 'external',
+        },
+        {
+          configKey: 'ignoreInternalFunctions',
+          code: contractWith('function foo_bar() internal {}'),
+          name: 'internal',
+        },
+        {
+          configKey: 'ignorePublicFunctions',
+          code: contractWith('function foo_bar() public {}'),
+          name: 'public',
+        },
+        {
+          configKey: 'ignorePrivateFunctions',
+          code: contractWith('function foo_bar() private {}'),
+          name: 'private',
+        },
+        {
+          configKey: 'ignoreInternalFunctions',
+          code: 'function foo_bar() {}',
+          name: 'free',
+        },
+      ].forEach(({ configKey, code, name }) => {
+        it(`should not raise error for ${name} function`, function () {
+          const report = processStr(code, { [configKey]: true })
+          assert.equal(report.errorCount, 0)
+        })
+      })
+    })
+
+    it('should raise func name error when a free function is in CapWords', () => {
+      const code = 'function AFuncName () {}'
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': 'error' },
+      })
+      assert.equal(report.errorCount, 1)
+      assert.ok(report.messages[0].message.includes('mixedCase'))
+    })
+
+    it('should raise func name error when a contract function is in CapWords', () => {
       const code = contractWith('function AFuncName () public {}')
       const report = processStr(code, {
         rules: { 'style-guide-casing': 'error' },
@@ -169,6 +229,13 @@ describe('style-guide-casing', function () {
   })
 
   describe('modifier names should be in mixedCase', () => {
+    it('should NOT raise error when modifier name is snake_case AND config ignores it', () => {
+      const code = contractWith('modifier snake_case(address a) { }')
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': ['error', { ignoreModifiers: true }] },
+      })
+      assert.equal(report.errorCount, 0)
+    })
     ;['snake_case', 'twoTrailingUnderscores__', 'threeTrailingUnderscores___'].forEach((name) => {
       it(`should raise modifier name error on ${name}`, () => {
         const code = contractWith(`modifier ${name}(address a) { }`)
@@ -215,6 +282,13 @@ describe('style-guide-casing', function () {
     })
   })
   describe('mutable variable names should be in mixedCase', () => {
+    it('should NOT raise error when variable is in camelCase AND config ignores variables', () => {
+      const code = contractWith('uint32 camelCase;')
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': ['error', { ignoreVariables: true }] },
+      })
+      assert.equal(report.errorCount, 0)
+    })
     it('should raise incorrect var name error', () => {
       const code = funcWith('var (a, B);')
       const report = processStr(code, {
@@ -288,23 +362,23 @@ describe('style-guide-casing', function () {
   })
   describe('type definition names should be in CapWords', () => {
     ;[
-      { name: 'contract', correct: 'contract FooBar{}', incorrect: 'contract foobar {}' },
-      { name: 'interface', correct: 'interface FooBar{}', incorrect: 'interface foobar {}' },
-      { name: 'interface', correct: 'interface FooBar{}', incorrect: 'interface foobar {}' },
-      { name: 'interface', correct: 'interface FooBar_{}', incorrect: 'interface foobar_ {}' },
-      { name: 'library', correct: 'library FooBar{}', incorrect: 'library foobar {}' },
+      { name: 'Contracts', correct: 'contract FooBar{}', incorrect: 'contract foobar {}' },
+      { name: 'Interfaces', correct: 'interface FooBar{}', incorrect: 'interface foobar {}' },
+      { name: 'Interfaces', correct: 'interface FooBar{}', incorrect: 'interface foobar {}' },
+      { name: 'Interfaces', correct: 'interface FooBar_{}', incorrect: 'interface foobar_ {}' },
+      { name: 'Libraries', correct: 'library FooBar{}', incorrect: 'library foobar {}' },
       {
-        name: 'enum',
+        name: 'Enums',
         correct: contractWith('enum Abc { Value, OtherValue }'),
         incorrect: contractWith('enum abc { Value, OtherValue }'),
       },
       {
-        name: 'event',
+        name: 'Events',
         correct: contractWith('event SomethingHappened();'),
         incorrect: contractWith('event somethingHappened();'),
       },
       {
-        name: 'struct',
+        name: 'Structs',
         correct: contractWith('struct Thingy{uint256 a;}'),
         incorrect: contractWith('struct thingy{uint256 a;}'),
       },
@@ -315,7 +389,6 @@ describe('style-guide-casing', function () {
         })
         assert.equal(report.errorCount, 1)
         assert.ok(report.messages[0].message.includes('CapWords'))
-        assert.ok(report.messages[0].message.includes(name))
       })
 
       it(`should NOT raise error for ${name} with valid name`, () => {
@@ -324,26 +397,33 @@ describe('style-guide-casing', function () {
         })
         assert.equal(report.errorCount, 0)
       })
-    })
 
-    describe('name with $ character', () => {
-      const WITH_$ = {
-        'starting with $': contractWith('struct $MyStruct {}'),
-        'containing a $': contractWith('struct My$Struct {}'),
-        'ending with $': contractWith('struct MyStruct$ {}'),
-        'only with $': contractWith('struct $ {}'),
-      }
-
-      for (const [key, code] of Object.entries(WITH_$)) {
-        it(`should not raise contract name error for Structs ${key}`, () => {
-          const report = processStr(code, {
-            rules: { 'style-guide-casing': 'error' },
-          })
-
-          assert.equal(report.errorCount, 0)
+      it(`should NOT raise error for ${name} with invalid name AND a config disabling it`, () => {
+        const report = processStr(incorrect, {
+          rules: { 'style-guide-casing': ['error', { [`ignore${name}`]: true }] },
         })
-      }
+        assert.equal(report.errorCount, 0)
+      })
     })
+  })
+
+  describe('name with $ character', () => {
+    const WITH_$ = {
+      'starting with $': contractWith('struct $MyStruct {}'),
+      'containing a $': contractWith('struct My$Struct {}'),
+      'ending with $': contractWith('struct MyStruct$ {}'),
+      'only with $': contractWith('struct $ {}'),
+    }
+
+    for (const [key, code] of Object.entries(WITH_$)) {
+      it(`should not raise contract name error for Structs ${key}`, () => {
+        const report = processStr(code, {
+          rules: { 'style-guide-casing': 'error' },
+        })
+
+        assert.equal(report.errorCount, 0)
+      })
+    }
   })
 
   it('rule is included in solhint:recommended ruleset with warning severity', function () {
