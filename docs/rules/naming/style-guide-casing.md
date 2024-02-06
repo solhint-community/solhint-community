@@ -17,16 +17,17 @@ Check identifier and type name casing conforms to the style guide
 ## Options
 This rule accepts an array of options:
 
-| Index | Description                                           | Default Value |
-| ----- | ----------------------------------------------------- | ------------- |
-| 0     | Rule severity. Must be one of "error", "warn", "off". | warn          |
+| Index | Description                                                                                                                                                                                                                                                                                                                                                             | Default Value                                                                                                                                                                                                                                                                                  |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0     | Rule severity. Must be one of "error", "warn", "off".                                                                                                                                                                                                                                                                                                                   | warn                                                                                                                                                                                                                                                                                           |
+| 1     | An object with keys `ignore{{Public,External,Internal,Private}Functions,Contracts,Libraries,Interfaces,Modifiers,Immutables,Constants,Variables,Enums,Structs,Events}` which, when true, disables the rule for that node. You might want to use `{ignoreExternalFunctions: true, ignorePublicFunctions: true}` when also enabling `foundry-test-functions`, for example | {"ignorePublicFunctions":false,"ignoreExternalFunctions":false,"ignoreInternalFunctions":false,"ignorePrivateFunctions":false,"ignoreModifiers":false,"ignoreImmutables":false,"ignoreConstants":false,"ignoreVariables":false,"ignoreEnums":false,"ignoreStructs":false,"ignoreEvents":false} |
 
 
 ### Example Config
 ```json
 {
   "rules": {
-    "style-guide-casing": ["warn"]
+    "style-guide-casing": ["warn",{"ignorePublicFunctions":false,"ignoreExternalFunctions":false,"ignoreInternalFunctions":false,"ignorePrivateFunctions":false,"ignoreModifiers":false,"ignoreImmutables":false,"ignoreConstants":false,"ignoreVariables":false,"ignoreEnums":false,"ignoreStructs":false,"ignoreEvents":false}]
   }
 }
 ```
