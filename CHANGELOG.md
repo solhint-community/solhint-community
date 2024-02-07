@@ -17,6 +17,11 @@ following rules:
     - `var-name-mixedcase￼`
     - `immutable-name-snakecase`
 
+### Added
+- configuration for `style-guide-casing` allowing to ignore specific nodes,
+which will come in handy for `foundry-test-functions`:
+https://github.com/solhint-community/solhint-community/pull/137
+
 ## [4.0.0-rc01] - 2024-01-28
 
 ### Breaking
