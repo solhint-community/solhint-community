@@ -7,6 +7,20 @@
   when errors are found in linted files (1) https://github.com/solhint-community/solhint-community/pull/134
     - also exit eagerly when a misconfiguration is detected, to help the programmer
     realize of their mistake sooner
+- created `style-guide-casing` rule to enforce all `mixedCase`, `CapWords` and
+`SNAKE_CASE` requirements from the style guide in one place, removing the
+following rules:
+    - `const-name-snakecase￼`
+    - `definition-name-capwords￼`
+    - `func-name-mixedcase￼`
+    - `modifier-name-mixedcase￼`
+    - `var-name-mixedcase￼`
+    - `immutable-name-snakecase`
+
+### Added
+- configuration for `style-guide-casing` allowing to ignore specific nodes,
+which will come in handy for `foundry-test-functions`:
+https://github.com/solhint-community/solhint-community/pull/137
 
 ## [4.0.0-rc01] - 2024-01-28
 
