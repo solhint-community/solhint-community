@@ -1,4 +1,4 @@
-## [4.0.0-rc02] - XXXX-XX-XX
+## [4.0.0-rc02] - 2024-02-20
 
 ### Breaking
 - use solhint:recommended when no config is available, instead of exiting with
