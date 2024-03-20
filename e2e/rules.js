@@ -33,22 +33,4 @@ describe('e2e tests for rules', function () {
       expect(stdout.trim()).to.contain('Code contains empty blocks')
     })
   })
-
-  describe('foundry-test-functions', () => {
-    // Foo contract has 1 warning
-    // FooTest contract has 1 error
-    useFixture('07-foundry-test')
-
-    it(`should raise error for wrongFunctionDefinitionName() only`, () => {
-      const { code, stdout } = shell.exec('solhint -c test/.solhint.json test/FooTest.sol', {
-        silent: true,
-      })
-
-      expect(code).to.equal(1)
-      expect(stdout.trim()).to.contain(
-        'Function wrongFunctionDefinitionName() must match Foundry test naming convention'
-      )
-      expect(stdout.trim()).to.contain('(1 error')
-    })
-  })
 })

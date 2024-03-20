@@ -31,7 +31,6 @@ title:       "Rule Index of Solhint"
 | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | ----------- |
 | [interface-starts-with-i](./rules/naming/interface-starts-with-i.md)                 | Interfaces name should start with `I`                                                  | ✔️          |
 | [quotes](./rules/miscellaneous/quotes.md)                                            | Use double quotes for string literals. Values must be 'single' or 'double'.            | ✔️          |
-| [foundry-test-functions](./rules/naming/foundry-test-functions.md)                   | Enforce naming convention on functions for Foundry test cases                          |             |
 | [named-parameters-mapping](./rules/naming/named-parameters-mapping.md)               | Solidity v0.8.18 introduced named parameters on the mappings definition                |             |
 | [named-return-values](./rules/naming/named-return-values.md)                         | Ensure function return parameters are named                                            | ✔️          |
 | [private-vars-leading-underscore](./rules/naming/private-vars-leading-underscore.md) | Private and internal names must start with a single underscore.                        |             |
