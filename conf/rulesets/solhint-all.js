@@ -27,7 +27,6 @@ module.exports = Object.freeze({
     'constructor-syntax': 'warn',
     'comprehensive-interface': 'warn',
     quotes: ['error', 'double'],
-    'foundry-test-functions': ['warn', ['setUp']],
     'named-parameters-function': ['warn', 3],
     'named-parameters-mapping': 'warn',
     'named-return-values': ['warn', 1],
