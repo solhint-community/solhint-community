@@ -94,4 +94,96 @@ describe('Linter - custom-errors', () => {
     assertErrorMessage(report, 0, 'Use Custom Errors instead of require statements')
     assertErrorMessage(report, 1, 'Use Custom Errors instead of revert statements')
   })
+
+  describe('pragma directive', function () {
+    it('should emit error on no pragma directive', function () {
+      const code = `
+        contract A{
+          function foo() external {
+            revert("Insufficent funds");
+          }
+        }
+      `
+      const report = linter.processStr(code, {
+        rules: { 'custom-errors': 'error' },
+      })
+
+      assertErrorCount(report, 1)
+      assertErrorMessage(report, 'Use Custom Errors instead of revert statement')
+    })
+
+    it('should NOT emit error on exact match pragma directive for a previous version', function () {
+      const code = `
+        pragma solidity 0.8.3;
+        contract A{
+          function foo() external {
+            revert("Insufficent funds");
+          }
+        }
+      `
+      const report = linter.processStr(code, {
+        rules: { 'custom-errors': 'error' },
+      })
+      assertErrorCount(report, 0)
+    })
+
+    it('should emit error on range match allowing 0.8.4', function () {
+      let code = `
+        pragma solidity ^0.8.0;
+        contract A{
+          function foo() external {
+            revert("Insufficent funds");
+          }
+        }
+      `
+      let report = linter.processStr(code, {
+        rules: { 'custom-errors': 'error' },
+      })
+
+      assertErrorCount(report, 1)
+      assertErrorMessage(report, 'Use Custom Errors instead of revert statement')
+
+      code = `
+        pragma solidity >=0.8.19 <0.9.0;
+        contract A{
+          function foo() external {
+            revert("Insufficent funds");
+          }
+        }
+      `
+      report = linter.processStr(code, {
+        rules: { 'custom-errors': 'error' },
+      })
+
+      assertErrorCount(report, 1)
+      assertErrorMessage(report, 'Use Custom Errors instead of revert statement')
+    })
+
+    it('should NOT emit error on range match disallowing 0.8.4 or later', function () {
+      let code = `
+        pragma solidity <0.8.4;
+        contract A{
+          function foo() external {
+            revert("Insufficent funds");
+          }
+        }
+      `
+      let report = linter.processStr(code, {
+        rules: { 'custom-errors': 'error' },
+      })
+      assertErrorCount(report, 0)
+      code = `
+        pragma solidity >=0.6.0 <0.7.0;
+        contract A{
+          function foo() external {
+            revert("Insufficent funds");
+          }
+        }
+      `
+      report = linter.processStr(code, {
+        rules: { 'custom-errors': 'error' },
+      })
+      assertErrorCount(report, 0)
+    })
+  })
 })
