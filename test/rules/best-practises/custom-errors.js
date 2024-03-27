@@ -10,7 +10,7 @@ const { funcWith } = require('../../common/contract-builder')
 
 describe('Linter - custom-errors', () => {
   it('should raise error for revert()', () => {
-    const code = funcWith(`revert();`)
+    const code = funcWith(`revert();`, '0.8.5')
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -20,7 +20,7 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should raise error for revert([string])', () => {
-    const code = funcWith(`revert("Insufficent funds");`)
+    const code = funcWith(`revert("Insufficent funds");`, '0.8.5')
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -30,7 +30,7 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should NOT raise error for revert ErrorFunction()', () => {
-    const code = funcWith(`revert ErrorFunction();`)
+    const code = funcWith(`revert ErrorFunction();`, '0.8.5')
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -40,7 +40,7 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should NOT raise error for revert ErrorFunction() with arguments', () => {
-    const code = funcWith(`revert ErrorFunction({ msg: "Insufficent funds msg" });`)
+    const code = funcWith(`revert ErrorFunction({ msg: "Insufficent funds msg" });`, '0.8.5')
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -50,9 +50,12 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should raise error for require', () => {
-    const code = funcWith(`require(!has(role, account), "Roles: account already has role");
+    const code = funcWith(
+      `require(!has(role, account), "Roles: account already has role");
         role.bearer[account] = true;role.bearer[account] = true;
-    `)
+    `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -62,9 +65,12 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should NOT raise error for regular function call', () => {
-    const code = funcWith(`callOtherFunction();
+    const code = funcWith(
+      `callOtherFunction();
         role.bearer[account] = true;role.bearer[account] = true;
-    `)
+    `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -73,10 +79,13 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should be included in [recommended] config', () => {
-    const code = funcWith(`require(!has(role, account), "Roles: account already has role");
+    const code = funcWith(
+      `require(!has(role, account), "Roles: account already has role");
         revert("RevertMessage");
         revert CustomError();
-    `)
+    `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { ...configGetter('solhint:recommended').rules, 'compiler-version': 'off' },
     })

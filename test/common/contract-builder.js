@@ -1,8 +1,8 @@
 const { times } = require('lodash')
 
-function contractWith(code) {
+function contractWith(code, version) {
   return `
-      pragma solidity 0.4.4;
+      pragma solidity ${version || '0.4.4'};
         
         
       contract A {
@@ -22,12 +22,15 @@ function libraryWith(code) {
     `
 }
 
-function funcWith(statements) {
-  return contractWith(`
+function funcWith(statements, version) {
+  return contractWith(
+    `
         function b() public {
           ${statements}
         }
-    `)
+    `,
+    version
+  )
 }
 
 function modifierWith(statements) {
