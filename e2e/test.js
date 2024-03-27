@@ -326,6 +326,9 @@ describe('main executable tests', function () {
         it('THEN it does NOT display warnings exceeded message', function () {
           expect(stdout.trim()).to.not.contain(warningExceededMsg)
         })
+        it('AND it lists the warnings on stdout', function () {
+          expect(stdout.trim()).to.contain('state-visibility')
+        })
         it('AND it exits without error', function () {
           expect(code).to.equal(0)
         })
@@ -341,6 +344,9 @@ describe('main executable tests', function () {
         it('THEN displays warnings exceeded message', function () {
           expect(stdout.trim()).to.contain(warningExceededMsg)
         })
+        it('AND it lists the warnings on stdout', function () {
+          expect(stdout.trim()).to.contain('state-visibility')
+        })
         it('AND it exits with error 1', function () {
           expect(code).to.equal(1)
         })
@@ -353,11 +359,14 @@ describe('main executable tests', function () {
             { silent: true }
           ))
         })
-        it('THEN reports 0 problems since all warnings are dropped', function () {
-          expect(stdout.trim()).to.eq('')
+        it('THEN it displays warnings exceeded message', function () {
+          expect(stdout.trim()).to.contain(warningExceededMsg)
         })
-        it('AND it exits with error 0', function () {
-          expect(code).to.equal(0)
+        it('AND it lists the warnings on stdout', function () {
+          expect(stdout.trim()).to.contain('state-visibility')
+        })
+        it('AND it exits with error 1', function () {
+          expect(code).to.equal(1)
         })
       })
     })

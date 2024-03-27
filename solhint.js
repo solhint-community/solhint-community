@@ -114,18 +114,16 @@ function processStdin(subcommandOptions) {
   report.file = allOptions.filename || 'stdin'
   if (allOptions.fix) {
     const { output } = linter.fixStr(inputSrc, report)
-    if (allOptions.quiet) {
-      report.reports = report.reports.filter((i) => i.severity === 2)
-    }
     report.reports = report.reports.filter((x) => !x.fix)
+    // not reading allOptions.quiet since it doesn't make a difference here
+    const tooManyWarnings =
+      allOptions.maxWarnings >= 0 && report.warningCount > allOptions.maxWarnings
     // unconditionally log the output, to prevent usage as a filter from
     // writing an empty file
     console.log(output)
-    if (
-      report.errorCount > 0 ||
-      (allOptions.maxWarnings >= 0 && report.warningCount > allOptions.maxWarnings)
-    )
+    if (report.errorCount > 0 || tooManyWarnings) {
       process.exit(EXIT_CODES.REPORTED_ERRORS)
+    }
 
     process.exit(EXIT_CODES.OK)
   }
@@ -203,16 +201,17 @@ function getFormatter(formatter) {
 
 // @returns the program's exit value
 function consumeReport(reports, formatterFn) {
-  if (rootCommand.opts().quiet) {
+  const errorsCount = reports.reduce((acc, i) => acc + i.errorCount, 0)
+  let warningCount = reports.reduce((acc, i) => acc + i.warningCount, 0)
+  const tooManyWarnings =
+    rootCommand.opts().maxWarnings >= 0 && warningCount > rootCommand.opts().maxWarnings
+  if (rootCommand.opts().quiet && !tooManyWarnings) {
     // filter the list of reports, to set errors only.
     reports.forEach((reporter) => {
       reporter.reports = reporter.reports.filter((i) => i.severity === 2)
     })
+    warningCount = 0
   }
-  const errorsCount = reports.reduce((acc, i) => acc + i.errorCount, 0)
-  const warningCount = reports.reduce((acc, i) => acc + i.warningCount, 0)
-  const tooManyWarnings =
-    rootCommand.opts().maxWarnings >= 0 && warningCount > rootCommand.opts().maxWarnings
   console.log(formatterFn(reports))
   if (tooManyWarnings && errorsCount === 0) {
     console.log(

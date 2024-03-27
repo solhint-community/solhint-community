@@ -6,6 +6,8 @@
 - disabled `custom-errors` on files whose pragma directive doesn't allow
   versions equal or greater than 0.8.4, where they were introduced
   https://github.com/solhint-community/solhint-community/pull/142
+- made `--quiet` not take precedence over `--max-warnings`
+  https://github.com/solhint-community/solhint-community/pull/143
 
 ## [4.0.0-rc02] - 2024-02-20
 
