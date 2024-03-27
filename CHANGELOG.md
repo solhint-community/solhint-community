@@ -2,7 +2,10 @@
 
 ### Breaking
 - removed `foundry-test-functions` to be re-added in `4.1.0`
-https://github.com/solhint-community/solhint-community/pull/139
+  https://github.com/solhint-community/solhint-community/pull/139
+- disabled `custom-errors` on files whose pragma directive doesn't allow
+  versions equal or greater than 0.8.4, where they were introduced
+  https://github.com/solhint-community/solhint-community/pull/142
 
 ## [4.0.0-rc02] - 2024-02-20
 

@@ -65,7 +65,7 @@ describe('Linter - check-send-result', () => {
       rules: { 'check-send-result': 'error' },
     })
     assert.equal(report.errorCount, 0)
-    report = linter.processStr(funcWith('bool success;', 'success = x.send(1);'), {
+    report = linter.processStr(funcWith('bool success; success = x.send(1);'), {
       rules: { 'check-send-result': 'error' },
     })
     assert.equal(report.errorCount, 0)

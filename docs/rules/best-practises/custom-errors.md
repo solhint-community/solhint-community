@@ -26,6 +26,8 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 }
 ```
 
+### Notes
+- This rule is automatically disabled for files whose pragma directive disallows versions where custom errors are available
 
 ## Examples
 ### 👍 Examples of **correct** code for this rule
