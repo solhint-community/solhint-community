@@ -63,7 +63,7 @@ describe('e2e: stdin subcommand', function () {
     })
   })
 
-  describe('--quiet drops warnings so --max-warnings has no effect', function () {
+  describe('--quiet does NOT drop warnings when they exceed --max-warnings', function () {
     useFixture('09-fixers')
     describe('WHEN checking a file with one warning AND using --quiet AND using --max-warnings 0', function () {
       beforeEach(function () {
@@ -72,15 +72,15 @@ describe('e2e: stdin subcommand', function () {
           { silent: true }
         ))
       })
-      it('THEN it exits with code 0', function () {
-        expect(code).to.eq(0)
+      it('THEN it exits with code 1', function () {
+        expect(code).to.eq(1)
       })
-      it('AND it does NOT print the warning messages', function () {
-        expect(stdout).not.to.include('3:9  warning')
+      it('AND it prints the warning messages', function () {
+        expect(stdout).to.include('3:9  warning')
         expect(stdout).not.to.include('3:9  error')
       })
-      it('AND it does NOT print the too many warnings message', function () {
-        expect(stdout).not.to.include('found more warnings than the maximum')
+      it('AND it prints the too many warnings message', function () {
+        expect(stdout).to.include('found more warnings than the maximum')
       })
     })
   })
@@ -348,11 +348,14 @@ describe('e2e: stdin subcommand', function () {
             { silent: true }
           ))
         })
-        it('THEN it exits with code 0 since warnings are ignored', function () {
-          expect(code).to.eq(0)
+        it('THEN it exits with code 1 since there are too many warnings', function () {
+          expect(code).to.eq(1)
         })
         it('AND outputs the fixed file', function () {
           expect(stdout.trim()).to.eq(getFixtureFileContentSync('throw-fixed.sol').trim())
+        })
+        it('AND does NOT print too many warnings message', function () {
+          expect(stdout.trim()).to.not.include('more warnings')
         })
       })
 
