@@ -43,9 +43,23 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
     
 ```
 
+#### Fallback is not payable, but theres a receive function
+
+```solidity
+
+      pragma solidity 0.4.4;
+        
+        
+      contract A {
+        function () public {}
+receive() public{}
+      }
+    
+```
+
 ### 👎 Examples of **incorrect** code for this rule
 
-#### Fallback is not payable
+#### Fallback is not payable and theres no receive function
 
 ```solidity
 
