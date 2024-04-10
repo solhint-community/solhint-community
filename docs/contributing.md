@@ -52,7 +52,7 @@ passing. If you contribute with a new feature, please add tests for it. To run t
 
 Git workflow
 ------------
-Development for the next major version, `4.0.0` takes place on `master`
+Development for the next minor version, `4.1.0` takes place on `master`
 branch.
 
 When working towards a release candidate, we usually have a

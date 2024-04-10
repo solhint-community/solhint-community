@@ -1,3 +1,18 @@
+## [4.0.0] - 2024-04-10
+Stable release.
+Current `latest` version.
+
+Includes lots of breaking changes such as removing rules or changing their
+semantics, while also adding some long-awaited features, such as:
+- parsing multiple config files from subdirectories
+- better handling of exit codes
+- saner defaults, such as using solhint:recommended ruleset when run without a
+  config file present instead of erroring out
+- clumped all style guide casing constranints into a single rule
+- re-defined the recommended ruleset
+
+For a comprehensive list of changes, see the changelog for `4.0.0-rc0{0-4}`, listed below:
+
 ## [4.0.0-rc04] - 2024-04-10
 
 ### Breaking
@@ -111,8 +126,6 @@ https://github.com/solhint-community/solhint-community/pull/103
 - increase mocha timeout https://github.com/solhint-community/solhint-community/pull/99
 
 ## [3.7.0] - 2023-12-05
-Stable release.
-Current `latest` version.
 Includes all changes for `3.7.0-rc0{0-4}`, listed below.
 
 ## [3.7.0-rc04] - 2023-12-04
