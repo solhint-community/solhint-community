@@ -1,3 +1,10 @@
+## [4.0.0-rc04] - XXXX-XX-XX
+
+### Breaking
+- changed payable-fallback to not revert when fallback function is not payable
+  but there's a receive function:
+  https://github.com/solhint-community/solhint-community/pull/145
+
 ## [4.0.0-rc03] - 2024-03-27
 
 ### Breaking
