@@ -1,4 +1,4 @@
-## [4.0.0-rc03] - XXXX-XX-XX
+## [4.0.0-rc03] - 2024-03-27
 
 ### Breaking
 - removed `foundry-test-functions` to be re-added in `4.1.0`
