@@ -1,4 +1,4 @@
-## [4.0.0-rc04] - XXXX-XX-XX
+## [4.0.0-rc04] - 2024-04-10
 
 ### Breaking
 - changed payable-fallback to not revert when fallback function is not payable
