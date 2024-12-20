@@ -215,8 +215,12 @@ describe('Linter - no-unused-vars', () => {
         code: `import {A} from './A.sol'; contract B { A.thing public statevar; }`,
       },
       {
+        description: 'imported type is used in an empty function parameter declaration',
+        code: `import {A} from './A.sol'; contract B { function (A.thing) public {} }`,
+      },
+      {
         description: 'imported type is used in a function parameter declaration',
-        code: `import {A} from './A.sol'; contract B { function (A.thing statevar) public {} }`,
+        code: `import {A} from './A.sol'; contract B { function (A.thing param) public returns(uint256){return param.foo;} }`,
       },
       {
         description: 'imported function is attached to a type',
