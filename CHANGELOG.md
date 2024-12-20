@@ -1,3 +1,9 @@
+## [4.0.1] - XXXX-XX-XX
+
+### Fixed
+- false positive in no-unused-var when variable is only used in modifier invocation
+  https://github.com/solhint-community/solhint-community/pull/159
+
 ## [4.0.0] - 2024-04-10
 Stable release.
 Current `latest` version.
