@@ -64,7 +64,7 @@ module.exports = Object.freeze({
     'avoid-throw': 'warn',
     'avoid-tx-origin': 'warn',
     'check-send-result': 'warn',
-    'compiler-version': ['error', '^0.8.14'],
+    'compiler-version': ['error', '^0.8.23'],
     'func-visibility': [
       'warn',
       {
