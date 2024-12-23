@@ -18,9 +18,9 @@ Compiler version must satisfy a semver requirement.
 This rule accepts an array of options:
 
 | Index | Description                                           | Default Value |
-| ----- | ----------------------------------------------------- |---------------|
+| ----- | ----------------------------------------------------- | ------------- |
 | 0     | Rule severity. Must be one of "error", "warn", "off". | error         |
-| 1     | Semver requirement                                    | ^0.8.23       |
+| 1     | Semver requirement                                    | ^0.8.14       |
 
 
 ### Example Config
