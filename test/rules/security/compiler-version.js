@@ -211,8 +211,8 @@ describe('Linter - compiler-version', () => {
     assertNoErrors(report)
   })
 
-  it(`should report error with version 0.8.13 and no options`, () => {
-    const report = linter.processStr(`pragma solidity ^0.8.13;`, {
+  it(`should report error with version 0.8.22 and no options`, () => {
+    const report = linter.processStr(`pragma solidity ^0.8.22;`, {
       rules: { 'compiler-version': 'error' },
     })
 

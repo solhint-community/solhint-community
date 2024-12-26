@@ -24,7 +24,7 @@ describe('Linter - one-contract-per-file', () => {
   })
 
   it('should not raise error for zero contracts', () => {
-    const report = linter.processStr('pragma solidity ^0.8.23;', {
+    const report = linter.processStr('pragma solidity ^0.8.14;', {
       rules: { 'one-contract-per-file': 'error' },
     })
     assertNoErrors(report)
