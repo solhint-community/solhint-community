@@ -203,16 +203,16 @@ describe('Linter - compiler-version', () => {
     assert.equal(report.errorCount, 0)
   })
 
-  it(`should not report error with version 0.8.14 and no options`, () => {
-    const report = linter.processStr(`pragma solidity ^0.8.14;`, {
+  it(`should not report error with version 0.8.23 and no options`, () => {
+    const report = linter.processStr(`pragma solidity ^0.8.23;`, {
       rules: { 'compiler-version': 'error' },
     })
 
     assertNoErrors(report)
   })
 
-  it(`should report error with version 0.8.13 and no options`, () => {
-    const report = linter.processStr(`pragma solidity ^0.8.13;`, {
+  it(`should report error with version 0.8.22 and no options`, () => {
+    const report = linter.processStr(`pragma solidity ^0.8.22;`, {
       rules: { 'compiler-version': 'error' },
     })
 
