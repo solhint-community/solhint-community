@@ -13,7 +13,13 @@ module.exports = Object.freeze({
     'max-line-length': ['error', 120],
     'max-states-count': ['warn', 15],
     'no-console': 'error',
-    'no-empty-blocks': 'warn',
+    'no-empty-blocks': [
+      'warn',
+      {
+        allowEmptyModifiers: false,
+        allowEmptyCatch: false,
+      },
+    ],
     'no-global-import': 'warn',
     'no-unused-vars': 'warn',
     'one-contract-per-file': 'warn',
