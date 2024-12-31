@@ -12,6 +12,7 @@ module.exports = Object.freeze({
     'interface-starts-with-i': 'error',
     'max-line-length': ['error', 120],
     'max-states-count': ['warn', 15],
+    'no-boolean-compare': 'error',
     'no-console': 'error',
     'no-empty-blocks': 'warn',
     'no-global-import': 'warn',
