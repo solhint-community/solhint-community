@@ -151,6 +151,7 @@ describe('Linter - named-parameters-function', () => {
       rules: {
         ...configGetter('solhint:recommended').rules,
         'compiler-version': 'off',
+        'no-unused-vars': 'off',
         'no-empty-blocks': 'off',
       },
     })
