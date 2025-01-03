@@ -171,6 +171,7 @@ describe('Config file', () => {
       assert.deepStrictEqual(noEmptyBlocksValue[1], {
         allowEmptyCatch: false,
         allowEmptyModifiers: false,
+        allowEmptyTry: false,
       })
     })
     it('invalid config in subdirectory causes error', function () {

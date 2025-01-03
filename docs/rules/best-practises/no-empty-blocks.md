@@ -27,13 +27,13 @@ This rule accepts an array of options:
 ```json
 {
   "rules": {
-    "no-empty-blocks": ["warn",{"allowEmptyModifiers":false,"allowEmptyCatch":false}]
+    "no-empty-blocks": ["warn",{"allowEmptyModifiers":false,"allowEmptyCatch":false,"allowEmptyTry":false}]
   }
 }
 ```
 
 ### Notes
-- Empty constructor is ignored if the constructor has parent-initialization modifiers.
+- The rule ignores an empty constructor by default as long as parent contracts are being initialized. See "Empty Constructor" example.
 - Use allowEmptyModifiers / allowEmptyCatch to skip warnings for underscore-only modifiers / empty catch blocks.
 
 ## Examples
@@ -51,22 +51,16 @@ receive () external {}
 fallback () external {}
 ```
 
-#### empty constructor with parent init
+#### empty constructor with member initialization list
 
 ```solidity
-constructor(uint x) Base(x) {}
+constructor(uint param) Foo(param) Bar(param*2)
 ```
 
 #### empty modifier with _ allowed
 
 ```solidity
 modifier onlyOwner { _; }
-```
-
-#### empty try-catch block allowed
-
-```solidity
-try foo() {} catch {}
 ```
 
 ### 👎 Examples of **incorrect** code for this rule
@@ -93,6 +87,24 @@ constructor () {}
 
 ```solidity
 modifier onlyOwner { _; }
+```
+
+#### empty modifier with only _ (when allowEmptyModifiers is true)
+
+```solidity
+modifier onlyOwner { _; }
+```
+
+#### empty catch block
+
+```solidity
+catch Error(string memory reason) {}
+```
+
+#### empty try block
+
+```solidity
+try {}
 ```
 
 ## Version

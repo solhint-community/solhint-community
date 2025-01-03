@@ -1,3 +1,9 @@
+## [Unreleased]
+### Added
+- Added `allowEmptyTry` option to `no-empty-blocks` rule to allow empty try blocks 
+- Added `allowEmptyModifiers` option to `no-empty-blocks` rule to allow empty modifier blocks containing only `_`
+- Added `allowEmptyCatch` option to `no-empty-blocks` rule to allow empty catch blocks
+
 ## [4.0.0] - 2024-04-10
 Stable release.
 Current `latest` version.

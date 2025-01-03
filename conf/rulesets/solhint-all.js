@@ -18,6 +18,7 @@ module.exports = Object.freeze({
       {
         allowEmptyModifiers: false,
         allowEmptyCatch: false,
+        allowEmptyTry: false,
       },
     ],
     'no-global-import': 'warn',
