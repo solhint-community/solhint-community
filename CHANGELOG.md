@@ -1,11 +1,8 @@
-## [Unreleased]
-
+## [4.0.1] - XXXX-XX-XX
 ### Added
 - Added `allowEmptyTry` option to `no-empty-blocks` rule to allow empty try blocks 
 - Added `allowEmptyModifiers` option to `no-empty-blocks` rule to allow empty modifier blocks containing only `_`
 - Added `allowEmptyCatch` option to `no-empty-blocks` rule to allow empty catch blocks
-
-## [4.0.1] - XXXX-XX-XX
 
 ### Fixed
 - false positive in no-unused-var when function parameters are only used only as
