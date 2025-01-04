@@ -215,8 +215,12 @@ describe('Linter - no-unused-vars', () => {
         code: `import {A} from './A.sol'; contract B { A.thing public statevar; }`,
       },
       {
+        description: 'imported type is used in an empty function parameter declaration',
+        code: `import {A} from './A.sol'; contract B { function (A.thing) public {} }`,
+      },
+      {
         description: 'imported type is used in a function parameter declaration',
-        code: `import {A} from './A.sol'; contract B { function (A.thing statevar) public {} }`,
+        code: `import {A} from './A.sol'; contract B { function (A.thing param) public returns(uint256){return param.foo;} }`,
       },
       {
         description: 'imported function is attached to a type',
@@ -408,6 +412,7 @@ describe('Linter - no-unused-vars', () => {
   })
 
   const UNUSED_VARS = [
+    contractWith('function a(uint d) public returns (uint c) { }'),
     contractWith('function a(uint a, uint b) public { b += 1; }'),
     contractWith(
       multiLine(
@@ -438,9 +443,10 @@ describe('Linter - no-unused-vars', () => {
 
   const USED_VARS = [
     contractWith('function a(uint a) public { uint b = bytes32(a); b += 1; }'),
+    contractWith('function a(uint b) public modifiedBy(b) returns(uint256) { return 1; }'),
+    contractWith('function a(uint b) public modifiedBy(b) { }'),
     contractWith('function a() public returns (uint c) { return 1; }'),
-    contractWith('function a(uint d) public returns (uint c) { }'),
-    contractWith('function a(uint a, uint c) public returns (uint c);'),
+    contractWith('function a(uint a, uint b) public returns (uint c);'),
     contractWith('function a(uint amount) public { foo.deposit{value: amount}(); }'),
     contractWith('function a(uint amount) public { foo.deposit({value: amount}); }'),
     contractWith(

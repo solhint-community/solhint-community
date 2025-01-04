@@ -1,6 +1,12 @@
-## [Unreleased]
+## [4.0.1] - XXXX-XX-XX
 ### Added
 - Added `no-boolean-compare` rule to prevent direct comparisons with boolean literals
+
+### Fixed
+- false positive in no-unused-var when function parameters are only used only as
+  modifier arguments
+  https://github.com/solhint-community/solhint-community/pull/159
+
 
 ## [4.0.0] - 2024-04-10
 Stable release.
