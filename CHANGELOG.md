@@ -1,3 +1,7 @@
+## [Unreleased]
+### Added
+- Added `no-boolean-compare` rule to prevent direct comparisons with boolean literals
+
 ## [4.0.0] - 2024-04-10
 Stable release.
 Current `latest` version.
