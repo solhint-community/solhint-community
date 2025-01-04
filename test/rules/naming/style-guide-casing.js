@@ -226,6 +226,48 @@ describe('style-guide-casing', function () {
         })
       }
     })
+
+    it('should allow pure functions to be in UPPER_SNAKE_CASE', () => {
+      const code = contractWith('function FOO_BAR() public pure returns (uint256) {}')
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': 'error' },
+      })
+      assert.equal(report.errorCount, 0)
+    })
+
+    it('should allow interface functions with same name as immutable to be in UPPER_SNAKE_CASE', () => {
+      const code = 'interface IFoo { function FOO_BAR() external pure returns (address); }'
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': 'error' },
+      })
+      assert.equal(report.errorCount, 0)
+    })
+
+    it('should raise error for pure functions not in mixedCase or UPPER_SNAKE_CASE', () => {
+      const code = contractWith('function snake_case() public pure returns (uint256) {}')
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': 'error' },
+      })
+      assert.equal(report.errorCount, 1)
+      assert.ok(
+        report.messages[0].message.includes(
+          'Pure function name must be in mixedCase or UPPER_SNAKE_CASE'
+        )
+      )
+    })
+
+    it('should raise error for pure interface functions not in mixedCase or UPPER_SNAKE_CASE', () => {
+      const code = 'interface IFoo { function snake_case() external pure returns (address); }'
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': 'error' },
+      })
+      assert.equal(report.errorCount, 1)
+      assert.ok(
+        report.messages[0].message.includes(
+          'Pure function name must be in mixedCase or UPPER_SNAKE_CASE'
+        )
+      )
+    })
   })
 
   describe('modifier names should be in mixedCase', () => {
@@ -436,5 +478,36 @@ describe('style-guide-casing', function () {
     })
     assert.equal(report.warningCount, 1)
     assert.ok(report.messages[0].message.includes('CapWords'))
+  })
+
+  describe('pure free functions', function () {
+    it('should NOT raise error if a pure free function is in UPPER_SNAKE_CASE', () => {
+      const code = `
+        function FOO_BAR() pure returns (uint256) {
+          return 42;
+        }
+      `
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': 'error' },
+      })
+      assert.equal(report.errorCount, 0)
+    })
+
+    it('should raise error if a pure free function is in snake_case', () => {
+      const code = `
+        function snake_case() pure returns (uint256) {
+          return 42;
+        }
+      `
+      const report = processStr(code, {
+        rules: { 'style-guide-casing': 'error' },
+      })
+      assert.equal(report.errorCount, 1)
+      assert.ok(
+        report.messages[0].message.includes(
+          'Pure function name must be in mixedCase or UPPER_SNAKE_CASE'
+        )
+      )
+    })
   })
 })
