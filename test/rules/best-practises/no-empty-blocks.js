@@ -281,7 +281,7 @@ describe('Linter - no-empty-blocks', () => {
     })
   })
 
-  it('should not raise warning for non-empty try block when allowEmptyTry is true', () => {
+  it('should not raise warning for non-empty try block when allowEmptyTry is false', () => {
     const code = contractWith(`
       function test() external {
         try this.foo() {
