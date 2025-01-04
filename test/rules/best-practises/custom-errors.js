@@ -186,4 +186,107 @@ describe('Linter - custom-errors', () => {
       assertErrorCount(report, 0)
     })
   })
+
+  it('should NOT raise error for require with custom error function call as second argument', () => {
+    const code = `
+      pragma solidity 0.8.5;
+      contract A {
+        function test() external {
+          require(msg.sender != address(0), ZeroAddressError());
+        }
+      }
+    `
+    const report = linter.processStr(code, {
+      rules: { 'custom-errors': 'error' },
+    })
+    assertNoWarnings(report)
+    assertNoErrors(report)
+  })
+
+  it('should raise error for require with a non-function-call second argument', () => {
+    // second arg is a numeric literal instead of a function call
+    const code = `
+      pragma solidity 0.8.5;
+      contract A {
+        function test() external {
+          require(msg.sender != address(0), 123);
+        }
+      }
+    `
+    const report = linter.processStr(code, {
+      rules: { 'custom-errors': 'error' },
+    })
+    assertErrorCount(report, 1)
+    assertErrorMessage(report, 'Use Custom Errors instead of require statements')
+  })
+
+  it('should raise error for require with no second argument', () => {
+    const code = `
+      pragma solidity 0.8.5;
+      contract A {
+        function test() external {
+          require(msg.sender != address(0));
+        }
+      }
+    `
+    const report = linter.processStr(code, {
+      rules: { 'custom-errors': 'error' },
+    })
+    assertErrorCount(report, 1)
+    assertErrorMessage(report, 'Use Custom Errors instead of require statements')
+  })
+
+  it('should NOT raise error for require with custom error constructor call with expressions', () => {
+    const code = `
+      pragma solidity 0.8.5;
+      contract A {
+        function test(uint x) external {
+          require(msg.sender != address(0), CustomError(x + 1));
+        }
+      }
+    `
+    const report = linter.processStr(code, {
+      rules: { 'custom-errors': 'error' },
+    })
+    assertNoWarnings(report)
+    assertNoErrors(report)
+  })
+
+  it('should raise error for require with complex non-error expression', () => {
+    const code = `
+      pragma solidity 0.8.5;
+      contract A {
+        function test(uint x) external {
+          require(msg.sender != address(0), x > 5 ? "Too high" : "Too low");
+        }
+      }
+    `
+    const report = linter.processStr(code, {
+      rules: { 'custom-errors': 'error' },
+    })
+    assertErrorCount(report, 1)
+    assertErrorMessage(report, 'Use Custom Errors instead of require statements')
+  })
+
+  it('should NOT raise error for require with custom error with complex arguments', () => {
+    const code = `
+      pragma solidity 0.8.5;
+      contract A {
+        function test(uint x, string memory reason) external {
+          require(
+            msg.sender != address(0), 
+            ComplexError({
+              code: x > 5 ? 1 : 2,
+              message: string.concat("Error: ", reason)
+            })
+          );
+        }
+      }
+    `
+    const report = linter.processStr(code, {
+      rules: { 'custom-errors': 'error' },
+    })
+    assertNoWarnings(report)
+    assertNoErrors(report)
+  })
 })
