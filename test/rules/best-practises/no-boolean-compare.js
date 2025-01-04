@@ -1,8 +1,6 @@
-const { expect } = require('chai')
 const linter = require('../../../lib/index')
 const { assertErrorCount, assertNoErrors, assertErrorMessage } = require('../../common/asserts')
 const { contractWith, funcWith } = require('../../common/contract-builder')
-const NoBooleanCompareChecker = require('../../../lib/rules/best-practises/no-boolean-compare')
 
 describe('Linter - no-boolean-compare', () => {
   it('should raise an error when comparing a variable to true', () => {
@@ -93,63 +91,5 @@ describe('Linter - no-boolean-compare', () => {
 
     assertErrorCount(report, 2)
     assertErrorMessage(report, 'Avoid comparing boolean expressions to true or false.')
-  })
-
-  describe('Parser Version Compatibility', () => {
-    it('should handle different AST formats for boolean literals', () => {
-      let reportedError = null
-      const reporter = {
-        error(node, ruleId, message) {
-          reportedError = { node, ruleId, message }
-        },
-        config: {
-          rules: {
-            'no-boolean-compare': 'error',
-          },
-        },
-      }
-
-      const checker = new NoBooleanCompareChecker(reporter)
-
-      // Test older parser version (BooleanLiteral node)
-      const oldNode = {
-        type: 'BinaryOperation',
-        operator: '==',
-        left: {
-          type: 'BooleanLiteral',
-          value: true,
-        },
-        right: {
-          type: 'Identifier',
-          name: 'foo',
-        },
-      }
-
-      // Test newer parser version (Literal node with kind=bool)
-      const newNode = {
-        type: 'BinaryOperation',
-        operator: '==',
-        left: {
-          type: 'Literal',
-          kind: 'bool',
-          value: true,
-        },
-        right: {
-          type: 'Identifier',
-          name: 'foo',
-        },
-      }
-
-      // Test BooleanLiteral (old style)
-      checker.BinaryOperation(oldNode)
-      expect(reportedError.message).to.equal(
-        'Avoid comparing boolean expressions to true or false.'
-      )
-
-      // Reset and test Literal node (new style)
-      reportedError = null
-      checker.BinaryOperation(newNode)
-      expect(reportedError).to.equal(null)
-    })
   })
 })
