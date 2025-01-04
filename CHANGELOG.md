@@ -1,3 +1,10 @@
+## [Unreleased]
+### Fixed
+- `custom-errors`: Made the rule more fine-grained by:
+  - Allowing custom errors as the second argument of `require` statements (e.g., `require(cond, CustomError())`) 
+  - Still flagging non-custom-error second arguments (e.g., string literals, numbers, variables)
+  - Still flagging `require` statements with no second argument
+
 ## [4.0.0] - 2024-04-10
 Stable release.
 Current `latest` version.
