@@ -255,5 +255,50 @@ describe('Linter - no-empty-blocks', () => {
 
       assertNoWarnings(report)
     })
+
+    it('should not raise warning for non-empty catch block when allowEmptyCatch is false', () => {
+      const code = contractWith(`
+        function foo() external returns (uint) {
+          return 1;
+        }
+    
+        function test() external {
+          try this.foo() {
+            console.log('success');
+          } catch Error(string memory) {
+            revert('error');
+          }
+        }
+      `)
+
+      const report = linter.processStr(code, {
+        rules: {
+          'no-empty-blocks': ['warn', { allowEmptyCatch: false }],
+        },
+      })
+
+      assertNoWarnings(report)
+    })
+  })
+
+  it('should not raise warning for non-empty try block when allowEmptyTry is true', () => {
+    const code = contractWith(`
+      function test() external {
+        try this.foo() {
+          console.log('success');
+        }
+        catch Error(string memory reason) {
+          revert(reason);
+        }
+      }
+    `)
+
+    const report = linter.processStr(code, {
+      rules: {
+        'no-empty-blocks': ['warn', { allowEmptyTry: true }],
+      },
+    })
+
+    assertNoWarnings(report)
   })
 })
