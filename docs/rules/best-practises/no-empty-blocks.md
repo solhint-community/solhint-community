@@ -15,19 +15,26 @@ title:       "no-empty-blocks | Solhint"
 Code block has zero statements inside. Some common exceptions apply.
 
 ## Options
-This rule accepts a string option of rule severity. Must be one of "error", "warn", "off". Default to warn.
+This rule accepts an array of options:
+
+| Index | Description                             | Default Value |
+| ----- | --------------------------------------- | ------------- |
+| 0     | Allow empty modifiers containing only _ | false         |
+| 1     | Allow empty try-catch blocks            | false         |
+
 
 ### Example Config
 ```json
 {
   "rules": {
-    "no-empty-blocks": "warn"
+    "no-empty-blocks": ["warn",{"allowEmptyModifiers":false,"allowEmptyCatch":false,"allowEmptyTry":false}]
   }
 }
 ```
 
 ### Notes
 - The rule ignores an empty constructor by default as long as parent contracts are being initialized. See "Empty Constructor" example.
+- Use allowEmptyModifiers / allowEmptyCatch to skip warnings for underscore-only modifiers / empty catch blocks.
 
 ## Examples
 ### 👍 Examples of **correct** code for this rule
@@ -47,7 +54,13 @@ fallback () external {}
 #### empty constructor with member initialization list
 
 ```solidity
-constructor(uint param) Foo(param) Bar(param*2) {}
+constructor(uint param) Foo(param) Bar(param*2)
+```
+
+#### empty modifier with _ allowed
+
+```solidity
+modifier onlyOwner { _; }
 ```
 
 ### 👎 Examples of **incorrect** code for this rule
@@ -68,6 +81,30 @@ contract Foo {}
 
 ```solidity
 constructor () {}
+```
+
+#### empty modifier with only _ (when allowEmptyModifiers is false)
+
+```solidity
+modifier onlyOwner { _; }
+```
+
+#### empty modifier with only _ (when allowEmptyModifiers is true)
+
+```solidity
+modifier onlyOwner { _; }
+```
+
+#### empty catch block
+
+```solidity
+catch Error(string memory reason) {}
+```
+
+#### empty try block
+
+```solidity
+try {}
 ```
 
 ## Version
