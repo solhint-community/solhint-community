@@ -28,7 +28,6 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 
 ### Notes
 - The rule ignores an empty constructor by default as long as parent contracts are being initialized. See "Empty Constructor" example.
-- You can configure allowEmptyTry or allowEmptyCatch to ignore empty try or catch blocks respectively.
 
 ## Examples
 ### 👍 Examples of **correct** code for this rule
