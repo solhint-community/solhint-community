@@ -1,27 +1,75 @@
-const { assertNoWarnings, assertErrorMessage, assertWarnsCount } = require('../../common/asserts')
+const {
+  assertNoWarnings,
+  assertErrorMessage,
+  assertWarnsCount,
+  assertErrorCount,
+} = require('../../common/asserts')
 const linter = require('../../../lib/index')
 const { contractWith, funcWith } = require('../../common/contract-builder')
 
 describe('Linter - no-empty-blocks', () => {
-  const EMPTY_BLOCKS = [
-    funcWith('if (a < b) {  }'),
-    contractWith('struct Abc {  }'),
-    contractWith('enum Abc {  }'),
-    contractWith('constructor () {  }'),
-    'contract A { }',
-    funcWith('assembly {  }'),
-  ]
+  describe('Basic empty blocks', () => {
+    const EMPTY_BLOCKS = [
+      funcWith('if (a < b) {  }'),
+      funcWith('for(uint i = 0; i < 10; i++) {  }'),
+      funcWith('while(true) {  }'),
+      funcWith('do {  } while(true);'),
+      funcWith('try foo() {  } catch {  }'),
+      contractWith('struct Abc {  }'),
+      contractWith('enum Abc {  }'),
+      contractWith('constructor () {  }'),
+      'contract A { }',
+      funcWith('assembly {  }'),
+    ]
 
-  EMPTY_BLOCKS.forEach((curData) =>
-    it(`should raise warn for empty blocks ${label(curData)}`, () => {
-      const report = linter.processStr(curData, {
+    EMPTY_BLOCKS.forEach((curData) =>
+      it(`should raise warn for empty block: ${label(curData)}`, () => {
+        const report = linter.processStr(curData, {
+          rules: { 'no-empty-blocks': 'warn' },
+        })
+        assertWarnsCount(report, curData.includes('try') ? 2 : 1)
+        assertErrorMessage(report, 'empty block')
+      })
+    )
+  })
+
+  describe('Valid non-empty blocks', () => {
+    const VALID_BLOCKS = [
+      funcWith('if (a < b) { uint x = 1; }'),
+      funcWith('for(uint i = 0; i < 10; i++) { sum += i; }'),
+      funcWith('while(true) { count++; }'),
+      funcWith('do { count--; } while(true)'),
+      funcWith('try foo() { emit Event(); } catch { revert(); }'),
+      contractWith('struct Point { uint x; uint y; }'),
+      contractWith('enum Color { Red, Green, Blue }'),
+      contractWith('constructor () BaseContract(1) {  }'),
+      'contract Token { string private name; }',
+      funcWith('assembly { let x := 1 }'),
+    ]
+
+    VALID_BLOCKS.forEach((curData) =>
+      it(`should not raise warn for valid block: ${label(curData)}`, () => {
+        const report = linter.processStr(curData, {
+          rules: { 'no-empty-blocks': 'warn' },
+        })
+        assertNoWarnings(report)
+      })
+    )
+  })
+
+  describe('Nested blocks', () => {
+    it('should detect multiple empty blocks in one contract', () => {
+      const code = contractWith(`
+        function f1() public { }
+        function f2() public { }
+        struct S { }
+      `)
+      const report = linter.processStr(code, {
         rules: { 'no-empty-blocks': 'warn' },
       })
-
-      assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'empty block')
+      assertWarnsCount(report, 3)
     })
-  )
+  })
 
   const BLOCKS_WITH_DEFINITIONS = [
     contractWith('function () public payable { make1(); }'),
@@ -44,57 +92,6 @@ describe('Linter - no-empty-blocks', () => {
       assertNoWarnings(report)
     })
   )
-
-  it('should not warn for modifier with content besides _', () => {
-    const code = contractWith(`
-      modifier onlyOwner {
-        require(msg.sender == owner);
-        _;
-      }
-    `)
-    const report = linter.processStr(code, {
-      rules: {
-        'no-empty-blocks': ['warn', { allowEmptyModifiers: false }],
-      },
-    })
-    assertNoWarnings(report)
-  })
-
-  it('should not warn for empty try block when allowEmptyTry is true', () => {
-    const code = contractWith(`
-      function test() external {
-        try this.foo() {} 
-        catch Error(string memory reason) {
-          revert(reason);
-        }
-      }
-    `)
-
-    const report = linter.processStr(code, {
-      rules: {
-        'no-empty-blocks': ['warn', { allowEmptyTry: true }],
-      },
-    })
-
-    assertNoWarnings(report)
-  })
-
-  it('should warn for empty try block when allowEmptyTry is false', () => {
-    const code = contractWith(`
-      function test() external {
-        try this.foo() {} 
-        catch Error(string memory reason) {
-          revert(reason);
-        }
-      }
-    `)
-    const report = linter.processStr(code, {
-      rules: {
-        'no-empty-blocks': ['warn', { allowEmptyTry: false }],
-      },
-    })
-    assertWarnsCount(report, 1)
-  })
 
   it('should not raise error for default function', () => {
     const defaultFunction = contractWith('function () public payable {}')
@@ -175,130 +172,229 @@ describe('Linter - no-empty-blocks', () => {
     return items[labelIndex]
   }
 
-  describe('configuration options', () => {
-    it('should raise warning for empty modifier with _ when allowEmptyModifiers is false', () => {
-      const code = contractWith(`
-    modifier onlyOwner {
-      _;
-    }
-  `)
-      const report = linter.processStr(code, {
-        rules: {
-          'no-empty-blocks': ['warn', { allowEmptyModifiers: false }],
-        },
-      })
+  it('should respect config severity level', () => {
+    const code = 'contract A { }'
 
-      assertWarnsCount(report, 1)
+    const warnReport = linter.processStr(code, {
+      rules: { 'no-empty-blocks': 'warn' },
     })
+    assertWarnsCount(warnReport, 1)
 
-    it('should raise warning for completely empty modifier', () => {
-      const code = contractWith(`
-        modifier onlyOwner {
-        }
-      `)
-
-      const report = linter.processStr(code, {
-        rules: {
-          'no-empty-blocks': ['warn', { allowEmptyModifiers: true }],
-        },
-      })
-
-      assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'Code contains empty blocks')
+    const errorReport = linter.processStr(code, {
+      rules: { 'no-empty-blocks': 'error' },
     })
+    assertErrorCount(errorReport, 1)
+  })
 
-    it('should raise warning for empty try-catch when allowEmptyCatch is false', () => {
-      const code = contractWith(`
-        function foo() external returns (uint) {
-          return 1;
+  describe('Abstract contract cases', () => {
+    it('should not raise warning for abstract contract with virtual functions', () => {
+      const code = `
+        abstract contract Base {
+          function foo() public virtual;
         }
-    
-        function test() external {
-          try this.foo() {
-            console.log('success');
-          } catch Error(string memory) {
-            // empty catch
-          }
-        }
-      `)
-
+      `
       const report = linter.processStr(code, {
-        rules: {
-          'no-empty-blocks': ['warn', { allowEmptyCatch: false }],
-        },
+        rules: { 'no-empty-blocks': 'warn' },
       })
-
-      assertWarnsCount(report, 1)
-      assertErrorMessage(report, 'Code contains empty blocks')
-    })
-
-    it('should not raise warning for empty try-catch when allowEmptyCatch is true', () => {
-      const code = contractWith(`
-        function foo() external returns (uint) {
-          return 1;
-        }
-    
-        function test() external {
-          try this.foo() {
-            console.log('success');
-          } catch Error(string memory) {
-            // empty catch allowed
-          }
-        }
-      `)
-
-      const report = linter.processStr(code, {
-        rules: {
-          'no-empty-blocks': ['warn', { allowEmptyCatch: true }],
-        },
-      })
-
-      assertNoWarnings(report)
-    })
-
-    it('should not raise warning for non-empty catch block when allowEmptyCatch is false', () => {
-      const code = contractWith(`
-        function foo() external returns (uint) {
-          return 1;
-        }
-    
-        function test() external {
-          try this.foo() {
-            console.log('success');
-          } catch Error(string memory) {
-            revert('error');
-          }
-        }
-      `)
-
-      const report = linter.processStr(code, {
-        rules: {
-          'no-empty-blocks': ['warn', { allowEmptyCatch: false }],
-        },
-      })
-
       assertNoWarnings(report)
     })
   })
 
-  it('should not raise warning for non-empty try block when allowEmptyTry is false', () => {
-    const code = contractWith(`
-      function test() external {
-        try this.foo() {
-          console.log('success');
-        }
-        catch Error(string memory reason) {
-          revert(reason);
-        }
-      }
-    `)
+  describe('Try-catch variations', () => {
+    const TRY_CATCH_CASES = [
+      funcWith('try foo() { revert(); } catch Error(string memory) { }'),
+      funcWith('try foo() { revert(); } catch (bytes memory) { }'),
+      funcWith('try foo() returns (uint) { } catch Error(string memory) { revert(); }'),
+    ]
 
-    const report = linter.processStr(code, {
-      rules: {
-        'no-empty-blocks': ['warn', { allowEmptyTry: true }],
-      },
+    TRY_CATCH_CASES.forEach((code) => {
+      it(`should detect empty blocks in try-catch: ${label(code)}`, () => {
+        const report = linter.processStr(code, {
+          rules: { 'no-empty-blocks': 'warn' },
+        })
+        assertWarnsCount(report, 1)
+      })
+    })
+  })
+
+  describe('Constructor inheritance', () => {
+    it('should not raise warning for empty constructor with multiple inheritance', () => {
+      const code = `
+        contract C is A, B {
+          constructor() A(1) B(2) { }
+        }
+      `
+      const report = linter.processStr(code, {
+        rules: { 'no-empty-blocks': 'warn' },
+      })
+      assertNoWarnings(report)
+    })
+  })
+
+  describe('Modifier cases', () => {
+    it('should raise warning for empty modifier', () => {
+      const code = contractWith('modifier onlyOwner() { }')
+      const report = linter.processStr(code, {
+        rules: { 'no-empty-blocks': 'warn' },
+      })
+      assertWarnsCount(report, 1)
     })
 
-    assertNoWarnings(report)
+    it('should not raise warning for modifier with placeholder', () => {
+      const code = contractWith('modifier onlyOwner() { _; }')
+      const report = linter.processStr(code, {
+        rules: { 'no-empty-blocks': 'warn' },
+      })
+      assertNoWarnings(report)
+    })
+
+    it('should not raise warning for modifier with content besides placeholder', () => {
+      const code = contractWith(`
+        modifier checkValue(uint value) { 
+          require(value > 100);
+          _;
+          require(value < 200);
+        }
+      `)
+      const report = linter.processStr(code, {
+        rules: { 'no-empty-blocks': 'warn' },
+      })
+      assertNoWarnings(report)
+    })
+
+    it('should not raise warning for modifier with multiple placeholders', () => {
+      const code = contractWith(`
+        modifier sandwich() {
+          _; // Start
+          require(msg.sender != address(0));
+          _; // End
+        }
+      `)
+      const report = linter.processStr(code, {
+        rules: { 'no-empty-blocks': 'warn' },
+      })
+      assertNoWarnings(report)
+    })
+
+    it('should not raise warning for modifier with conditional and placeholder', () => {
+      const code = contractWith(`
+        modifier checkRole() {
+          if (hasRole(msg.sender)) {
+            _;
+          }
+        }
+      `)
+      const report = linter.processStr(code, {
+        rules: { 'no-empty-blocks': 'warn' },
+      })
+      assertNoWarnings(report)
+    })
+  })
+
+  describe('Complex assembly', () => {
+    it('should handle nested assembly blocks', () => {
+      const code = funcWith(`
+        assembly {
+          {
+            let x := 1
+            {
+              
+            }
+          }
+        }
+      `)
+      const report = linter.processStr(code, {
+        rules: { 'no-empty-blocks': 'warn' },
+      })
+      assertWarnsCount(report, 1)
+    })
+  })
+
+  describe('No empty blocks with configuration options', () => {
+    describe('Empty modifiers', () => {
+      const modifierCode = contractWith('modifier onlyOwner() { }')
+
+      it('should warn when allowEmptyModifiers is false', () => {
+        const report = linter.processStr(modifierCode, {
+          rules: {
+            'no-empty-blocks': ['warn', { allowEmptyModifiers: false }],
+          },
+        })
+        assertWarnsCount(report, 1)
+      })
+
+      it('should not warn when allowEmptyModifiers is true', () => {
+        const report = linter.processStr(modifierCode, {
+          rules: {
+            'no-empty-blocks': ['warn', { allowEmptyModifiers: true }],
+          },
+        })
+        assertNoWarnings(report)
+      })
+    })
+
+    describe('Empty try-catch', () => {
+      const tryCatchCode = funcWith('try foo() { } catch { }')
+
+      it('should warn for both empty try and catch when not allowed', () => {
+        const report = linter.processStr(tryCatchCode, {
+          rules: {
+            'no-empty-blocks': [
+              'warn',
+              {
+                allowEmptyTry: false,
+                allowEmptyCatch: false,
+              },
+            ],
+          },
+        })
+        assertWarnsCount(report, 2)
+      })
+
+      it('should only warn for empty catch when try is allowed', () => {
+        const report = linter.processStr(tryCatchCode, {
+          rules: {
+            'no-empty-blocks': [
+              'warn',
+              {
+                allowEmptyTry: true,
+                allowEmptyCatch: false,
+              },
+            ],
+          },
+        })
+        assertWarnsCount(report, 1)
+      })
+
+      it('should only warn for empty try when catch is allowed', () => {
+        const report = linter.processStr(tryCatchCode, {
+          rules: {
+            'no-empty-blocks': [
+              'warn',
+              {
+                allowEmptyTry: false,
+                allowEmptyCatch: true,
+              },
+            ],
+          },
+        })
+        assertWarnsCount(report, 1)
+      })
+
+      it('should not warn when both empty try and catch are allowed', () => {
+        const report = linter.processStr(tryCatchCode, {
+          rules: {
+            'no-empty-blocks': [
+              'warn',
+              {
+                allowEmptyTry: true,
+                allowEmptyCatch: true,
+              },
+            ],
+          },
+        })
+        assertNoWarnings(report)
+      })
+    })
   })
 })

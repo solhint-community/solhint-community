@@ -15,26 +15,20 @@ title:       "no-empty-blocks | Solhint"
 Code block has zero statements inside. Some common exceptions apply.
 
 ## Options
-This rule accepts an array of options:
-
-| Index | Description                             | Default Value |
-| ----- | --------------------------------------- | ------------- |
-| 0     | Allow empty modifiers containing only _ | false         |
-| 1     | Allow empty try-catch blocks            | false         |
-
+This rule accepts a string option of rule severity. Must be one of "error", "warn", "off". Default to warn.
 
 ### Example Config
 ```json
 {
   "rules": {
-    "no-empty-blocks": ["warn",{"allowEmptyModifiers":false,"allowEmptyCatch":false,"allowEmptyTry":false}]
+    "no-empty-blocks": "warn"
   }
 }
 ```
 
 ### Notes
 - The rule ignores an empty constructor by default as long as parent contracts are being initialized. See "Empty Constructor" example.
-- Use allowEmptyModifiers / allowEmptyCatch to skip warnings for underscore-only modifiers / empty catch blocks.
+- You can configure allowEmptyTry or allowEmptyCatch to ignore empty try or catch blocks respectively.
 
 ## Examples
 ### 👍 Examples of **correct** code for this rule
@@ -54,13 +48,27 @@ fallback () external {}
 #### empty constructor with member initialization list
 
 ```solidity
-constructor(uint param) Foo(param) Bar(param*2)
+constructor(uint param) Foo(param) Bar(param*2) {}
 ```
 
-#### empty modifier with _ allowed
+#### empty try block when allowEmptyTry: true is enabled
 
 ```solidity
-modifier onlyOwner { _; }
+try foo() {
+  // empty
+} catch {
+  revert();
+}
+```
+
+#### empty catch block when allowEmptyCatch: true is enabled
+
+```solidity
+try foo() {
+  revert();
+} catch {
+  // empty
+}
 ```
 
 ### 👎 Examples of **incorrect** code for this rule
@@ -83,28 +91,10 @@ contract Foo {}
 constructor () {}
 ```
 
-#### empty modifier with only _ (when allowEmptyModifiers is false)
+#### empty try-catch with allowEmptyTry: false and allowEmptyCatch: false
 
 ```solidity
-modifier onlyOwner { _; }
-```
-
-#### empty modifier with only _ (when allowEmptyModifiers is true)
-
-```solidity
-modifier onlyOwner { _; }
-```
-
-#### empty catch block
-
-```solidity
-catch Error(string memory reason) {}
-```
-
-#### empty try block
-
-```solidity
-try {}
+try foo() { } catch { }
 ```
 
 ## Version

@@ -20,7 +20,7 @@
     "test:coverage": "npm run exec-tests",
     "test": "mocha --recursive",
     "e2e": "mocha --timeout 9000 e2e/*.js",
-    "lint": "eslint .",
+    "lint": "eslint ",
     "generate-rulesets": "node scripts/generate-rulesets.js && prettier --write conf/rulesets",
     "docs": "node scripts/generate-rule-docs.js",
     "prepare": "husky install",

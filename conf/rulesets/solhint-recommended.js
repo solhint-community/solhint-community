@@ -10,14 +10,7 @@ module.exports = Object.freeze({
     'interface-starts-with-i': 'error',
     'max-states-count': ['warn', 15],
     'no-console': 'error',
-    'no-empty-blocks': [
-      'warn',
-      {
-        allowEmptyModifiers: false,
-        allowEmptyCatch: false,
-        allowEmptyTry: false,
-      },
-    ],
+    'no-empty-blocks': 'warn',
     'no-global-import': 'warn',
     'no-unused-vars': 'warn',
     'one-contract-per-file': 'warn',
