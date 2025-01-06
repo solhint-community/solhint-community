@@ -166,6 +166,7 @@ describe('Config file', () => {
       )
       // it's disabled in the root config but sub/.solhintrc extends
       // recommended, where it's set as 'warn'
+      assert.equal(config.rules['no-empty-blocks'], 'warn')
     })
     it('invalid config in subdirectory causes error', function () {
       assert.throws(
