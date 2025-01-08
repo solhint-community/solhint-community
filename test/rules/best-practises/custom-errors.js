@@ -16,7 +16,7 @@ describe('Linter - custom-errors', () => {
     })
 
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of revert statement')
+    assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
   })
 
   it('should raise error for revert([string])', () => {
@@ -26,7 +26,7 @@ describe('Linter - custom-errors', () => {
     })
 
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of revert statement')
+    assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
   })
 
   it('should NOT raise error for revert ErrorFunction()', () => {
@@ -61,7 +61,7 @@ describe('Linter - custom-errors', () => {
     })
 
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of require statement')
+    assertErrorMessage(report, 'Use Custom Errors instead of require statements')
   })
 
   it('should NOT raise error for regular function call', () => {
@@ -109,7 +109,7 @@ describe('Linter - custom-errors', () => {
       })
 
       assertErrorCount(report, 1)
-      assertErrorMessage(report, 'Use Custom Errors instead of revert statement')
+      assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
     })
 
     it('should NOT emit error on exact match pragma directive for a previous version', function () {
@@ -141,7 +141,7 @@ describe('Linter - custom-errors', () => {
       })
 
       assertErrorCount(report, 1)
-      assertErrorMessage(report, 'Use Custom Errors instead of revert statement')
+      assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
 
       code = `
         pragma solidity >=0.8.19 <0.9.0;
@@ -156,7 +156,7 @@ describe('Linter - custom-errors', () => {
       })
 
       assertErrorCount(report, 1)
-      assertErrorMessage(report, 'Use Custom Errors instead of revert statement')
+      assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
     })
 
     it('should NOT emit error on range match disallowing 0.8.4 or later', function () {
