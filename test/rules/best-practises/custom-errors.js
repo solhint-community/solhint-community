@@ -289,4 +289,57 @@ describe('Linter - custom-errors', () => {
     assertNoWarnings(report)
     assertNoErrors(report)
   })
+
+  it('should NOT raise error if the second argument is a nested function call that returns a custom error', () => {
+    const code = `
+      pragma solidity 0.8.5;
+      contract A {
+        function getError() public returns (error) {
+          return MyCustomError();
+        }
+        function test() external {
+          require(msg.sender != address(0), getError());
+        }
+      }
+    `
+    const report = linter.processStr(code, {
+      rules: { 'custom-errors': 'error' },
+    })
+    assertNoErrors(report)
+  })
+
+  it('should NOT raise error for require(cond, returnsBool()) even if returnsBool() is not a custom error', () => {
+    const code = `
+      pragma solidity 0.8.5;
+      contract A {
+        function returnsBool() public pure returns (bool) {
+          return false;
+        }
+        function test() external {
+          require(msg.sender != address(0), returnsBool());
+        }
+      }
+    `
+    const report = linter.processStr(code, {
+      rules: { 'custom-errors': 'error' },
+    })
+    assertNoErrors(report)
+  })
+
+  it('should NOT raise error for require(aFunctionCall() && anotherFunctionCall(), CustomError())', () => {
+    const code = `
+      pragma solidity 0.8.5;
+      contract A {
+        function aFunctionCall() public pure returns (bool) { return true; }
+        function anotherFunctionCall() public pure returns (bool) { return true; }
+        function test() external {
+          require(aFunctionCall() && anotherFunctionCall(), CustomError());
+        }
+      }
+    `
+    const report = linter.processStr(code, {
+      rules: { 'custom-errors': 'error' },
+    })
+    assertNoErrors(report)
+  })
 })

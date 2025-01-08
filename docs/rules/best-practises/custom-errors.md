@@ -44,6 +44,12 @@ revert CustomErrorFunction();
 revert CustomErrorFunction({ msg: "Insufficient Balance" });
 ```
 
+#### Use of require with a custom error function
+
+```solidity
+require(cond, CustomError());
+```
+
 ### 👎 Examples of **incorrect** code for this rule
 
 #### Use of require statement
