@@ -39,6 +39,18 @@ if (foo == bar) { doSomething(); }
 require(foo != 0, "foo must not be zero");
 ```
 
+#### Comparison used in ternary operation
+
+```solidity
+return foo == bar ? foo : bar;
+```
+
+#### Comparison used in modifier
+
+```solidity
+modifier whenEqual(uint a, uint b) { require(a == b); _; }
+```
+
 ### 👎 Examples of **incorrect** code for this rule
 
 #### Comparison as standalone statement in function.
@@ -51,6 +63,12 @@ foo == bar;
 
 ```solidity
 42 != someVar;
+```
+
+#### Multiple comparisons in expression statement
+
+```solidity
+(foo == bar) != (bar == baz);
 ```
 
 ## Version
