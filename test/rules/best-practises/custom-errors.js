@@ -120,14 +120,14 @@ describe('Linter - custom-errors', () => {
     })
 
     it('should NOT emit error on exact match pragma directive for a previous version', function () {
-      const code = `
-        pragma solidity 0.8.3;
-        contract A{
+      const code = contractWith(
+        `
           function foo() external {
             revert("Insufficient funds");
           }
-        }
-      `
+        `,
+        '0.8.3'
+      )
       const report = linter.processStr(code, {
         rules: { 'custom-errors': 'error' },
       })
@@ -135,75 +135,75 @@ describe('Linter - custom-errors', () => {
     })
 
     it('should emit error on range match allowing 0.8.4', function () {
-      let code = `
-        pragma solidity ^0.8.0;
-        contract A{
+      let code = contractWith(
+        `
           function foo() external {
             revert("Insufficient funds");
           }
-        }
-      `
-      let report = linter.processStr(code, {
+        `,
+        '^0.8.0'
+      )
+      const report1 = linter.processStr(code, {
         rules: { 'custom-errors': 'error' },
       })
 
-      assertErrorCount(report, 1)
-      assertErrorMessage(report, 'Use custom errors instead of string messages in revert')
+      assertErrorCount(report1, 1)
+      assertErrorMessage(report1, 'Use custom errors instead of string messages in revert')
 
-      code = `
-        pragma solidity >=0.8.19 <0.9.0;
-        contract A{
+      code = contractWith(
+        `
           function foo() external {
             revert("Insufficient funds");
           }
-        }
-      `
-      report = linter.processStr(code, {
+        `,
+        '>=0.8.19 <0.9.0'
+      )
+      const report2 = linter.processStr(code, {
         rules: { 'custom-errors': 'error' },
       })
 
-      assertErrorCount(report, 1)
-      assertErrorMessage(report, 'Use custom errors instead of string messages in revert')
+      assertErrorCount(report2, 1)
+      assertErrorMessage(report2, 'Use custom errors instead of string messages in revert')
     })
 
     it('should NOT emit error on range match disallowing 0.8.4 or later', function () {
-      let code = `
-        pragma solidity <0.8.4;
-        contract A{
+      let code = contractWith(
+        `
           function foo() external {
             revert("Insufficient funds");
           }
-        }
-      `
-      let report = linter.processStr(code, {
+        `,
+        '<0.8.4'
+      )
+      const report1 = linter.processStr(code, {
         rules: { 'custom-errors': 'error' },
       })
-      assertErrorCount(report, 0)
+      assertErrorCount(report1, 0)
 
-      code = `
-        pragma solidity >=0.6.0 <0.7.0;
-        contract A{
+      code = contractWith(
+        `
           function foo() external {
             revert("Insufficient funds");
           }
-        }
-      `
-      report = linter.processStr(code, {
+        `,
+        '>=0.6.0 <0.7.0'
+      )
+      const report2 = linter.processStr(code, {
         rules: { 'custom-errors': 'error' },
       })
-      assertErrorCount(report, 0)
+      assertErrorCount(report2, 0)
     })
   })
 
   it('should NOT raise error for require with custom error function call as second argument', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
+    const code = contractWith(
+      `
         function test() external {
           require(msg.sender != address(0), ZeroAddressError());
         }
-      }
-    `
+      `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -212,14 +212,14 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should raise error for require with a non-function-call second argument', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
+    const code = contractWith(
+      `
         function test() external {
           require(msg.sender != address(0), "Invalid sender");
         }
-      }
-    `
+      `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -245,14 +245,14 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should NOT raise error for require with custom error constructor call with expressions', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
+    const code = contractWith(
+      `
         function test(uint x) external {
           require(msg.sender != address(0), CustomError(x + 1));
         }
-      }
-    `
+      `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -261,14 +261,14 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should raise error for require with a ternary operator in its second parameter which resolves to a string', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
+    const code = contractWith(
+      `
         function test(uint x) external {
           require(msg.sender != address(0), x > 5 ? "Too high" : "Too low");
         }
-      }
-    `
+      `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -280,9 +280,8 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should not raise an error when require uses a custom error with structured arguments', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
+    const code = contractWith(
+      `
         function test(uint x, string memory reason) external {
           require(
             msg.sender != address(0), 
@@ -292,8 +291,9 @@ describe('Linter - custom-errors', () => {
             })
           );
         }
-      }
-    `
+      `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -302,17 +302,17 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should not raise an error when require uses a non-custom error as the second argument', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
+    const code = contractWith(
+      `
         function returnsBool() public pure returns (bool) {
           return false;
         }
         function test() external {
           require(msg.sender != address(0), returnsBool());
         }
-      }
-    `
+      `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -320,9 +320,8 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should handle deeply nested error constructors', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
+    const code = contractWith(
+      `
         function test() external {
           revert Lib.Sub.DeepError({
             data: NestedStruct({
@@ -334,8 +333,9 @@ describe('Linter - custom-errors', () => {
             })
           });
         }
-      }
-    `
+      `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
@@ -472,17 +472,17 @@ describe('Linter - custom-errors', () => {
   it('should NOT raise error for revert using low-level bytes representation of a custom error', () => {
     const code = contractWith(
       `
-      error CustomError(string message);
-  
-      function revertWithLowLevelError() external pure {
-        bytes memory errorData = abi.encodeWithSelector(CustomError.selector, "This is a custom error");
-        assembly {
-          let dataSize := mload(errorData) 
-          let dataPointer := add(errorData, 0x20)
-          revert(dataPointer, dataSize)
+        error CustomError(string message);
+    
+        function revertWithLowLevelError() external pure {
+          bytes memory errorData = abi.encodeWithSelector(CustomError.selector, "This is a custom error");
+          assembly {
+            let dataSize := mload(errorData) 
+            let dataPointer := add(errorData, 0x20)
+            revert(dataPointer, dataSize)
+          }
         }
-      }
-    `,
+      `,
       '0.8.5'
     )
 
@@ -495,16 +495,16 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should raise error for a revert expression with its first param as a string', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
+    const code = contractWith(
+      `
         function test() external {
           if (checkCertainCondition()) {
             revert("Condition check failed");
           }
         }
-      }
-    `
+      `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
