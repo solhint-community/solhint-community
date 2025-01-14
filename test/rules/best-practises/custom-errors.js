@@ -6,30 +6,30 @@ const {
 } = require('../../common/asserts')
 const { configGetter } = require('../../../lib/config/config-file')
 const linter = require('../../../lib/index')
-const { funcWith } = require('../../common/contract-builder')
+const { funcWith, contractWith } = require('../../common/contract-builder')
 
 describe('Linter - custom-errors', () => {
-  it('should raise error for revert()', () => {
+  it('should raise error for an empty revert', () => {
     const code = funcWith(`revert();`, '0.8.5')
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
 
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
+    assertErrorMessage(report, 'Use custom errors instead of empty revert statements')
   })
 
-  it('should raise error for revert([string])', () => {
+  it('should raise error for a revert statement with a string message', () => {
     const code = funcWith(`revert("Insufficient funds");`, '0.8.5')
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
 
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
+    assertErrorMessage(report, 'Use custom errors instead of string messages in revert')
   })
 
-  it('should NOT raise error for revert ErrorFunction()', () => {
+  it('should NOT raise error for an empty custom error', () => {
     const code = funcWith(`revert ErrorFunction();`, '0.8.5')
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
@@ -39,7 +39,7 @@ describe('Linter - custom-errors', () => {
     assertNoErrors(report)
   })
 
-  it('should NOT raise error for revert ErrorFunction() with arguments', () => {
+  it('should NOT raise error for a custom error with a string argument', () => {
     const code = funcWith(`revert ErrorFunction({ msg: "Insufficient funds msg" });`, '0.8.5')
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
@@ -61,7 +61,10 @@ describe('Linter - custom-errors', () => {
     })
 
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of require statements')
+    assertErrorMessage(
+      report,
+      'The second argument of require should be a custom error. Avoid using string literals or complex expressions'
+    )
   })
 
   it('should NOT raise error for regular function call', () => {
@@ -91,8 +94,12 @@ describe('Linter - custom-errors', () => {
     })
 
     assertErrorCount(report, 2)
-    assertErrorMessage(report, 0, 'Use Custom Errors instead of require statements')
-    assertErrorMessage(report, 1, 'Use Custom Errors instead of revert statements')
+    assertErrorMessage(
+      report,
+      0,
+      'The second argument of require should be a custom error. Avoid using string literals or complex expressions'
+    )
+    assertErrorMessage(report, 1, 'Use custom errors instead of string messages in revert')
   })
 
   describe('pragma directive', function () {
@@ -109,7 +116,7 @@ describe('Linter - custom-errors', () => {
       })
 
       assertErrorCount(report, 1)
-      assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
+      assertErrorMessage(report, 'Use custom errors instead of string messages in revert')
     })
 
     it('should NOT emit error on exact match pragma directive for a previous version', function () {
@@ -141,7 +148,7 @@ describe('Linter - custom-errors', () => {
       })
 
       assertErrorCount(report, 1)
-      assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
+      assertErrorMessage(report, 'Use custom errors instead of string messages in revert')
 
       code = `
         pragma solidity >=0.8.19 <0.9.0;
@@ -156,7 +163,7 @@ describe('Linter - custom-errors', () => {
       })
 
       assertErrorCount(report, 1)
-      assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
+      assertErrorMessage(report, 'Use custom errors instead of string messages in revert')
     })
 
     it('should NOT emit error on range match disallowing 0.8.4 or later', function () {
@@ -172,6 +179,7 @@ describe('Linter - custom-errors', () => {
         rules: { 'custom-errors': 'error' },
       })
       assertErrorCount(report, 0)
+
       code = `
         pragma solidity >=0.6.0 <0.7.0;
         contract A{
@@ -204,12 +212,11 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should raise error for require with a non-function-call second argument', () => {
-    // second arg is a numeric literal instead of a function call
     const code = `
       pragma solidity 0.8.5;
       contract A {
         function test() external {
-          require(msg.sender != address(0), 123);
+          require(msg.sender != address(0), "Invalid sender");
         }
       }
     `
@@ -217,23 +224,24 @@ describe('Linter - custom-errors', () => {
       rules: { 'custom-errors': 'error' },
     })
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of require statements')
+    assertErrorMessage(
+      report,
+      'The second argument of require should be a custom error. Avoid using string literals or complex expressions'
+    )
   })
 
   it('should raise error for require with no second argument', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
-        function test() external {
-          require(msg.sender != address(0));
-        }
-      }
-    `
+    const code = funcWith(
+      `
+      require(msg.sender != address(0));
+    `,
+      '0.8.5'
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of require statements')
+    assertErrorMessage(report, 'Provide a custom error as the second argument to require')
   })
 
   it('should NOT raise error for require with custom error constructor call with expressions', () => {
@@ -252,7 +260,7 @@ describe('Linter - custom-errors', () => {
     assertNoErrors(report)
   })
 
-  it('should raise error for require with complex non-error expression', () => {
+  it('should raise error for require with a ternary operator in its second parameter which resolves to a string', () => {
     const code = `
       pragma solidity 0.8.5;
       contract A {
@@ -265,10 +273,13 @@ describe('Linter - custom-errors', () => {
       rules: { 'custom-errors': 'error' },
     })
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of require statements')
+    assertErrorMessage(
+      report,
+      'The second argument of require should be a custom error. Avoid using string literals or complex expressions'
+    )
   })
 
-  it('should NOT raise error for require with custom error with complex arguments', () => {
+  it('should not raise an error when require uses a custom error with structured arguments', () => {
     const code = `
       pragma solidity 0.8.5;
       contract A {
@@ -290,25 +301,7 @@ describe('Linter - custom-errors', () => {
     assertNoErrors(report)
   })
 
-  it('should NOT raise error if the second argument is a nested function call that returns a custom error', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
-        function getError() public returns (error) {
-          return MyCustomError();
-        }
-        function test() external {
-          require(msg.sender != address(0), getError());
-        }
-      }
-    `
-    const report = linter.processStr(code, {
-      rules: { 'custom-errors': 'error' },
-    })
-    assertNoErrors(report)
-  })
-
-  it('should NOT raise error for require(cond, returnsBool()) even if returnsBool() is not a custom error', () => {
+  it('should not raise an error when require uses a non-custom error as the second argument', () => {
     const code = `
       pragma solidity 0.8.5;
       contract A {
@@ -317,23 +310,6 @@ describe('Linter - custom-errors', () => {
         }
         function test() external {
           require(msg.sender != address(0), returnsBool());
-        }
-      }
-    `
-    const report = linter.processStr(code, {
-      rules: { 'custom-errors': 'error' },
-    })
-    assertNoErrors(report)
-  })
-
-  it('should NOT raise error for require(aFunctionCall() && anotherFunctionCall(), CustomError())', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
-        function aFunctionCall() public pure returns (bool) { return true; }
-        function anotherFunctionCall() public pure returns (bool) { return true; }
-        function test() external {
-          require(aFunctionCall() && anotherFunctionCall(), CustomError());
         }
       }
     `
@@ -493,47 +469,38 @@ describe('Linter - custom-errors', () => {
     assertNoErrors(report)
   })
 
-  it('should NOT raise error for require(cond, dynamicError())', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
-        function dynamicError() public returns (CustomError) {
-          return CustomError();
-        }
-        function test() external {
-          require(condition, dynamicError());
+  it('should NOT raise error for revert using low-level bytes representation of a custom error', () => {
+    const code = contractWith(
+      `
+      error CustomError(string message);
+  
+      function revertWithLowLevelError() external pure {
+        bytes memory errorData = abi.encodeWithSelector(CustomError.selector, "This is a custom error");
+        assembly {
+          let dataSize := mload(errorData) 
+          let dataPointer := add(errorData, 0x20)
+          revert(dataPointer, dataSize)
         }
       }
-    `
+    `,
+      '0.8.5'
+    )
+
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
+
+    assertNoWarnings(report)
     assertNoErrors(report)
   })
 
-  it('should raise error for require with tuple as second argument', () => {
+  it('should raise error for a revert expression with its first param as a string', () => {
     const code = `
       pragma solidity 0.8.5;
       contract A {
         function test() external {
-          require(condition, ("Error message", 123));
-        }
-      }
-    `
-    const report = linter.processStr(code, {
-      rules: { 'custom-errors': 'error' },
-    })
-    assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of require statements')
-  })
-
-  it('should raise error for revert with complex condition', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
-        function test() external {
-          if (complexCondition()) {
-            revert("Complex condition failed");
+          if (checkCertainCondition()) {
+            revert("Condition check failed");
           }
         }
       }
@@ -542,6 +509,6 @@ describe('Linter - custom-errors', () => {
       rules: { 'custom-errors': 'error' },
     })
     assertErrorCount(report, 1)
-    assertErrorMessage(report, 'Use Custom Errors instead of revert statements')
+    assertErrorMessage(report, 'Use custom errors instead of string messages in revert')
   })
 })

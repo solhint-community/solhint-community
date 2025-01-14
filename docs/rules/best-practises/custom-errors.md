@@ -52,7 +52,7 @@ require(cond, CustomError());
 
 ### 👎 Examples of **incorrect** code for this rule
 
-#### Use of require statement
+#### Use of require with a string message
 
 ```solidity
 require(userBalance >= availableAmount, "Insufficient Balance");
@@ -68,6 +68,12 @@ revert();
 
 ```solidity
 revert("Insufficient Balance");
+```
+
+#### Use of require with a complex expression instead of a custom error
+
+```solidity
+require(condition, x > 5 ? "Too high" : "Too low");
 ```
 
 ## Version

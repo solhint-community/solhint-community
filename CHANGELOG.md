@@ -1,7 +1,8 @@
 ## [4.0.1] - XXXX-XX-XX
 ### Fixed
-- `custom-errors`: Made the rule more fine-grained by:
-  - Allowing custom errors as the second argument of `require` statements (e.g., `require(cond, CustomError())`) 
+- `custom-errors`: Made the rule more fine-grained by
+  allowing custom errors as the second argument of `require` statements (e.g., `require(cond, CustomError())`) 
+  https://github.com/solhint-community/solhint-community/pull/163
 
 ### Fixed
 - false positive in no-unused-var when function parameters are only used only as
