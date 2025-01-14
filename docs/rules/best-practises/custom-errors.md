@@ -28,6 +28,8 @@ This rule accepts a string option of rule severity. Must be one of "error", "war
 
 ### Notes
 - This rule is automatically disabled for files whose pragma directive disallows versions where custom errors are available
+- Limitation: The rule accepts any function call as a custom error. It does not verify if the function is a valid custom error constructor.
+- Complex expressions are disallowed as the second argument to `require` to maintain clarity and ensure that a straightforward custom error is used. This avoids potential issues where the expression could resolve to a string or other unintended types.
 
 ## Examples
 ### 👍 Examples of **correct** code for this rule
