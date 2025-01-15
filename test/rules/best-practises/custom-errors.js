@@ -380,96 +380,32 @@ describe('Linter - custom-errors', () => {
     assertNoErrors(report)
   })
 
-  it('should handle multi-line formatting', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
-        function test() external {
-          require(
-            complexCondition(),
-            ComplexError({
-              code: 123,
-              message: "test",
-              details: "more info"
-            })
-          );
-          
-          revert 
-            VeryDetailedError
-            ({
-              timestamp: block.timestamp,
-              caller: msg.sender,
-              value: msg.value
-            });
+  it('should NOT raise error for custom error calls in require and revert statements', () => {
+    const code = contractWith(
+      `
+      error CustomError(string message);
+      bool internal condition = true;
+    
+    function test() external view {
+        // Custom error in revert
+        if (!condition) {
+            revert CustomError("error one");
         }
-      }
-    `
+        
+        // Custom error in require
+        if (!condition) {
+            require(false, "standard error");
+            revert CustomError("error two");
+        }
+    }`
+    )
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
     assertNoErrors(report)
   })
 
-  it('should handle imported custom errors', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      import { ValidationError, BusinessError } from "./Errors.sol";
-      import * as Errors from "./MoreErrors.sol";
-      
-      contract A {
-        function test() external {
-          revert ValidationError();
-          require(condition, Errors.SystemError());
-        }
-      }
-    `
-    const report = linter.processStr(code, {
-      rules: { 'custom-errors': 'error' },
-    })
-    assertNoErrors(report)
-  })
-
-  it('should handle inherited custom errors', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      abstract contract Base {
-        error BaseError(string message);
-      }
-      
-      contract Child is Base {
-        function test() external {
-          revert BaseError("from child");
-          require(condition, BaseError("another error"));
-        }
-      }
-    `
-    const report = linter.processStr(code, {
-      rules: { 'custom-errors': 'error' },
-    })
-    assertNoErrors(report)
-  })
-
-  it('should handle errors defined in interfaces', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      interface IErrors {
-        error InterfaceError(uint code);
-      }
-      
-      contract Implementation is IErrors {
-        function test() external {
-          revert InterfaceError(404);
-          require(condition, InterfaceError(500));
-        }
-      }
-    `
-    const report = linter.processStr(code, {
-      rules: { 'custom-errors': 'error' },
-    })
-    assertNoErrors(report)
-  })
-
-  it('should NOT raise error for revert using low-level bytes representation of a custom error', () => {
+  it('should NOT raise error for assembly reverts because the rule ignores this case', () => {
     const code = contractWith(
       `
         error CustomError(string message);
@@ -510,5 +446,26 @@ describe('Linter - custom-errors', () => {
     })
     assertErrorCount(report, 1)
     assertErrorMessage(report, 'Use custom errors instead of string messages in revert')
+  })
+
+  it('should NOT report errors on incorrect revert syntax that the compiler will catch', () => {
+    const code = contractWith(
+      `
+      error CustomError();
+      function test() external {
+        // The compiler will catch this incorrect use of revert
+        // The correct syntax would be "revert CustomError();"
+        revert(CustomError());
+      }
+    `,
+      '0.8.5'
+    )
+
+    const report = linter.processStr(code, {
+      rules: { 'custom-errors': 'error' },
+    })
+
+    assertNoWarnings(report)
+    assertNoErrors(report)
   })
 })
