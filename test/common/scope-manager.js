@@ -1,16 +1,9 @@
 /* eslint-disable no-unused-expressions */
 // We disable no-unused-expressions because chai does not have lint-friendly terminating assertions
 const { expect } = require('chai')
-const parser = require('@solidity-parser/parser')
 const astParents = require('ast-parents')
 const { ScopeManager, Scope, attachScopes } = require('../../lib/common/scope-manager')
-
-/**
- * Helper to parse code
- */
-function parse(code) {
-  return parser.parse(code, { loc: true, range: true })
-}
+const { parseInput } = require('../../lib/index')
 
 describe('ScopeManager', () => {
   let scopeManager
@@ -55,7 +48,7 @@ describe('Scope', () => {
 
   describe('addVariable', () => {
     it('should track variable declarations correctly with correct node and name', () => {
-      const ast = parse('contract C { function f() public { uint x; } }')
+      const ast = parseInput('contract C { function f() public { uint x; } }')
       astParents(ast)
       attachScopes(ast)
 
@@ -73,7 +66,7 @@ describe('Scope', () => {
     })
 
     it('should handle multiple variable declarations', () => {
-      const ast = parse('contract C { function f() public { uint x; uint y; } }')
+      const ast = parseInput('contract C { function f() public { uint x; uint y; } }')
       astParents(ast)
       attachScopes(ast)
 
@@ -97,7 +90,7 @@ describe('Scope', () => {
     })
 
     it('should accurately reflect variable presence using hasVariable', () => {
-      const ast = parse('contract C { function f() public { uint x; } }')
+      const ast = parseInput('contract C { function f() public { uint x; } }')
       astParents(ast)
       attachScopes(ast)
 
@@ -168,7 +161,7 @@ describe('attachScopes', () => {
   describe('Scope Creation', () => {
     describe('SourceUnit', () => {
       it('should create scopes for SourceUnit', () => {
-        const ast = parse('contract C {}')
+        const ast = parseInput('contract C {}')
         astParents(ast)
         attachScopes(ast)
 
@@ -178,7 +171,7 @@ describe('attachScopes', () => {
 
     describe('ContractDefinition', () => {
       it('should create scopes for ContractDefinition', () => {
-        const ast = parse('contract C {}')
+        const ast = parseInput('contract C {}')
         astParents(ast)
         attachScopes(ast)
 
@@ -187,7 +180,7 @@ describe('attachScopes', () => {
       })
 
       it('should create scope for empty contract', () => {
-        const ast = parse('contract C {}')
+        const ast = parseInput('contract C {}')
         astParents(ast)
         attachScopes(ast)
 
@@ -196,7 +189,7 @@ describe('attachScopes', () => {
       })
 
       it('should create scope for interface', () => {
-        const ast = parse('interface I {}')
+        const ast = parseInput('interface I {}')
         astParents(ast)
         attachScopes(ast)
 
@@ -205,7 +198,7 @@ describe('attachScopes', () => {
       })
 
       it('should create scope for library', () => {
-        const ast = parse('library L {}')
+        const ast = parseInput('library L {}')
         astParents(ast)
         attachScopes(ast)
 
@@ -216,7 +209,7 @@ describe('attachScopes', () => {
 
     describe('FunctionDefinition', () => {
       it('should create scopes for FunctionDefinition with body', () => {
-        const ast = parse('contract C { function f() public {} }')
+        const ast = parseInput('contract C { function f() public {} }')
         astParents(ast)
         attachScopes(ast)
 
@@ -225,7 +218,7 @@ describe('attachScopes', () => {
       })
 
       it('should not create scopes for function declarations without body', () => {
-        const ast = parse('contract C { function f() public; }')
+        const ast = parseInput('contract C { function f() public; }')
         astParents(ast)
         attachScopes(ast)
 
@@ -236,7 +229,7 @@ describe('attachScopes', () => {
       })
 
       it('should create scope for function with empty body', () => {
-        const ast = parse('contract C { function f() public {} }')
+        const ast = parseInput('contract C { function f() public {} }')
         astParents(ast)
         attachScopes(ast)
 
@@ -245,7 +238,7 @@ describe('attachScopes', () => {
       })
 
       it('should not create scope for function declaration (null body)', () => {
-        const ast = parse('contract C { function f() public; }')
+        const ast = parseInput('contract C { function f() public; }')
         astParents(ast)
         attachScopes(ast)
 
@@ -256,7 +249,7 @@ describe('attachScopes', () => {
 
     describe('Block', () => {
       it('should create scopes for non-function-body blocks', () => {
-        const ast = parse('contract C { function f() public { if (true) { uint x; } } }')
+        const ast = parseInput('contract C { function f() public { if (true) { uint x; } } }')
         astParents(ast)
         attachScopes(ast)
 
@@ -265,7 +258,7 @@ describe('attachScopes', () => {
       })
 
       it('should not create redundant scope for function body blocks', () => {
-        const ast = parse('contract C { function f() public { uint x; } }')
+        const ast = parseInput('contract C { function f() public { uint x; } }')
         astParents(ast)
         attachScopes(ast)
 
@@ -278,7 +271,7 @@ describe('attachScopes', () => {
   describe('Variable Declarations and Usages', () => {
     describe('Import Declarations', () => {
       it('should correctly assign unitAliasIdentifier and unitAlias for import with unit alias', () => {
-        const ast = parse(`
+        const ast = parseInput(`
                 import "./A.sol" as AliasA;
     
                 contract C {
@@ -302,7 +295,7 @@ describe('attachScopes', () => {
       })
 
       it('should correctly assign symbolAliasesIdentifiers and symbolAliases for import with symbol aliases', () => {
-        const ast = parse(`
+        const ast = parseInput(`
                 import { Foo as Bar } from "./Foo.sol";
     
                 contract C {
@@ -326,7 +319,7 @@ describe('attachScopes', () => {
       })
 
       it('should track import declarations with unit alias', () => {
-        const ast = parse(`
+        const ast = parseInput(`
                 import "./A.sol" as AliasA;
     
                 contract C {
@@ -345,7 +338,7 @@ describe('attachScopes', () => {
       })
 
       it('should track import declarations with symbol aliases', () => {
-        const ast = parse(`
+        const ast = parseInput(`
                 import { Foo as Bar } from "./Foo.sol";
     
                 contract C {
@@ -365,7 +358,7 @@ describe('attachScopes', () => {
 
     describe('Variable Declarations', () => {
       it('should track variable declarations', () => {
-        const ast = parse('contract C { function f() public { uint x; } }')
+        const ast = parseInput('contract C { function f() public { uint x; } }')
         astParents(ast)
         attachScopes(ast)
 
@@ -383,7 +376,7 @@ describe('attachScopes', () => {
               x = 1;
             }
           }`
-        const ast = parse(code)
+        const ast = parseInput(code)
         astParents(ast)
         attachScopes(ast)
 
@@ -394,7 +387,7 @@ describe('attachScopes', () => {
 
     describe('Identifier Nodes', () => {
       it('should not track identifier nodes that are part of declarations', () => {
-        const ast = parse('contract C { uint x; }')
+        const ast = parseInput('contract C { uint x; }')
         astParents(ast)
         attachScopes(ast)
 
