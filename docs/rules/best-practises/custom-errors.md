@@ -79,12 +79,6 @@ revert("Insufficient Balance");
 require(condition, x > 5 ? "Too high" : "Too low");
 ```
 
-#### Incorrect custom error syntax that will fail compilation
-
-```solidity
-revert(CustomError());  // Use "revert CustomError();" instead
-```
-
 ## Version
 This rule was introduced in [Solhint 3.7.0-rc02](https://github.com/solhint-community/solhint-community/tree/v3.7.0-rc02)
 

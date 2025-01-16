@@ -363,42 +363,35 @@ describe('Linter - custom-errors', () => {
   })
 
   it('should handle string concatenation in errors', () => {
-    const code = `
-      pragma solidity 0.8.5;
-      contract A {
+    const code = contractWith(`
         function test(string memory reason) external {
           revert CustomError(string.concat("Error: ", reason));
           require(condition, DetailedError({
             message: string.concat("Failed: ", reason, " at: ", time)
           }));
         }
-      }
-    `
+    `)
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
     assertNoErrors(report)
   })
 
-  it('should NOT raise error for custom error calls in require and revert statements', () => {
-    const code = contractWith(
-      `
-      error CustomError(string message);
-      bool internal condition = true;
-    
-    function test() external view {
-        // Custom error in revert
-        if (!condition) {
-            revert CustomError("error one");
+  it('should NOT raise error for custom error in require', () => {
+    // This will be rejected by the compiler at a later stage
+    const code = `
+      pragma solidity 0.8.5;
+      abstract contract Base {
+        error BaseError(string message);
+      }
+      
+      contract Child is Base {
+        function test() external {
+          revert BaseError("from child");
+          require(condition, BaseError("another error"));
         }
-        
-        // Custom error in require
-        if (!condition) {
-            require(false, "standard error");
-            revert CustomError("error two");
-        }
-    }`
-    )
+      }
+    `
     const report = linter.processStr(code, {
       rules: { 'custom-errors': 'error' },
     })
