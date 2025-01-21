@@ -182,15 +182,6 @@ describe('attachScopes', () => {
         expect(ast.scopeManager.getScope(contract)).to.exist
       })
 
-      it('should create scope for empty contract', () => {
-        const ast = parseInput('contract C {}')
-        astParents(ast)
-        attachScopes(ast)
-
-        const contract = ast.children[0]
-        expect(ast.scopeManager.scopes.get(contract)).to.exist
-      })
-
       it('should create scope for interface', () => {
         const ast = parseInput('interface I {}')
         astParents(ast)
@@ -218,26 +209,6 @@ describe('attachScopes', () => {
 
         const func = ast.children[0].subNodes[0]
         expect(ast.scopeManager.getScope(func)).to.exist
-      })
-
-      it('should not create scopes for function declarations without body', () => {
-        const ast = parseInput('abstract contract C { function f() public virtual; }')
-        astParents(ast)
-        attachScopes(ast)
-
-        // This is a function *declaration* (body = null), so no scope is created.
-        const func = ast.children[0].subNodes[0]
-        const immediateScope = ast.scopeManager.scopes.get(func)
-        expect(immediateScope).to.be.undefined
-      })
-
-      it('should create scope for function with empty body', () => {
-        const ast = parseInput('contract C { function f() public {} }')
-        astParents(ast)
-        attachScopes(ast)
-
-        const func = ast.children[0].subNodes[0]
-        expect(ast.scopeManager.scopes.get(func)).to.exist
       })
 
       it('should not create scope for function declaration (null body)', () => {
@@ -288,34 +259,6 @@ describe('attachScopes', () => {
         )
         const scope = ast.scopeManager.getScope(contractC)
         expect(scope.variables.has('aInstance')).to.be.true
-
-        const sourceScope = ast.scopeManager.getScope(ast)
-        expect(sourceScope.variables.has('AliasA')).to.be.true
-      })
-
-      it('should correctly assign symbolAliasesIdentifiers and symbolAliases for import with symbol aliases', () => {
-        const ast = parseInput(`
-              import { Foo as Bar } from "./Foo.sol";
-              contract C {
-                Bar bInstance;
-              }
-            `)
-        astParents(ast)
-        attachScopes(ast)
-
-        const sourceScope = ast.scopeManager.getScope(ast)
-        expect(sourceScope.variables.has('Bar')).to.be.true
-      })
-
-      it('should track import declarations with unit alias', () => {
-        const ast = parseInput(`
-              import "./A.sol" as AliasA;
-              contract C {
-                  AliasA.A aInstance;
-              }
-            `)
-        astParents(ast)
-        attachScopes(ast)
 
         const sourceScope = ast.scopeManager.getScope(ast)
         expect(sourceScope.variables.has('AliasA')).to.be.true
@@ -379,8 +322,9 @@ describe('attachScopes', () => {
       })
     })
   })
-  describe('Assembly Variables', () => {
-    it('should track assembly variable usage', () => {
+
+  describe('Assembly Handling', () => {
+    it('should track basic assembly variable usage', () => {
       const ast = parseInput(`
         contract C {
           function f() public {
@@ -400,9 +344,7 @@ describe('attachScopes', () => {
       expect(funcScope.variables.has('x')).to.be.true
       expect(funcScope.variables.get('x')?.usages).to.equal(1)
     })
-  })
 
-  describe('Assembly Tracking', () => {
     it('should track identifier usage in assembly let expressions', () => {
       const ast = parseInput(`
           contract C {
@@ -419,6 +361,30 @@ describe('attachScopes', () => {
       const funcNode = ast.children[0].subNodes[0]
       const funcScope = ast.scopeManager.getScope(funcNode)
       expect(funcScope.variables.get('localVar')?.usages).to.equal(1)
+    })
+
+    it('should track variable usage in complex assembly operations', () => {
+      const ast = parseInput(`
+        contract C {
+          function f() public pure returns (uint256) {
+            assembly {
+              let x := 1
+              let y := 2
+              let z := add(mul(x, 2), y)
+              mstore(0x40, z)
+            }
+            return 0;
+          }
+        }`)
+      astParents(ast)
+      attachScopes(ast)
+
+      const assemblyBlock = ast.children[0].subNodes[0].body.statements[0].body
+      const scope = ast.scopeManager.getScope(assemblyBlock)
+
+      expect(scope.variables.get('x')?.usages).to.equal(1)
+      expect(scope.variables.get('y')?.usages).to.equal(1)
+      expect(scope.variables.get('z')?.usages).to.equal(1)
     })
   })
 
@@ -482,32 +448,6 @@ describe('attachScopes', () => {
 
       const contractScope = ast.scopeManager.getScope(ast.children[0])
       expect(contractScope.variables.get('x')?.usages).to.equal(2)
-    })
-  })
-
-  describe('Assembly Handling', () => {
-    it('should track variable usage in complex assembly operations', () => {
-      const ast = parseInput(`
-        contract C {
-          function f() public pure returns (uint256) {
-            assembly {
-              let x := 1
-              let y := 2
-              let z := add(mul(x, 2), y)
-              mstore(0x40, z)
-            }
-            return 0;
-          }
-        }`)
-      astParents(ast)
-      attachScopes(ast)
-
-      const assemblyBlock = ast.children[0].subNodes[0].body.statements[0].body
-      const scope = ast.scopeManager.getScope(assemblyBlock)
-
-      expect(scope.variables.get('x')?.usages).to.equal(1)
-      expect(scope.variables.get('y')?.usages).to.equal(1)
-      expect(scope.variables.get('z')?.usages).to.equal(1)
     })
   })
 })
