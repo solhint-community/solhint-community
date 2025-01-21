@@ -192,7 +192,7 @@ describe('Linter - no-boolean-compare', () => {
 
   it('should not identify non-boolean literals as boolean', () => {
     const code = funcWith(`
-      uint x = 5;
+      uint256 x = 5;
       string memory str = "true";
       bool foo;
       
@@ -206,8 +206,7 @@ describe('Linter - no-boolean-compare', () => {
 
   it('should confirm numeric literal is not treated as a boolean literal', () => {
     const code = funcWith(`
-      uint x = 5;
-      // NOT a BooleanLiteral on either side, so isLiteralBool(...) should return false for both operands.
+      uint256 x = 5;
       if (x == 10) {
         x = x + 1;
       }
