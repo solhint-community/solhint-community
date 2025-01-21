@@ -50,6 +50,26 @@ fallback () external {}
 constructor(uint param) Foo(param) Bar(param*2) {}
 ```
 
+#### empty try block when allowEmptyTry: true is enabled
+
+```solidity
+try foo() {
+  // empty
+} catch {
+  revert();
+}
+```
+
+#### empty catch block when allowEmptyCatch: true is enabled
+
+```solidity
+try foo() {
+  revert();
+} catch {
+  // empty
+}
+```
+
 ### 👎 Examples of **incorrect** code for this rule
 
 #### empty block for an if statement
@@ -68,6 +88,12 @@ contract Foo {}
 
 ```solidity
 constructor () {}
+```
+
+#### empty try-catch with allowEmptyTry: false and allowEmptyCatch: false
+
+```solidity
+try foo() { } catch { }
 ```
 
 ## Version
