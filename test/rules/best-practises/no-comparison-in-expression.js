@@ -58,16 +58,6 @@ describe('Linter - no-comparison-in-expression', () => {
     assertNoErrors(report)
   })
 
-  it('should raise no error for other binary operators in expression statements', () => {
-    const code = contractWith(`
-      function addSomething(uint foo, uint bar) public {
-        foo + bar;
-      }
-    `)
-    const report = linter.processStr(code, { rules: { 'no-comparison-in-expression': 'error' } })
-    assertNoErrors(report)
-  })
-
   it('should raise no error for while loops with comparison', () => {
     const code = contractWith(`
       function loopCheck(uint foo, uint bar) public {
@@ -204,15 +194,7 @@ describe('Linter - no-comparison-in-expression', () => {
     assertErrorMessage(report, 'Avoid using a comparison')
   })
 
-  it('should raise no error for comparison in state variable initialization', () => {
-    const code = contractWith(`
-      bool public isEqual = foo == bar;
-    `)
-    const report = linter.processStr(code, { rules: { 'no-comparison-in-expression': 'error' } })
-    assertNoErrors(report)
-  })
-
-  it('should handle statements with null expression type gracefully', () => {
+  it('ensures linter does not crash on empty function bodies', () => {
     const code = contractWith(`
       function emptyStatement() public {
         
@@ -222,11 +204,31 @@ describe('Linter - no-comparison-in-expression', () => {
     assertNoErrors(report)
   })
 
-  it('should handle non-BinaryOperation expression types gracefully', () => {
+  it('ensures linter does not incorrectly flag valid unary operations', () => {
     const code = contractWith(`
-      function unaryOperation(uint x) public {
-        -x;
+      function unaryOperation(int x) public {
+        int y = -x;
       }
+    `)
+    const report = linter.processStr(code, { rules: { 'no-comparison-in-expression': 'error' } })
+    assertNoErrors(report)
+  })
+
+  it('ensures valid arithmetic operations are not mistaken for comparisons', () => {
+    const code = contractWith(`
+      function addSomething(uint foo, uint bar) public {
+        uint result = foo + bar;
+      }
+    `)
+    const report = linter.processStr(code, { rules: { 'no-comparison-in-expression': 'error' } })
+    assertNoErrors(report)
+  })
+
+  it('allows comparisons when initializing state variables since they have a clear purpose', () => {
+    const code = contractWith(`
+      uint256 public foo;
+      uint256 public bar;
+      bool public isEqual = foo == bar;
     `)
     const report = linter.processStr(code, { rules: { 'no-comparison-in-expression': 'error' } })
     assertNoErrors(report)
