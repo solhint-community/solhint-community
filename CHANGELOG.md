@@ -1,3 +1,13 @@
+## [4.1.0] - XXXX-XX-XX
+
+### Added
+- introduced `scope-manager.js` to handle lexical scoping and variable tracking prior to rule execution
+  https://github.com/solåhint-community/solhint-community/pull/167
+
+### Changed
+- simplified `no-unused-vars.js` to not modify the AST directly, having it rely on the logic from `scope-manager.js` instead
+  https://github.com/solåhint-community/solhint-community/pull/167
+
 ## [4.0.1] - XXXX-XX-XX
 
 ### Fixed
