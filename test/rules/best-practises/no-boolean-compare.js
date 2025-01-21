@@ -3,7 +3,7 @@ const { assertErrorCount, assertNoErrors, assertErrorMessage } = require('../../
 const { contractWith, funcWith } = require('../../common/contract-builder')
 
 describe('Linter - no-boolean-compare', () => {
-  it('should raise an error when comparing a variable to true', () => {
+  it('raises an error when comparing a function parameter to true in Solidity function', () => {
     const code = contractWith(`
       function checkFoo(bool foo) public {
         if (foo == true) {
@@ -17,7 +17,7 @@ describe('Linter - no-boolean-compare', () => {
     assertErrorMessage(report, 'Avoid comparing boolean expressions to true or false.')
   })
 
-  it('should raise an error when comparing a variable to false', () => {
+  it('raises an error when comparing a state variable to false in Solidity function', () => {
     const code = funcWith(`
       bool bar = false;
       if (bar != false) {
@@ -30,13 +30,34 @@ describe('Linter - no-boolean-compare', () => {
     assertErrorMessage(report, 'Avoid comparing boolean expressions to true or false.')
   })
 
-  it('should raise no error for normal usage', () => {
+  it('raises no error when using boolean in modifier conditions', () => {
     const code = contractWith(`
-      function checkFoo(bool foo) public {
-        if (foo) {
-          // do something
-        } else if (!foo) {
-          // do something else
+      modifier whenTrue(bool _condition) {
+        require(_condition);
+        _;
+      }
+    `)
+    const report = linter.processStr(code, { rules: { 'no-boolean-compare': 'error' } })
+    assertNoErrors(report)
+  })
+
+  it('raises error when comparing boolean in require statement', () => {
+    const code = contractWith(`
+      function checkCondition(bool condition) public {
+        require(condition == true, "Invalid condition");
+      }
+    `)
+    const report = linter.processStr(code, { rules: { 'no-boolean-compare': 'error' } })
+
+    assertErrorCount(report, 1)
+    assertErrorMessage(report, 'Avoid comparing boolean expressions to true or false.')
+  })
+
+  it('raises no error for numeric comparisons in Solidity', () => {
+    const code = contractWith(`
+      function checkValue(uint256 x) public {
+        if (x == 5) {
+          // allowed
         }
       }
     `)
@@ -44,11 +65,40 @@ describe('Linter - no-boolean-compare', () => {
     assertNoErrors(report)
   })
 
-  it('should raise no error for other comparisons', () => {
+  it('raises no error when emitting events with boolean parameters', () => {
     const code = contractWith(`
-      function checkValue(uint256 x) public {
-        if (x == 5) {
-          // allowed
+      event StatusChanged(bool status);
+      
+      function updateStatus(bool newStatus) public {
+        emit StatusChanged(newStatus);
+      }
+    `)
+    const report = linter.processStr(code, { rules: { 'no-boolean-compare': 'error' } })
+    assertNoErrors(report)
+  })
+
+  it('detects boolean comparisons in Solidity complex expressions', () => {
+    const code = funcWith(`
+      bool foo = true;
+      bool bar = false;
+      uint256 balance = 100;
+      if ((balance > 50 && foo == true) || (balance == 0 && bar != false)) {
+        foo = !bar;
+      }
+    `)
+    const report = linter.processStr(code, { rules: { 'no-boolean-compare': 'error' } })
+
+    assertErrorCount(report, 2)
+    assertErrorMessage(report, 'Avoid comparing boolean expressions to true or false.')
+  })
+
+  it('should raise no error for normal usage', () => {
+    const code = contractWith(`
+      function checkFoo(bool foo) public {
+        if (foo) {
+          // do something
+        } else if (!foo) {
+          // do something else
         }
       }
     `)
@@ -94,20 +144,6 @@ describe('Linter - no-boolean-compare', () => {
     const report = linter.processStr(code, { rules: { 'no-boolean-compare': 'error' } })
 
     assertErrorCount(report, 3)
-    assertErrorMessage(report, 'Avoid comparing boolean expressions to true or false.')
-  })
-  it('should detect boolean comparisons in complex expressions', () => {
-    const code = funcWith(`
-      bool foo = true;
-      bool bar = false;
-      uint x = 5;
-      if ((x > 10 && foo == true) || (x < 0 && bar != false)) {
-        foo = !bar;
-      }
-    `)
-    const report = linter.processStr(code, { rules: { 'no-boolean-compare': 'error' } })
-
-    assertErrorCount(report, 2)
     assertErrorMessage(report, 'Avoid comparing boolean expressions to true or false.')
   })
 

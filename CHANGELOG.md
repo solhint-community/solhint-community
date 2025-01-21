@@ -1,6 +1,10 @@
-## [4.0.1] - XXXX-XX-XX
+## [4.1.0] - XXXX-XX-XX
 ### Added
-- Added `no-boolean-compare` rule to prevent direct comparisons with boolean literals
+- Added `no-boolean-compare` rule to enforce cleaner boolean expressions by preventing direct 
+  comparisons with boolean literals (true/false). This rule catches comparisons in various 
+  contexts including function bodies, require statements, if conditions, assignments, and 
+  ternary expressions.
+  https://github.com/solhint-community/solhint-community/pull/164
 
 ### Fixed
 - false positive in no-unused-var when function parameters are only used only as
