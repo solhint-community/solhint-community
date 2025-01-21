@@ -1,8 +1,9 @@
-## [4.0.1] - XXXX-XX-XX
+## [4.1.0] - XXXX-XX-XX
 ### Added
-- Added `allowEmptyTry` option to `no-empty-blocks` rule to allow empty try blocks 
-- Added `allowEmptyModifiers` option to `no-empty-blocks` rule to allow empty modifier blocks containing only `_`
-- Added `allowEmptyCatch` option to `no-empty-blocks` rule to allow empty catch blocks
+- Added configurable exceptions to `no-empty-blocks` rule https://github.com/solhint-community/solhint-community/pull/162
+  - `allowEmptyTry` option to allow empty try blocks
+  - `allowEmptyModifiers` option to allow empty modifier blocks containing only `_`
+  - `allowEmptyCatch` option to allow empty catch blocks
 
 ### Fixed
 - false positive in no-unused-var when function parameters are only used only as
