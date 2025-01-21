@@ -311,7 +311,7 @@ describe('attachScopes', () => {
     })
 
     describe('Identifier Nodes', () => {
-      it('should track identifier nodes appropriately in declarations', () => {
+      it('should initialize variable declarations with zero usage count', () => {
         const ast = parseInput('contract C { uint x; }')
         astParents(ast)
         attachScopes(ast)
@@ -324,13 +324,15 @@ describe('attachScopes', () => {
   })
 
   describe('Assembly Handling', () => {
-    it('should track basic assembly variable usage', () => {
+    it('should track assembly variable declarations and usages', () => {
       const ast = parseInput(`
         contract C {
           function f() public {
+            uint localVar = 1;
             assembly {
               let x := 1
               let y := x
+              let z := localVar
             }
           }
         }
@@ -341,25 +343,11 @@ describe('attachScopes', () => {
       const funcNode = ast.children[0].subNodes[0]
       const funcScope = ast.scopeManager.getScope(funcNode)
 
+      // Check internal assembly variable tracking
       expect(funcScope.variables.has('x')).to.be.true
       expect(funcScope.variables.get('x')?.usages).to.equal(1)
-    })
 
-    it('should track identifier usage in assembly let expressions', () => {
-      const ast = parseInput(`
-          contract C {
-            function f() public {
-              uint localVar = 1;
-              assembly {
-                let x := localVar
-              }
-            }
-          }`)
-      astParents(ast)
-      attachScopes(ast)
-
-      const funcNode = ast.children[0].subNodes[0]
-      const funcScope = ast.scopeManager.getScope(funcNode)
+      // Check external variable reference tracking
       expect(funcScope.variables.get('localVar')?.usages).to.equal(1)
     })
 
@@ -430,7 +418,7 @@ describe('attachScopes', () => {
       expect(scope).to.be.undefined
     })
 
-    it('should track variable usage across multiple sibling blocks', () => {
+    it('should accumulate variable usages from multiple code blocks', () => {
       const ast = parseInput(`
         contract C {
           uint256 x;
