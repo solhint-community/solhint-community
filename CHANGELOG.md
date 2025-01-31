@@ -1,3 +1,9 @@
+## [4.1.0] - 2024-06-XX
+
+### Added
+- **no-comparison-in-expression**: A new best-practises rule that disallows comparisons (`==` or `!=`) as standalone expression statements. This helps prevent common mistakes like using `==` when `=` was intended, or discarding the comparison result unintentionally.
+https://github.com/solhint-community/solhint-community/pull/165
+
 ## [4.0.1] - XXXX-XX-XX
 ### Fixed
 - `custom-errors`: Made the rule more fine-grained by allowing custom errors as
