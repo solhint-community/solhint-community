@@ -1,4 +1,7 @@
-## [4.0.1] - XXXX-XX-XX
+## [4.0.1] 2025-01-30
+Patch release, completely backwards-compatible with 4.0.0
+Current `latest` version.
+
 ### Fixed
 - `custom-errors`: Made the rule more fine-grained by allowing custom errors as
   the second argument of `require` statements (e.g., `require(cond, CustomError())`)
@@ -11,7 +14,6 @@
 
 ## [4.0.0] - 2024-04-10
 Stable release.
-Current `latest` version.
 
 Includes lots of breaking changes such as removing rules or changing their
 semantics, while also adding some long-awaited features, such as:
